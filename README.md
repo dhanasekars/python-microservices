@@ -14,13 +14,14 @@ using Python and FastAPI
 
 # Progress
 
-## Day 1 : Aug 18 : 09:15 
+## Day 1 : Aug 18 
 
-`Spent 45 minutes`
+`Spent 70 minutes`
 
 - Basic project structure
 - Explored and implemented `Makefile`
 - Basic understanding of `Poetry`
+- Setup `sample_endpoint.py` and test file for it to configure pytest and test coverage
 
 ### References 
 - https://www.youtube.com/watch?v=YB-_FsssK8E
