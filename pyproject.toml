@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "microservices"
+version = "0.1.0"
+description = ""
+authors = ["DS <dhanasekars@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+pylint = "^2.17.5"
+black = "^23.7.0"
+fire = "^0.5.0"
+fastapi = "^0.101.1"
+uvicorn = "^0.23.2"
+textblob = "^0.17.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
