@@ -39,15 +39,11 @@ using Python and FastAPI
 `Spent 30 minutes`
 
 
-- Set up route and todo route that returns  hardcoded value
-- Unable to have the todo route as a seprate module from main
+- :thumbsup: Set up route and todo route that returns  hardcoded value
+- :thumbsdown: Unable to have the todo route as a seprate module from main
 
 
 </details>
-
-:joy:
-
-`:joy:`
 
 <details> 
     <summary> Day 0: Template</summary>
