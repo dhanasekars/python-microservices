@@ -13,8 +13,8 @@ using Python and FastAPI
 ### Spend one hour daily on this project
 
 # Progress
-
-## Day 1 : Aug 18 
+<details>
+    <summary>Day 1 : Aug 18  </summary>
 
 `Spent 70 minutes`
 
@@ -27,3 +27,28 @@ using Python and FastAPI
 - https://www.youtube.com/watch?v=YB-_FsssK8E
 - https://python-poetry.org/docs/basic-usage/
 - https://www.gnu.org/software/make/manual/make.html
+
+</details>
+
+
+
+
+<details> 
+    <summary> Day 2: Aug 19</summary>
+
+`Spent 30 minutes`
+
+
+- Set up route and todo route that returns  hardcoded value
+- Unable to have the todo route as a seprate module from main
+
+
+</details>
+
+:joy:
+
+`:joy:`
+
+<details> 
+    <summary> Day 0: Template</summary>
+</details>
