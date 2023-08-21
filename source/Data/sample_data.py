@@ -4,14 +4,7 @@ Created on : 19/08/23 4:54 pm
 """
 
 class Todos:
-    sample = {
-      "id": 406,
-      "title": "install webcam",
-      "doneStatus": False,
-      "description": ""
-    },
-    todos = {
-  "todos": [
+    todos = [
     {
       "id": 406,
       "title": "install webcam",
@@ -62,4 +55,3 @@ class Todos:
       "description": ""
     }
   ]
-}

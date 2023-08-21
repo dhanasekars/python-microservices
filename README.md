@@ -45,6 +45,19 @@ using Python and FastAPI
 
 </details>
 
+
+<details> 
+    <summary> Day 3: Aug 21</summary>
+`Spent 60 minutes`
+
+- Pydantic
+For GET request
+- Async function 
+- Pagination and per page
+
+</details>
+
+
 <details> 
     <summary> Day 0: Template</summary>
 </details>
