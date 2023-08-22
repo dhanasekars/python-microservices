@@ -16,7 +16,7 @@ using Python and FastAPI
 <details>
     <summary>Day 1 : Aug 18  </summary>
 
-`Spent 70 minutes`
+`Time Spent : 50 minutes`
 
 - Basic project structure
 - Explored and implemented `Makefile`
@@ -36,7 +36,7 @@ using Python and FastAPI
 <details> 
     <summary> Day 2: Aug 19</summary>
 
-`Spent 30 minutes`
+`Time Spent : 50 minutes`
 
 
 - :thumbsup: Set up route and todo route that returns  hardcoded value
@@ -48,7 +48,8 @@ using Python and FastAPI
 
 <details> 
     <summary> Day 3: Aug 21</summary>
-`Spent 60 minutes`
+
+`Time Spent : 50 minutes`
 
 - Pydantic
 For GET request
@@ -57,7 +58,23 @@ For GET request
 
 </details>
 
+<details> 
+    <summary> Day 4: Aug 22</summary>
 
+`Time Spent : 50 minutes`
+
+- Validation for page and per_page
+- Unitest - statuscode done
+- :thumbsdown: Unitest - content unable to do 
+</details>
+
+
+
+
+-------------------------------
 <details> 
     <summary> Day 0: Template</summary>
+
+`Time Spent : XX minutes`
+
 </details>
