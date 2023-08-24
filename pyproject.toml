@@ -18,6 +18,7 @@ textblob = "^0.17.1"
 pydantic = "^2.2.1"
 requests = "^2.31.0"
 httpx = "^0.24.1"
+attr = "^0.3.2"
 
 
 [build-system]

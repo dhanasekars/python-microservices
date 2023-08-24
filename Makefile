@@ -5,13 +5,13 @@ install:
  		  poetry install
 format:
 	#format code
-	black *.py source/*.py
+	black *.py apis/*.py tests/*.py
 lint:
 	#flake8 or #pylint
-	pylint *.py source/*.py
+	pylint *.py apis/*.py tests/*.py
 test:
 	#test
-	python -m pytest -vv --cov=source --cov=main test_*.py
+	python -m pytest -vv --cov=tests
 
 deploy:
 	#deploy

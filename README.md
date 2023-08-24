@@ -68,7 +68,17 @@ For GET request
 - :thumbsdown: Unitest - content unable to do 
 </details>
 
+<details> 
+    <summary> Day 5: Aug 24</summary>
 
+- :thumbsup: Unitest Content done
+- :thumbsup: Able to have the todo route as a separate module from main
+
+Reference : https://www.youtube.com/watch?v=sBVb4IB3O_U
+
+`Time Spent : 45 minutes`
+
+</details>
 
 
 -------------------------------
