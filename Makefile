@@ -17,6 +17,7 @@ git:
 	#git push
 	git add .
 	git commit -m "daily practise"
+	git push
 
 routine: test git
 all: install format lint test
