@@ -105,6 +105,21 @@ Reference : [stack-overflow](https://stackoverflow.com/questions/4630312/reset-a
 
 </details>
 
+<details> 
+    <summary> Day 7: Aug 26</summary>
+
+`Time Spent : 90 minutes`
+
+- created helper file to read and save data to json file
+- stuck with absolute path issue.
+- Unit test is not working - need to use mock
+
+_Added a step in Make file to test and push to git_
+
+</details>
+
+
+
 -------------------------------
 <details> 
     <summary> Day 0: Template</summary>

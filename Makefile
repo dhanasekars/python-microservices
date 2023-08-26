@@ -5,13 +5,13 @@ install:
  		  poetry install
 format:
 	#format code
-	black *.py apis/*.py tests/*.py
+	black *.py apis/*.py tests/*.py utils/*.py
 lint:
 	#flake8 or #pylint
-	pylint *.py apis/*.py tests/*.py
+	pylint *.py apis/*.py tests/*.py utils/>py
 test:
 	#test
-	python -m pytest -vv --cov=tests
+	python -m pytest -vv --cov=apis --cov=utils
 
 git:
 	#git push

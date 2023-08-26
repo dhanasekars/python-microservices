@@ -6,8 +6,6 @@ Created on : 19/08/23 4:54 pm
 
 class Todos:
     """test sample data"""
-    def __init__(self,todos):
-        self.todos = todos
 
     todos = [
         {"id": 406, "title": "install webcam", "doneStatus": False, "description": ""},
@@ -34,3 +32,4 @@ class Todos:
             "description": "",
         },
     ]
+
