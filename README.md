@@ -40,7 +40,7 @@ using Python and FastAPI
 
 
 - :thumbsup: Set up route and todo route that returns  hardcoded value
-- :thumbsdown: Unable to have the todo route as a seprate module from main
+- :thumbsdown: Unable to have the todo route as a separate module from main
 
 
 </details>
@@ -80,6 +80,30 @@ Reference : https://www.youtube.com/watch?v=sBVb4IB3O_U
 
 </details>
 
+
+<details> 
+    <summary> Day 6: Aug 25</summary>
+
+`Time Spent : 45 minutes`
+
+:thumbsdown: tried to restructure data, reading from a json file and parsing.
+Learned the problems of circular import, could not find the right solution but learnt why it is not working
+Also, learn to rebase to last working version
+
+This will undo any changes you've made to tracked files and restore deleted files:
+```commandline
+git reset HEAD --hard
+```
+This will delete any new files that were added since the last commit:
+```commandline
+git clean -fd
+```
+Files that are not tracked due to .gitignore are preserved; they will not be removed
+Warning: using -x instead of -fd would delete ignored files. You probably don't want to do this.
+
+Reference : [stack-overflow](https://stackoverflow.com/questions/4630312/reset-all-changes-after-last-commit-in-git)
+
+</details>
 
 -------------------------------
 <details> 
