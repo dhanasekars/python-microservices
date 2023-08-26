@@ -2,7 +2,7 @@
 Created on : 26/08/23 11:27 am
 @author : ds  
 """
-import json
+import json,uuid
 
 def load_list():
     try:
@@ -23,4 +23,8 @@ def save_list(todo_list):
             json.dump(todo_list, file)
     except Exception as e:
         print(f"An error occurred: {e}")
+
+
+def generate_id():
+    return uuid.uuid4().hex
 

@@ -8,7 +8,7 @@ from typing import Optional, List, Dict
 import fastapi
 from fastapi import Query, HTTPException
 from pydantic import BaseModel, Field
-from utils.helper import load_list, save_list
+from utils.helper import load_list, save_list, generate_id
 
 router = fastapi.APIRouter()
 
@@ -21,7 +21,7 @@ class TodoItem(BaseModel):
 
 
 class ReturnTodo(TodoItem):
-    id: int
+    id: str
 
 
 @router.get("/")
@@ -50,10 +50,13 @@ async def read_todos(
 async def update_todo(todo: TodoItem):
     try:
         todo = todo.model_dump()
+        todo.update(id=generate_id())
+        # print(type(todo))
+        # print(todo)
         data = load_list()
         data.append(todo)
         save_list(data)
-        return {"success": "Id will come here"}
+        return todo
     except Exception as e:
         return {"bad": "error goes here: {e}"}
 
