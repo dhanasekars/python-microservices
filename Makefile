@@ -13,6 +13,10 @@ test:
 	#test
 	python -m pytest -vv --cov=tests
 
-deploy:
-	#deploy
-all: install format lint test deploy
+git:
+	#git push
+	git add .
+	git commit -m "daily practise"
+
+routine: test git
+all: install format lint test
