@@ -4,7 +4,6 @@ Created on : 18/08/23 8:37 am
 """
 from fastapi import FastAPI
 from apis import todos
-from utils.helper import load_list, save_list
 
 app = FastAPI()
 
@@ -17,4 +16,5 @@ def configuration():
 configuration()
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="127.0.0.1", port=8000)

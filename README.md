@@ -120,6 +120,15 @@ _Added a step in Make file to test and push to git_
 
 </details>
 
+<details> 
+    <summary> Day 8: Aug 27</summary>
+
+`Time Spent : 45 minutes`
+
+- Route to read an item using id
+- Route to remove an item using id 
+
+</details>
 
 
 -------------------------------

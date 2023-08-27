@@ -8,7 +8,7 @@ format:
 	black *.py apis/*.py tests/*.py utils/*.py
 lint:
 	#flake8 or #pylint
-	pylint *.py apis/*.py tests/*.py utils/>py
+	pylint *.py apis/*.py tests/*.py utils/*.py
 test:
 	#test
 	python -m pytest -vv --cov=apis --cov=utils

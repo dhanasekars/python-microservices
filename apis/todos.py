@@ -3,30 +3,32 @@ Created on : 24/08/23 8:39 am
 @author : ds  
 """
 
-from typing import Optional, List, Dict
+from typing import Optional, List
 
 import fastapi
 from fastapi import Query, HTTPException
 from pydantic import BaseModel, Field
-from utils.helper import load_list, save_list, generate_id
+from utils.helper import load_list, save_list, generate_id, get_todo_details, remove_todo
 
 router = fastapi.APIRouter()
 
 
 class TodoItem(BaseModel):
     """Base model for to-do list"""
+
     title: str
     description: Optional[str] = None
     doneStatus: bool = Field(default=False)
 
 
 class ReturnTodo(TodoItem):
+    """ extending TodoItem class with UUID"""
     id: str
 
 
 @router.get("/")
 async def read_root():
-    """ root route"""
+    """root route"""
     return {"message": "Welcome to API Challenge"}
 
 
@@ -46,13 +48,22 @@ async def read_todos(
     return load_list()[skip: skip + per_page]
 
 
+@router.get("/todos/{todo_id}")
+async def read_todo(todo_id):
+    """ return todo details for a given id"""
+    result = get_todo_details(todo_id)
+    if result:
+        return result
+    else:
+        return {"error": "Invalid Id"}
+
+
 @router.post("/todos")
-async def update_todo(todo: TodoItem):
+async def add_todo(todo: TodoItem):
+    """This is post route to add a To-do item"""
     try:
         todo = todo.model_dump()
         todo.update(id=generate_id())
-        # print(type(todo))
-        # print(todo)
         data = load_list()
         data.append(todo)
         save_list(data)
@@ -61,7 +72,19 @@ async def update_todo(todo: TodoItem):
         return {"bad": "error goes here: {e}"}
 
 
+@router.delete("/todos/{todo_id}")
+async def update_todo(todo_id):
+    """This is to update an exiting todo using its ID"""
+    data = remove_todo(todo_id)
+    if data:
+        save_list(data)
+        return {"success": f"{todo_id} removed"}
+    else:
+        return {"error": "Id not found"}
+
+
 @router.get("/test")
 async def playground():
+    """a test route to be removed later"""
     data = load_list()
     return data
