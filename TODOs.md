@@ -1,5 +1,6 @@
 ## Todos
 - [ ] Unit tests for all function.
+- [ ] Head, Options, Patch and Trace
 - [ ] Host it in cloud
 - [ ] Storage to db from flat json file
 - [ ] Authentication 
