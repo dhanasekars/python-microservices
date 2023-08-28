@@ -1,0 +1,113 @@
+{
+	"info": {
+		"_postman_id": "91cb075f-e410-48ef-b554-e79469c56fd6",
+		"name": "FastAPI CRUD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "01_LoadBASE",
+			"_postman_id": "7eda31b4-7f43-4469-b8b9-0ca95b7e24f4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}"
+			},
+			"response": []
+		},
+		{
+			"name": "01_GET_Todos",
+			"_postman_id": "431d30f1-b594-46ba-83da-412223dce132",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}todos"
+			},
+			"response": []
+		},
+		{
+			"name": "02_POST_Todo",
+			"_postman_id": "dc938754-79ae-40f0-a3ad-2315e2d9f15a",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\":\"This is the second task.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseURL}}todos"
+			},
+			"response": []
+		},
+		{
+			"name": "03_GET_todo_using_id",
+			"_postman_id": "17a30a44-ffcb-4472-bec4-9d5a5f7c8741",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{baseURL}}todos/{{sanity_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "04_PUT_todo",
+			"_postman_id": "2853e495-fc6b-4801-956c-8d495e315f14",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"doneStatus\": false,\n\t\"description\": \"This is updated using PUT SECOND TIME\",\n    \"title\": \"Changed. There should be only three items\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseURL}}todos/{{sanity_id}}"
+			},
+			"response": []
+		},
+		{
+			"name": "05_DEL_Todo",
+			"_postman_id": "237f199f-79b4-4b49-8c6b-9331f9423712",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "{{baseURL}}todos/{{sanity_id}}"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "81e25d79-4a7b-45c0-9f7e-2f50922db730",
+			"key": "sanity_id",
+			"value": "b4c42e28258242bb931d12e5ead1d3da",
+			"type": "string"
+		}
+	]
+}
