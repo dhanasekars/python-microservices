@@ -18,6 +18,7 @@ git:
 	git add .
 	git commit -m "daily practise"
 	git push
-
+start:
+	uvicorn main:app --reload
 routine: test git
 all: install format lint test

@@ -130,6 +130,17 @@ _Added a step in Make file to test and push to git_
 
 </details>
 
+<details> 
+    <summary> Day 9: Aug 28</summary>
+
+- Route for update using PUT
+- Learnt about limitation in FastAPI pydantic base model 
+- This is the most complex so for. 
+
+`Time Spent : 75 minutes`
+
+</details>
+
 
 -------------------------------
 <details> 

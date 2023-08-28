@@ -8,7 +8,14 @@ from typing import Optional, List
 import fastapi
 from fastapi import Query, HTTPException
 from pydantic import BaseModel, Field
-from utils.helper import load_list, save_list, generate_id, get_todo_details, remove_todo
+from utils.helper import (
+    load_list,
+    save_list,
+    generate_id,
+    get_todo_details,
+    remove_todo,
+    update_todo,
+)
 
 router = fastapi.APIRouter()
 
@@ -22,8 +29,16 @@ class TodoItem(BaseModel):
 
 
 class ReturnTodo(TodoItem):
-    """ extending TodoItem class with UUID"""
+    """extending TodoItem class with UUID"""
+
     id: str
+
+
+class UpdateTodo(BaseModel):
+    """ base model with optional field for updating"""
+    title: Optional[str] = None
+    description: Optional[str] = None
+    doneStatus: Optional[bool] = None
 
 
 @router.get("/")
@@ -34,8 +49,8 @@ async def read_root():
 
 @router.get("/todos", response_model=List[ReturnTodo])
 async def read_todos(
-        page: int = Query(default=1, description="Page Number"),
-        per_page: int = Query(default=5, description="Items per page"),
+    page: int = Query(default=1, description="Page Number"),
+    per_page: int = Query(default=5, description="Items per page"),
 ):
     """Get list of to-do items"""
     if page < 1 or per_page < 1:
@@ -46,16 +61,6 @@ async def read_todos(
     skip = (page - 1) * per_page
 
     return load_list()[skip: skip + per_page]
-
-
-@router.get("/todos/{todo_id}")
-async def read_todo(todo_id):
-    """ return todo details for a given id"""
-    result = get_todo_details(todo_id)
-    if result:
-        return result
-    else:
-        return {"error": "Invalid Id"}
 
 
 @router.post("/todos")
@@ -69,18 +74,29 @@ async def add_todo(todo: TodoItem):
         save_list(data)
         return todo
     except Exception as e:
-        return {"bad": "error goes here: {e}"}
+        return {"bad": f"error goes here: {e}"}
+
+
+@router.get("/todos/{todo_id}")
+async def read_todo(todo_id):
+    """return todo details for a given id"""
+    result = get_todo_details(todo_id)
+    if result:
+        return result
+
+    return {"error": "Invalid Id"}
 
 
 @router.delete("/todos/{todo_id}")
-async def update_todo(todo_id):
-    """This is to update an exiting todo using its ID"""
-    data = remove_todo(todo_id)
-    if data:
-        save_list(data)
-        return {"success": f"{todo_id} removed"}
-    else:
-        return {"error": "Id not found"}
+async def delete_todo(todo_id):
+    """This is to delete an item"""
+    return remove_todo(todo_id)
+
+@router.put("/todos/{todo_id}")
+async def update_tod(todo: UpdateTodo, todo_id):
+    """This route is to update an item"""
+    todo = todo.model_dump()
+    return update_todo(todo_id, todo)
 
 
 @router.get("/test")

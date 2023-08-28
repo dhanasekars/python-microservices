@@ -7,10 +7,12 @@ import uuid
 
 
 def load_list():
-    """ Load json to an object"""
+    """Load json to an object"""
     try:
         with open(
-            "/Users/ds/PycharmProjects/Microservices/data/todo.json", "r", encoding='utf-8'
+            "/Users/ds/PycharmProjects/Microservices/data/todo.json",
+            "r",
+            encoding="utf-8",
         ) as file:
             data = json.load(file)
             return data
@@ -21,34 +23,68 @@ def load_list():
     except Exception as e:
         return e
 
+
 def get_todo_details(todo_id):
+    """to get the details for a given id"""
     data = load_list()
     for item in data:
         if item["id"] == todo_id:
             return item
     return None
 
+
 def remove_todo(todo_id):
+    """function to remove an item from the list"""
     data = load_list()
+    print(f"{data=}")
     initial_length = len(data)
+    print(f"{initial_length=}")
     for item in data:
         if item["id"] == todo_id:
             data.remove(item)
             break
     new_length = len(data)
+    print(f"{new_length=}")
     if initial_length == new_length:
-        return None
-    else:
-        return data
+        return {"error": "Id not found"}
+
+    save_list(data)
+    return {"success": f"{todo_id} removed"}
+
+
+def update_todo(todo_id, todo):
+    """function to update an item."""
+    to_update_item = {}
+    data = load_list()
+    initial_length = len(data)
+    for item in data:
+        if item["id"] == todo_id:
+            to_update_item: object = item
+            data.remove(item)
+            break
+    new_length = len(data)
+    if initial_length == new_length:
+        return {"error": f"{todo_id} not found ."}
+
+    for key, value in todo.items():
+        if value is not None:
+            to_update_item[key] = value
+    data.append(to_update_item)
+    save_list(data)
+
+    return {"success": f"{todo_id} updated successfully."}
+
 
 def save_list(todo_list):
-    """ save object to json file"""
+    """save object to json file"""
     try:
         with open(
-            "/Users/ds/PycharmProjects/Microservices/data/todo.json", "w", encoding='utf-8'
+            "/Users/ds/PycharmProjects/Microservices/data/todo.json",
+            "w",
+            encoding="utf-8",
         ) as file:
             json.dump(todo_list, file)
-            return { "success"}
+            return {"success"}
     except Exception as e:
         return e
 
@@ -56,4 +92,3 @@ def save_list(todo_list):
 def generate_id():
     """generate a UUID for each task"""
     return uuid.uuid4().hex
-
