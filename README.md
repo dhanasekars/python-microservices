@@ -147,10 +147,13 @@ _Added a step in Make file to test and push to git_
 - No progress 
 - Poetry env got screwed up while adding unit test (not sure about the root cause)
 - Fixed the issue
+- Then git screwed because of POSTMAN json directly updating remote and me add some __init__.py file
+
+[solution](https://stackoverflow.com/questions/37145151/how-to-handle-git-gc-fatal-bad-object-refs-remotes-origin-head-error)
 
 Have to focus on unit tests tomorrow.
 
-`Time Spent : 60 minutes`
+`Time Spent : 90 minutes`
 
 </details>
 
