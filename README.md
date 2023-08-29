@@ -141,6 +141,19 @@ _Added a step in Make file to test and push to git_
 
 </details>
 
+<details> 
+    <summary> Day 10: Aug 29</summary>
+
+- No progress 
+- Poetry env got screwed up while adding unit test (not sure about the root cause)
+- Fixed the issue
+
+Have to focus on unit tests tomorrow.
+
+`Time Spent : 60 minutes`
+
+</details>
+
 
 -------------------------------
 <details> 
