@@ -24,9 +24,7 @@ class ConfigurationManager:
 
         try:
             with open(config_file_path, "r") as config_file:
-                print("I loaded config json")
                 self.config_data = json.load(config_file)
-                print(f"{self.config_data=}")
         except FileNotFoundError:
             raise FileNotFoundError("Config file not found.")
         except json.JSONDecodeError:
