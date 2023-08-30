@@ -4,7 +4,7 @@ Created on : 26/08/23 11:27 am
 """
 import json
 import uuid
-from config_manager import config_manager
+from config.config_manager import config_manager
 
 
 def load_list():
