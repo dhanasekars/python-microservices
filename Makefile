@@ -24,12 +24,8 @@ clean_cache:
 	#clearing all pytest cache
 	find . -type d -name ".pytest_cache" -exec rm -r {} +
 
-routine: clean_cache test git
 
-all: install format lint test
-
-
-unittest_coverage:
+unittest:
 	coverage run --rcfile=.coveragerc -m unittest tests/*.py
 	coverage report -m
 
@@ -37,3 +33,8 @@ unittest_coverage:
 coverage_for_function:
 	# This is to check coverage for a given function using pytest
 	pytest --cov=my_module -k my_function
+
+
+routine: clean_cache test unittest git
+
+all: install format lint test

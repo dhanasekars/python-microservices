@@ -4,13 +4,14 @@ Created on : 26/08/23 11:27 am
 """
 import json
 import uuid
+from config_manager import config_manager
 
 
 def load_list():
     """Load json to an object"""
     try:
         with open(
-            "/Users/ds/PycharmProjects/Microservices/data/todo.json",
+            config_manager.config_data.get("data_file"),
             "r",
             encoding="utf-8",
         ) as file:
@@ -79,7 +80,7 @@ def save_list(todo_list):
     """save object to json file"""
     try:
         with open(
-            "/Users/ds/PycharmProjects/Microservices/data/todo.json",
+            config_manager.config_data.get("data_file"),
             "w",
             encoding="utf-8",
         ) as file:

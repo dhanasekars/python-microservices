@@ -160,9 +160,10 @@ Have to focus on unit tests tomorrow.
 <details> 
     <summary> Day 11: Aug 30 </summary>
 
-`Time Spent : 60 minutes`
+`Time Spent : 120 minutes`
 
 - Productive time creating unit tests and coverage report 
+- Config file added using `Singleton` design pattern
 
 ![unit_test_coverage.png](images%2Funit_test_coverage.png)
 
