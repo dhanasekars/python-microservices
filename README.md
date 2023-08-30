@@ -52,7 +52,7 @@ using Python and FastAPI
 `Time Spent : 50 minutes`
 
 - Pydantic
-For GET request
+    For GET request
 - Async function 
 - Pagination and per page
 
@@ -154,6 +154,17 @@ _Added a step in Make file to test and push to git_
 Have to focus on unit tests tomorrow.
 
 `Time Spent : 90 minutes`
+
+</details>
+
+<details> 
+    <summary> Day 11: Aug 30 </summary>
+
+`Time Spent : 60 minutes`
+
+- Productive time creating unit tests and coverage report 
+
+![unit_test_coverage.png](images%2Funit_test_coverage.png)
 
 </details>
 

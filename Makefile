@@ -20,5 +20,20 @@ git:
 	git push
 start:
 	uvicorn main:app --reload
-routine: test git
+clean_cache:
+	#clearing all pytest cache
+	find . -type d -name ".pytest_cache" -exec rm -r {} +
+
+routine: clean_cache test git
+
 all: install format lint test
+
+
+unittest_coverage:
+	coverage run --rcfile=.coveragerc -m unittest tests/*.py
+	coverage report -m
+
+
+coverage_for_function:
+	# This is to check coverage for a given function using pytest
+	pytest --cov=my_module -k my_function
