@@ -40,6 +40,26 @@ def get_todo_details(todo_id):
     return {"error": "Todo not found for the given id."}
 
 
+def save_list(todo_list):
+    """save object to json file"""
+    try:
+        with open(
+            config_manager.config_data.get("data_file"),
+            "w",
+            encoding="utf-8",
+        ) as file:
+            json.dump(todo_list, file)
+            return True
+    except FileNotFoundError:
+        return "File not found. Check the file path."
+    except PermissionError:
+        return "Permission denied. Check file permissions."
+    except json.JSONDecodeError:
+        return "Error encoding data to JSON."
+    except Exception as e:
+        return f"An unexpected error occurred: {str(e)}"
+
+
 def remove_todo(todo_id):
     """function to remove an item from the list"""
     data = load_list()
@@ -80,20 +100,6 @@ def update_todo(todo_id, todo):
     save_list(data)
 
     return {"success": f"{todo_id} updated successfully."}
-
-
-def save_list(todo_list):
-    """save object to json file"""
-    try:
-        with open(
-            config_manager.config_data.get("data_file"),
-            "w",
-            encoding="utf-8",
-        ) as file:
-            json.dump(todo_list, file)
-            return {"success"}
-    except Exception as e:
-        return e
 
 
 def generate_id():

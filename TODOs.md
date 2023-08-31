@@ -2,6 +2,7 @@
 - [x] Patch entire class check unittest for get_todo_list()
   - use @patch decorator before class declaration to patch a function for all tests inside the class
 - [ ] Unit tests for all function.
+- [ ] Add debug logging to the project
 - [x] Create a config.json file
 - [ ] Head, Options, Patch and Trace
 - [ ] Host it in cloud

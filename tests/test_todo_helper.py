@@ -6,6 +6,7 @@ import json
 import unittest
 from unittest.mock import mock_open, patch
 from utils.todo_helper import save_list, load_list, get_todo_details
+from config.config_manager import config_manager
 
 
 class TestLoadListFromJSON(unittest.TestCase):
@@ -30,7 +31,7 @@ class TestLoadListFromJSON(unittest.TestCase):
         self.assertEqual(load_list().doc, "Test.")
 
 
-@patch("utils.todo_helper.load_list", autospec=True)
+@patch("utils.todo_helper.load_list")
 class TestGetTodoDetails(unittest.TestCase):
     """create test class that inherits from unitest.Testcase to test Get Todo Details helper function"""
 
@@ -63,3 +64,68 @@ class TestGetTodoDetails(unittest.TestCase):
         self.assertIsInstance(result, dict)
         assert "error" in result
         self.assertEqual(result["error"], "No data in the system.")
+
+
+class TestSaveList(unittest.TestCase):
+    """create test class that inherits from unitest.Testcase to test Get save list helper function"""
+
+    @patch("builtins.open", new_callable=mock_open)
+    def test_save_list_success(self, mock_file):
+        todo_list = [
+            {
+                "title": "This is the second task.",
+                "description": "",
+                "doneStatus": False,
+                "id": "062a2f32f2d54a5c94cd64c4013ee58b",
+            }
+        ]
+        result = save_list(todo_list=todo_list)
+        self.assertTrue(result)
+        mock_file.assert_called_once_with(
+            config_manager.config_data.get("data_file"), "w", encoding="utf-8"
+        )
+        mock_file().write.assert_called()
+
+    @patch("builtins.open", side_effect=FileNotFoundError)
+    def test_save_list_file_not_found(self, mock_file):
+        # Arrange
+        todo_list = ["Task 1", "Task 2"]
+
+        # Act
+        result = save_list(todo_list)
+
+        # Assert
+        self.assertEqual(result, "File not found. Check the file path.")
+
+    @patch("builtins.open", side_effect=PermissionError)
+    def test_save_list_permission_error(self, mock_open):
+        # Arrange
+        todo_list = ["Task 1", "Task 2"]
+
+        # Act
+        result = save_list(todo_list)
+
+        # Assert
+        self.assertEqual(result, "Permission denied. Check file permissions.")
+
+    @patch("builtins.open", side_effect=Exception("Test exception"))
+    def test_save_list_generic_exception(self, mock_open):
+        # Arrange
+        todo_list = ["Task 1", "Task 2"]
+
+        # Act
+        result = save_list(todo_list)
+
+        # Assert
+        self.assertEqual(result, "An unexpected error occurred: Test exception")
+
+    @patch("json.dump", side_effect=json.JSONDecodeError("Test error", "", 0))
+    def test_save_list_json_decode_error(self, mock_json_dump):
+        # Arrange
+        todo_list = ["Task 1", "Task 2"]
+
+        # Act
+        result = save_list(todo_list)
+
+        # Assert
+        self.assertEqual(result, "Error encoding data to JSON.")

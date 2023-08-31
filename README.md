@@ -172,11 +172,12 @@ Have to focus on unit tests tomorrow.
 <details> 
     <summary> Day 12: Aug 31</summary>
 
-`Time Spent : 75 minutes`
+`Time Spent : 120 minutes`
 
 - unit tests for get_todo_details made to refactor the function.
 - unit tests for get_todo_details is complete
 - Did @mock at module level.
+- Unit test for save_list
 
 </details>
 
