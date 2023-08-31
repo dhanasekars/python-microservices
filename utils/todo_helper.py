@@ -25,17 +25,19 @@ def load_list():
 
 def get_todo_details(todo_id):
     """to get the details for a given id"""
-
     data = load_list()
-    if isinstance(data, list):
-        for item in data:
-            if item["id"] == todo_id:
-                return item
-            return {"error": "ID not found."}
-    return {"error": {data}}
 
+    if not isinstance(data, list):
+        return {"error": "Invalid data format. Expected a list."}
 
-print(get_todo_details("trtr"))
+    if len(data) == 0:
+        return {"error": "No data in the system."}
+
+    for item in data:
+        if item["id"] == todo_id:
+            return item
+
+    return {"error": "Todo not found for the given id."}
 
 
 def remove_todo(todo_id):

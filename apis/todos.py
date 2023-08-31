@@ -82,10 +82,9 @@ async def add_todo(todo: TodoItem):
 async def read_todo(todo_id):
     """return todo details for a given id"""
     result = get_todo_details(todo_id)
-    if result:
-        return result
-
-    return {"error": "Invalid Id"}
+    if "error" in result:
+        return {"error": f"{result['error']}"}
+    return result
 
 
 @router.delete("/todos/{todo_id}")

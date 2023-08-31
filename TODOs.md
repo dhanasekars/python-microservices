@@ -1,4 +1,6 @@
 ## Todos
+- [x] Patch entire class check unittest for get_todo_list()
+  - use @patch decorator before class declaration to patch a function for all tests inside the class
 - [ ] Unit tests for all function.
 - [x] Create a config.json file
 - [ ] Head, Options, Patch and Trace
@@ -6,6 +8,7 @@
 - [ ] Storage to db from flat json file
 - [ ] Authentication 
 - [ ] tracking and limiting usage 
+- [ ] Have an error message json
 
 ## Bugs
 
