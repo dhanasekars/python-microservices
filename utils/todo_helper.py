@@ -19,19 +19,23 @@ def load_list():
             return data
     except FileNotFoundError:
         return []
-    except json.JSONDecodeError as e:
-        return e
-    except Exception as e:
+    except ValueError as e:
         return e
 
 
 def get_todo_details(todo_id):
     """to get the details for a given id"""
+
     data = load_list()
-    for item in data:
-        if item["id"] == todo_id:
-            return item
-    return None
+    if isinstance(data, list):
+        for item in data:
+            if item["id"] == todo_id:
+                return item
+            return {"error": "ID not found."}
+    return {"error": {data}}
+
+
+print(get_todo_details("trtr"))
 
 
 def remove_todo(todo_id):

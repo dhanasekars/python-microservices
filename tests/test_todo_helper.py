@@ -23,8 +23,8 @@ class TestLoadListFromJSON(unittest.TestCase):
     # Test case: JSONDecodeError raised for a non-JSON format
     @patch(
         "json.loads",
-        side_effect=json.JSONDecodeError("Invalid JSON File.", "Test.", 0),
+        side_effect=json.JSONDecodeError("Expecting value.", "Test.", 0),
     )
     def test_json_decode_error(self, mock_json_loads):
-        self.assertEqual(load_list().msg, "Invalid JSON File.")
+        self.assertEqual(load_list().msg, "Expecting value.")
         self.assertEqual(load_list().doc, "Test.")

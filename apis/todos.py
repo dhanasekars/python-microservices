@@ -8,7 +8,7 @@ from typing import Optional, List
 import fastapi
 from fastapi import Query, HTTPException
 from pydantic import BaseModel, Field
-from utils.helper import (
+from utils.todo_helper import (
     load_list,
     save_list,
     generate_id,
@@ -35,7 +35,8 @@ class ReturnTodo(TodoItem):
 
 
 class UpdateTodo(BaseModel):
-    """ base model with optional field for updating"""
+    """base model with optional field for updating"""
+
     title: Optional[str] = None
     description: Optional[str] = None
     doneStatus: Optional[bool] = None
@@ -60,7 +61,7 @@ async def read_todos(
 
     skip = (page - 1) * per_page
 
-    return load_list()[skip: skip + per_page]
+    return load_list()[skip : skip + per_page]
 
 
 @router.post("/todos")
@@ -92,6 +93,7 @@ async def delete_todo(todo_id):
     """This is to delete an item"""
     return remove_todo(todo_id)
 
+
 @router.put("/todos/{todo_id}")
 async def update_tod(todo: UpdateTodo, todo_id):
     """This route is to update an item"""
@@ -99,7 +101,7 @@ async def update_tod(todo: UpdateTodo, todo_id):
     return update_todo(todo_id, todo)
 
 
-@router.get("/test")
+@router.get("/playground")
 async def playground():
     """a test route to be removed later"""
     data = load_list()
