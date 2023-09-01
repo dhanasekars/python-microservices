@@ -37,7 +37,7 @@ coverage_for_function:
 
 routine: clean_cache test unittest git
 
-all: install format lint test
+check: format lint
 
 source:
 	source ~/.zshrc

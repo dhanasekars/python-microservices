@@ -15,3 +15,4 @@
 
 - [x] Hardcoded path in todo.json file path -helper.py 
 - [x] PUT endpoint needs all three fields, fix the Pydantic BaseModel with non-mandatory fields
+- [ ] PUT - Handle updating an existing todo item with empty body {} 

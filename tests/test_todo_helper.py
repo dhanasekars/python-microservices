@@ -4,16 +4,34 @@ Created on : 30/08/23 11:34 am
 """
 import json
 import unittest
+import uuid
 from unittest.mock import mock_open, patch
-from utils.todo_helper import save_list, load_list, get_todo_details
+from utils.todo_helper import (
+    save_list,
+    load_list,
+    get_todo_details,
+    remove_todo,
+    generate_id,
+    update_todo,
+)
 from config.config_manager import config_manager
+
+
+# ------------------------test setup ----------------------------------#
+# Mock functions for load_list and save_list
+def mock_load_list():
+    return [{"id": 1, "task": "Task 1"}, {"id": 2, "task": "Task 2"}]
+
+
+def mock_save_list(data):
+    mock_save_list.updated_data = data
+    pass
 
 
 class TestLoadListFromJSON(unittest.TestCase):
     # Test case - Loading a list from a valid JSON file
     @patch("builtins.open", new_callable=mock_open, read_data="[1, 2, 3, 4, 5]")
     def test_load_list_from_json_valid(self, mock_file_open):
-        loaded_list = load_list()
         self.assertEqual(load_list(), [1, 2, 3, 4, 5])
 
     # Test case: Return an empty list from a non-existent file
@@ -129,3 +147,71 @@ class TestSaveList(unittest.TestCase):
 
         # Assert
         self.assertEqual(result, "Error encoding data to JSON.")
+
+
+@patch("utils.todo_helper.load_list", side_effect=mock_load_list)
+@patch("utils.todo_helper.save_list", side_effect=mock_save_list)
+class TestRemoveTodo(unittest.TestCase):
+    """module to test Remove todo item"""
+
+    def test_remove_existing_todo(self, mock_load, mock_save):
+        result = remove_todo(1)
+        self.assertEqual(result, {"success": "1 removed"})
+
+    def test_remove_nonexistent_todo(self, mock_load, mock_save):
+        result = remove_todo(3)
+        self.assertEqual(result, {"error": "Id not found"})
+
+    def test_remove_last_todo(self, mock_load, mock_save):
+        result = remove_todo(2)
+        self.assertEqual(result, {"success": "2 removed"})
+
+    def test_remove_todo_without_change(self, mock_load, mock_save):
+        result = remove_todo(4)
+        self.assertEqual(result, {"error": "Id not found"})
+
+
+class TestGenerateID(unittest.TestCase):
+    """module to test UUID generation and uniqueness"""
+
+    def test_generate_id_length(self):
+        # Generate an ID and check if it has the correct length
+        generated_id = generate_id()
+        self.assertEqual(len(generated_id), 32)  # A UUID4 hex string has 32 characters
+
+    def test_generate_id_uniqueness(self):
+        # Generate a list of IDs and ensure they are all unique
+        id_list = [generate_id() for _ in range(100)]
+        self.assertEqual(len(id_list), len(set(id_list)))  # Check for uniqueness
+
+
+@patch("utils.todo_helper.load_list", side_effect=mock_load_list)
+@patch("utils.todo_helper.save_list", side_effect=mock_save_list)
+class TestUpdateTodo(unittest.TestCase):
+    def test_update_existing_todo(self, mock_save, mock_load):
+        # Update an existing todo
+        result = update_todo(1, {"task": "Updated Task"})
+        self.assertEqual(result, {"success": "1 updated successfully."})
+
+        # Verify that the todo was actually updated
+        self.assertEqual(
+            mock_save.call_args[0][0],
+            [{"id": 1, "task": "Updated Task"}, {"id": 2, "task": "Task 2"}],
+        )
+
+    def test_update_nonexistent_todo(self, mock_save, mock_load):
+        # Try to update a nonexistent todo
+        result = update_todo(3, {"task": "Updated Task"})
+        self.assertEqual(result, {"error": "3 not found."})
+        self.assertIsNone(mock_save.call_args)
+
+    def test_update_with_invalid_key(self, mock_save, mock_load):
+        # Try to update with an invalid key
+        result = update_todo(1, {"invalid_key": "Updated Task"})
+        self.assertEqual(result, {"success": "1 updated successfully."})
+
+        # Verify that the todo list remains unchanged
+        self.assertEqual(
+            mock_save.call_args[0][0],
+            [{"id": 1, "task": "Task 1"}, {"id": 2, "task": "Task 2"}],
+        )

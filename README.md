@@ -165,7 +165,7 @@ Have to focus on unit tests tomorrow.
 - Productive time creating unit tests and coverage report 
 - Config file added using `Singleton` design pattern
 
-![unit_test_coverage.png](images%2Funit_test_coverage.png)
+![unit_test_coverage.png](images/unit_test_coverage.png)
 
 </details>
 
@@ -178,6 +178,17 @@ Have to focus on unit tests tomorrow.
 - unit tests for get_todo_details is complete
 - Did @mock at module level.
 - Unit test for save_list
+
+</details>
+
+
+<details> 
+    <summary> Day 13: Sep 01 </summary>
+
+`Time Spent : 70 minutes`
+
+- Refactored update list
+- Added unit tests for update list and UUID generation 
 
 </details>
 

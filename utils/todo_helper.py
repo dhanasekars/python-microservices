@@ -63,42 +63,32 @@ def save_list(todo_list):
 def remove_todo(todo_id):
     """function to remove an item from the list"""
     data = load_list()
-    print(f"{data=}")
-    initial_length = len(data)
-    print(f"{initial_length=}")
-    for item in data:
-        if item["id"] == todo_id:
-            data.remove(item)
-            break
-    new_length = len(data)
-    print(f"{new_length=}")
-    if initial_length == new_length:
+    # New list with item for the given id removed
+    updated_data = [item for item in data if item["id"] != todo_id]
+
+    if len(data) == len(updated_data):
         return {"error": "Id not found"}
 
-    save_list(data)
+    save_list(updated_data)
     return {"success": f"{todo_id} removed"}
 
 
 def update_todo(todo_id, todo):
     """function to update an item."""
-    to_update_item = {}
     data = load_list()
-    initial_length = len(data)
+    updated = False
+
     for item in data:
         if item["id"] == todo_id:
-            to_update_item: object = item
-            data.remove(item)
+            for key, value in todo.items():
+                if value is not None and key in item:
+                    item[key] = value
+            updated = True
             break
-    new_length = len(data)
-    if initial_length == new_length:
-        return {"error": f"{todo_id} not found ."}
+    if not updated:
+        return {"error": f"{todo_id} not found."}
 
-    for key, value in todo.items():
-        if value is not None:
-            to_update_item[key] = value
-    data.append(to_update_item)
     save_list(data)
-
     return {"success": f"{todo_id} updated successfully."}
 
 

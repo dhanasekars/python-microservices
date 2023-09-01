@@ -28,4 +28,3 @@ Created on : 26/08/23 6:15 pm
 #     output = Foo(f1="test", f2=None, f4="hello")
 # except ValidationError as e:
 #     print(e)
-
