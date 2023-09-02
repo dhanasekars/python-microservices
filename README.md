@@ -192,6 +192,16 @@ Have to focus on unit tests tomorrow.
 
 </details>
 
+<details> 
+    <summary> Day 14: Sep 02</summary>
+
+`Time Spent : 120 minutes`
+
+- Lot of experimentation to mock the end points.
+- Finally, found that mocking should happen function call inside the route not at the actual function definition
+- Completed unittests for two routes.
+
+
 -------------------------------
 
 <details> 

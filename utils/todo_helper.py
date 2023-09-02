@@ -23,6 +23,9 @@ def load_list():
         return e
 
 
+load_list()
+
+
 def get_todo_details(todo_id):
     """to get the details for a given id"""
     data = load_list()
