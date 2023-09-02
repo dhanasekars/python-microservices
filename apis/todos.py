@@ -7,7 +7,7 @@ from typing import Optional, List
 
 import fastapi
 from fastapi import Query, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, constr
 from utils.todo_helper import (
     load_list,
     save_list,
@@ -23,7 +23,7 @@ router = fastapi.APIRouter()
 class TodoItem(BaseModel):
     """Base model for to-do list"""
 
-    title: str
+    title: constr(min_length=1, strip_whitespace=True)
     description: Optional[str] = None
     doneStatus: bool = Field(default=False)
 
@@ -75,7 +75,7 @@ async def add_todo(todo: TodoItem):
         save_list(data)
         return todo
     except Exception as e:
-        return {"bad": f"error goes here: {e}"}
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
 
 
 @router.get("/todos/{todo_id}")
@@ -83,7 +83,8 @@ async def read_todo(todo_id):
     """return todo details for a given id"""
     result = get_todo_details(todo_id)
     if "error" in result:
-        return {"error": f"{result['error']}"}
+        raise HTTPException(status_code=404, detail=f"{result['error']}")
+
     return result
 
 
@@ -94,14 +95,7 @@ async def delete_todo(todo_id):
 
 
 @router.put("/todos/{todo_id}")
-async def update_tod(todo: UpdateTodo, todo_id):
+async def update_todo_list(todo: UpdateTodo, todo_id):
     """This route is to update an item"""
     todo = todo.model_dump()
     return update_todo(todo_id, todo)
-
-
-@router.get("/playground")
-async def playground():
-    """a test route to be removed later"""
-    data = load_list()
-    return data

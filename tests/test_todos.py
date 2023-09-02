@@ -5,6 +5,8 @@ Created on : 02/09/23 11:49 am
 import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
+
+from apis import todos
 from main import app  # Import your FastAPI app instance
 from unittest.mock import patch
 
@@ -78,7 +80,7 @@ class TestReadTodos:
             "detail": "Page and per_page must be positive integer."
         }
 
-        # Assert that the `load_list()` function was called
+        # Assert that the `load_list()` function was NOT called
         mock_load_list.assert_not_called()
 
         # Test for invalid per_page
@@ -92,5 +94,215 @@ class TestReadTodos:
             "detail": "Page and per_page must be positive integer."
         }
 
-        # Assert that the `load_list()` function was called
+        # Assert that the `load_list()` function was NOT called
         mock_load_list.assert_not_called()
+
+
+class TestAddTodo:
+    def test_add_todo_success(self, test_client):
+        # Mock the load_list() function
+        mock_load_list = MagicMock()
+        mock_load_list.return_value = []
+
+        # Mock the save_list() function
+        mock_save_list = MagicMock()
+
+        # Mock the generate_id() function
+        mock_generate_id = MagicMock()
+        mock_generate_id.return_value = "1"
+
+        # Patch the load_list(), save_list(), and generate_id() functions
+        with patch.object(todos, "load_list", mock_load_list), patch.object(
+            todos, "save_list", mock_save_list
+        ), patch.object(todos, "generate_id", mock_generate_id):
+            # Make a request to the `/todos` route
+            response = test_client.post("/todos", json={"title": "Todo 1"})
+
+            # Get the JSON response
+            json_response = response.json()
+
+        # Assert the response
+        assert response.status_code == 200
+        assert json_response == {
+            "id": "1",
+            "title": "Todo 1",
+            "description": None,
+            "doneStatus": False,
+        }
+
+        # Assert that the `load_list()` function was called
+        mock_load_list.assert_called_once()
+
+        # Assert that the `save_list()` function was called
+        mock_save_list.assert_called_once()
+
+        # Assert that the `generate_id()` function was called
+        mock_generate_id.assert_called_once()
+
+    def test_add_todo_invalid_data(self, test_client):
+        # Mock the load_list() function
+        mock_load_list = MagicMock()
+        mock_load_list.return_value = []
+
+        # Mock the save_list() function
+        mock_save_list = MagicMock()
+
+        # Mock the generate_id() function
+        mock_generate_id = MagicMock()
+        mock_generate_id.return_value = "1"
+
+        # Patch the load_list(), save_list(), and generate_id() functions
+        with patch.object(todos, "load_list", mock_load_list), patch.object(
+            todos, "save_list", mock_save_list
+        ), patch.object(todos, "generate_id", mock_generate_id):
+            # Make a request to the `/todos` route with invalid data
+            response = test_client.post("/todos", json={"title": "     "})
+
+        # Assert the response
+        assert response.status_code == 422
+        assert response.json()["detail"][0]["type"] == "string_too_short"
+
+        # Assert that the `load_list()` function was not called
+        mock_load_list.assert_not_called()
+
+        # Assert that the `save_list()` function was not called
+        mock_save_list.assert_not_called()
+
+    def test_add_todo_exception(self, test_client):
+        # Mock the load_list() function
+        mock_load_list = MagicMock()
+        mock_load_list.return_value = []
+
+        # Mock the save_list() function
+        mock_save_list = MagicMock()
+        mock_save_list.side_effect = Exception("An error occurred")
+
+        # Mock the generate_id() function
+        mock_generate_id = MagicMock()
+        mock_generate_id.return_value = "1"
+
+        # Patch the load_list(), save_list(), and generate_id() functions
+        with patch.object(todos, "load_list", mock_load_list), patch.object(
+            todos, "save_list", mock_save_list
+        ), patch.object(todos, "generate_id", mock_generate_id):
+            # Make a request to the `/todos` route
+            response = test_client.post("/todos", json={"title": "Todo 1"})
+
+        # Assert the response
+        assert response.status_code == 500
+        assert response.json() == {"detail": "Internal Server Error: An error occurred"}
+
+        # Assert that the `load_list()` function was called
+        mock_load_list.assert_called_once()
+
+        # Assert that the `save_list()` function was not called
+        mock_save_list.assert_called_once()
+
+        # Assert that the `generate_id()` function was called
+        mock_generate_id.assert_called_once()
+
+
+class TestReadTodosByID:
+    """Tests for read todo by id route"""
+
+    def test_read_todo_success(self, test_client):
+        # Mock the get_todo_details() function
+        mock_get_todo_details = MagicMock()
+        mock_get_todo_details.return_value = {"id": "1", "title": "Todo 1"}
+
+        # Patch the get_todo_details() function
+        with patch.object(todos, "get_todo_details", mock_get_todo_details):
+            # Make a request to the `/todos/{todo_id}` route
+            response = test_client.get("/todos/1")
+
+            # Get the JSON response
+            json_response = response.json()
+
+        # Assert the response
+        assert response.status_code == 200
+        assert json_response == {"id": "1", "title": "Todo 1"}
+
+        # Assert that the `get_todo_details()` function was called
+        mock_get_todo_details.assert_called_once_with("1")
+
+    def test_read_todo_not_found(self, test_client):
+        # Mock the get_todo_details() function
+        mock_get_todo_details = MagicMock()
+        mock_get_todo_details.return_value = {"error": "Todo not found"}
+
+        # Patch the get_todo_details() function
+        with patch.object(todos, "get_todo_details", mock_get_todo_details):
+            # Make a request to the `/todos/{todo_id}` route
+            response = test_client.get("/todos/1")
+
+            # Get the JSON response
+            json_response = response.json()
+
+        # Assert the response
+        assert response.status_code == 404
+        assert json_response["detail"] == "Todo not found"
+
+        # Assert that the `get_todo_details()` function was called
+        mock_get_todo_details.assert_called_once_with("1")
+
+
+class TestDeleteTodoByID:
+    """class to test the delete route"""
+
+    def test_delete_todo_success(self, test_client):
+        # Mock the remove_todo() function
+        mock_remove_todo = MagicMock()
+        mock_remove_todo.return_value = True
+
+        # Patch the remove_todo() function
+        with patch.object(todos, "remove_todo", mock_remove_todo):
+            # Make a request to the `/todos/{todo_id}` route
+            response = test_client.delete("/todos/1")
+
+        # Assert the response
+        assert response.status_code == 200
+
+        # Assert that the `remove_todo()` function was called
+        mock_remove_todo.assert_called_once_with("1")
+
+    def test_delete_todo_not_found(self, test_client):
+        # Mock the remove_todo() function
+        mock_remove_todo = MagicMock()
+        mock_remove_todo.return_value = False
+
+        # Patch the remove_todo() function
+        with patch.object(todos, "remove_todo", mock_remove_todo):
+            # Make a request to the `/todos/{todo_id}` route
+            response = test_client.delete("/todos/1")
+
+        # Assert the response
+        assert response.status_code == 200
+
+        # Assert that the `remove_todo()` function was called
+        mock_remove_todo.assert_called_once_with("1")
+
+
+class TestUpdateTodo:
+    """Tests for the `update_todo()` route"""
+
+    def test_update_todo_success(self, test_client):
+        # Mock the update_todo() function
+        mock_update_todo = MagicMock()
+        mock_update_todo.return_value = {"title": "Todo 1", "doneStatus": False}
+
+        # Patch the update_todo() function
+        with patch.object(todos, "update_todo", mock_update_todo):
+            # Make a request to the `/todos/{todo_id}` route
+            response = test_client.put(
+                "/todos/1", json={"title": "Todo 1", "doneStatus": False}
+            )
+
+        # Assert the response
+        assert response.status_code == 200
+        print(response.json())
+        assert response.json() == {"title": "Todo 1", "doneStatus": False}
+
+        # Assert that the `update_todo()` function was called
+        mock_update_todo.assert_called_once_with(
+            "1", {"description": None, "doneStatus": False, "title": "Todo 1"}
+        )

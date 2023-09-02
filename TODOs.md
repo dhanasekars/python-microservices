@@ -5,6 +5,7 @@
 - [ ] Add debug logging to the project
 - [x] Create a config.json file
 - [ ] Head, Options, Patch and Trace
+- [ ] Return appropriate HTTP status code like 204
 - [ ] Host it in cloud
 - [ ] Storage to db from flat json file
 - [ ] Authentication 
