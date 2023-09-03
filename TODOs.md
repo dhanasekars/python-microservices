@@ -1,19 +1,25 @@
-## Todos
+# Todos
+## September 
 - [x] Patch entire class check unittest for get_todo_list()
   - use @patch decorator before class declaration to patch a function for all tests inside the class
 - [x] Unit tests for all function.
-- [ ] Add debug logging to the project
+- [x] Add debug logging to the project
 - [x] Create a config.json file
-- [ ] Head, Options, Patch and Trace
 - [ ] Return appropriate HTTP status code like 204
+- [ ] Establish CI/CD
 - [ ] Host it in cloud
+
+## Later
+- [ ] Head, Options, Patch and Trace
 - [ ] Move data store from json to db
 - [ ] Authentication 
 - [ ] tracking and limiting usage 
 - [ ] Have an error message json
 
-## Bugs
+
+# Bugs
 
 - [x] Hardcoded path in todo.json file path -helper.py 
 - [x] PUT endpoint needs all three fields, fix the Pydantic BaseModel with non-mandatory fields
 - [ ] PUT - Handle updating an existing todo item with empty body {} 
+- [ ] A test is creating the json.data - fix that. This happens when there is no json file 

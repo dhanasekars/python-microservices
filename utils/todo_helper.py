@@ -4,7 +4,10 @@ Created on : 26/08/23 11:27 am
 """
 import json
 import uuid
+import logging
 from config.config_manager import config_manager
+
+config_manager.configure_logging()
 
 
 def load_list():
@@ -16,10 +19,17 @@ def load_list():
             encoding="utf-8",
         ) as file:
             data = json.load(file)
+            logging.info(
+                f"Loaded data successfully from {config_manager.config_data.get('data_file')}"
+            )
             return data
     except FileNotFoundError:
+        logging.info(
+            f"Data file not found. Returning an empty list.: {config_manager.config_data.get('data_file')}"
+        )
         return []
     except ValueError as e:
+        logging.error(f"Error loading data. Value Error: {str(e)}")
         return e
 
 
@@ -28,73 +38,112 @@ load_list()
 
 def get_todo_details(todo_id):
     """to get the details for a given id"""
+    logging.info(f"Fetching todo details for ID: {todo_id}")
+
     data = load_list()
 
     if not isinstance(data, list):
-        return {"error": "Invalid data format. Expected a list."}
+        error_message = "Invalid data format. Expected a list."
+        logging.error(error_message)
+        return {"error": error_message}
 
     if len(data) == 0:
-        return {"error": "No data in the system."}
+        warning_message = "No data in the system."
+        logging.warning(warning_message)
+        return {"error": warning_message}
 
     for item in data:
         if item["id"] == todo_id:
+            logging.debug(f"Found todo details for ID {todo_id}: {item}")
             return item
 
-    return {"error": "Todo not found for the given id."}
+    logging.warning(f"Todo not found for the given ID: {todo_id}")
+    return {"error": f"Todo not found for the given id: {todo_id}"}
 
 
 def save_list(todo_list):
     """save object to json file"""
     try:
+        file_path = config_manager.config_data.get("data_file")
+        logging.debug(f"Saving data to file: {file_path}")
+
         with open(
-            config_manager.config_data.get("data_file"),
+            file_path,
             "w",
             encoding="utf-8",
         ) as file:
             json.dump(todo_list, file)
+            logging.debug("Data saved successfully.")
             return True
+
     except FileNotFoundError:
-        return "File not found. Check the file path."
+        error_message = "File not found. Check the file path."
+        logging.error(error_message)
+        return error_message
+
     except PermissionError:
-        return "Permission denied. Check file permissions."
+        error_message = "Permission denied. Check file permissions."
+        logging.error(error_message)
+        return error_message
+
     except json.JSONDecodeError:
-        return "Error encoding data to JSON."
+        error_message = "Error encoding data to JSON."
+        logging.error(error_message)
+        return error_message
+
     except Exception as e:
-        return f"An unexpected error occurred: {str(e)}"
+        error_message = f"An unexpected error occurred: {str(e)}"
+        logging.error(error_message)
+        return error_message
 
 
 def remove_todo(todo_id):
     """function to remove an item from the list"""
+    logging.debug(f"Removing item with ID: {todo_id}")
+
     data = load_list()
     # New list with item for the given id removed
     updated_data = [item for item in data if item["id"] != todo_id]
 
     if len(data) == len(updated_data):
-        return {"error": "Id not found"}
+        error_message = "ID not found"
+        logging.warning(error_message)
+        return {"error": error_message}
 
-    save_list(updated_data)
-    return {"success": f"{todo_id} removed"}
+    success_message = f"Item with ID {todo_id} removed"
+    logging.info(success_message)
+    return {"success": success_message}
 
 
 def update_todo(todo_id, todo):
     """function to update an item."""
+    logging.debug(f"Updating item with ID: {todo_id}")
+
     data = load_list()
     updated = False
 
     for item in data:
         if item["id"] == todo_id:
+            logging.debug(f"Found item with ID {todo_id} for update.")
             for key, value in todo.items():
                 if value is not None and key in item:
+                    logging.debug(f"Updating {key} to {value}.")
                     item[key] = value
             updated = True
             break
     if not updated:
-        return {"error": f"{todo_id} not found."}
+        error_message = f"{todo_id} not found."
+        logging.warning(error_message)
+        return {"error": error_message}
 
     save_list(data)
-    return {"success": f"{todo_id} updated successfully."}
+    success_message = f"{todo_id} updated successfully."
+    logging.info(success_message)
+    return {"success": success_message}
 
 
 def generate_id():
     """generate a UUID for each task"""
-    return uuid.uuid4().hex
+    new_id = uuid.uuid4().hex
+    logging.debug(f"Generated new ID: {new_id}")
+    return new_id

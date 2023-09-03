@@ -4,7 +4,7 @@ Created on : 24/08/23 8:39 am
 """
 
 from typing import Optional, List
-
+import logging
 import fastapi
 from fastapi import Query, HTTPException
 from pydantic import BaseModel, Field, constr
@@ -16,8 +16,10 @@ from utils.todo_helper import (
     remove_todo,
     update_todo,
 )
+from config.config_manager import config_manager
 
 router = fastapi.APIRouter()
+config_manager.configure_logging()
 
 
 class TodoItem(BaseModel):
@@ -45,6 +47,7 @@ class UpdateTodo(BaseModel):
 @router.get("/")
 async def read_root():
     """root route"""
+    logging.info("Request received at root route.")
     return {"message": "Welcome to API Challenge"}
 
 
@@ -54,48 +57,76 @@ async def read_todos(
     per_page: int = Query(default=5, description="Items per page"),
 ):
     """Get list of to-do items"""
+    logging.debug(f"Fetching todos for page {page}, per_page {per_page}")
     if page < 1 or per_page < 1:
         raise HTTPException(
             status_code=400, detail="Page and per_page must be positive integer."
         )
 
     skip = (page - 1) * per_page
+    todos = load_list()[skip : skip + per_page]
 
-    return load_list()[skip : skip + per_page]
+    logging.debug(f"Returning {len(todos)} todos")
+
+    return todos
 
 
 @router.post("/todos")
 async def add_todo(todo: TodoItem):
     """This is post route to add a To-do item"""
     try:
+        logging.debug("Adding a new todo item")
+
         todo = todo.model_dump()
         todo.update(id=generate_id())
         data = load_list()
         data.append(todo)
         save_list(data)
+
+        logging.debug(f"Added todo item with ID: {todo['id']}")
+
         return todo
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
+        error_message = f"Internal Server Error: {e}"
+        logging.error(error_message)
+        raise HTTPException(status_code=500, detail=error_message)
 
 
 @router.get("/todos/{todo_id}")
 async def read_todo(todo_id):
     """return todo details for a given id"""
-    result = get_todo_details(todo_id)
-    if "error" in result:
-        raise HTTPException(status_code=404, detail=f"{result['error']}")
+    try:
+        result = get_todo_details(todo_id)
+        if "error" in result:
+            error_message = result["error"]
+            logging.error(f"Error while retrieving todo: {error_message}")
+            raise HTTPException(status_code=404, detail=error_message)
 
-    return result
+        return result
+
+    except Exception as e:
+        error_message = f"Internal Server Error: {e}"
+        logging.error(error_message)
+        raise HTTPException(status_code=500, detail=error_message)
 
 
 @router.delete("/todos/{todo_id}")
 async def delete_todo(todo_id):
-    """This is to delete an item"""
+    """Delete an item"""
+    logging.debug(f"Deleting item with ID: {todo_id}")
     return remove_todo(todo_id)
 
 
 @router.put("/todos/{todo_id}")
 async def update_todo_list(todo: UpdateTodo, todo_id):
-    """This route is to update an item"""
+    """Update an item"""
+    logging.debug(f"Updating item with ID: {todo_id}")
+
     todo = todo.model_dump()
-    return update_todo(todo_id, todo)
+    result = update_todo(todo_id, todo)
+
+    if "error" in result:
+        error_message = result["error"]
+        logging.error(f"Error while updating todo: {error_message}")
+
+    return result

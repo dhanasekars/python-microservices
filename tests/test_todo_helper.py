@@ -65,7 +65,7 @@ class TestGetTodoDetails(unittest.TestCase):
         result = get_todo_details(2)
         self.assertIsInstance(result, dict)
         assert "error" in result
-        self.assertEqual(result["error"], "Todo not found for the given id.")
+        self.assertEqual(result["error"], "Todo not found for the given id: 2")
 
     def test_invalid_data_format(self, mock_load_list):
         mock_data = "invalid json"
@@ -156,19 +156,19 @@ class TestRemoveTodo(unittest.TestCase):
 
     def test_remove_existing_todo(self, mock_load, mock_save):
         result = remove_todo(1)
-        self.assertEqual(result, {"success": "1 removed"})
+        self.assertEqual(result, {"success": "Item with ID 1 removed"})
 
     def test_remove_nonexistent_todo(self, mock_load, mock_save):
         result = remove_todo(3)
-        self.assertEqual(result, {"error": "Id not found"})
+        self.assertEqual(result, {"error": "ID not found"})
 
     def test_remove_last_todo(self, mock_load, mock_save):
         result = remove_todo(2)
-        self.assertEqual(result, {"success": "2 removed"})
+        self.assertEqual(result, {"success": "Item with ID 2 removed"})
 
     def test_remove_todo_without_change(self, mock_load, mock_save):
         result = remove_todo(4)
-        self.assertEqual(result, {"error": "Id not found"})
+        self.assertEqual(result, {"error": "ID not found"})
 
 
 class TestGenerateID(unittest.TestCase):

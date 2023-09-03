@@ -11,7 +11,8 @@ lint:
 	pylint *.py apis/*.py tests/*.py utils/*.py
 test:
 	#test
-	python -m pytest -vv --cov=apis --cov=utils
+	python -m pytest -vv #  --cov=apis --cov=utils
+	coverage report --show-missing
 
 git:
 	#git push
@@ -34,8 +35,11 @@ coverage_for_function:
 	# This is to check coverage for a given function using pytest
 	pytest --cov=my_module -k my_function
 
+deletelog:
+	# Delete the log file
+	/bin/rm -f log/*
 
-routine: clean_cache test unittest git
+routine: deletelog clean_cache test unittest git
 
 check: format lint
 

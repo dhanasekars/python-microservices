@@ -212,3 +212,4 @@ pyrightconfig.json
 /data.json
 /config/config.json
 .coveragerc
+log/*.*

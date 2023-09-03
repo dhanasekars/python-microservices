@@ -195,24 +195,31 @@ Have to focus on unit tests tomorrow.
 <details> 
     <summary> Day 14: Sep 02</summary>
 
-`Time Spent : 120 minutes`
+`Time Spent : 240 minutes`
 
 - Lot of experimentation to mock the end points.
 - Finally, found that mocking should happen function call inside the route not at the actual function definition
 - Completed unittests for two routes.
+- All functions and routes have unit tests now.
+- Overall it was a great learning write isolated unittest mocking every external calls.
 
 </details>
 
 <details> 
     <summary> Day 15: Sep 03</summary>
 
-`Time Spent : 120 minutes spent on Sep 02`
+`Time Spent : 240 minutes`
 
-- All functions and routes have unit tests now.
-- Overall it was a great learning write isolated unittest mocking every external calls.
+- Debug log added for all functions
+- Again `Singleton pattern` used to invoke error config
+- Some refactoring while adding debug log
+- Learnt about --show-missing in coverage to show missing lines 
 
+![unit_coverage_Sep_03.png](images/unit_coverage_Sep_03.png)
 
 </details>
+
+
 
 -------------------------------
 

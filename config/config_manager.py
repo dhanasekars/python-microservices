@@ -5,6 +5,7 @@ Created on : 30/08/23 3:33 pm
 
 import json
 import os
+import logging
 
 
 class ConfigurationManager:
@@ -31,6 +32,22 @@ class ConfigurationManager:
             raise ValueError("Invalid JSON format in config file.")
         except Exception as e:
             raise Exception(f"Error loading config file: {str(e)}")
+
+    def configure_logging(self):
+        # Configure logging using the loaded configuration
+        log_level_str = self.config_data["logging_config"]["level"].upper()
+        log_level = getattr(logging, log_level_str)
+        log_format = self.config_data["logging_config"]["format"]
+        log_file = self.config_data["logging_config"]["filename"]
+        log_file_mode = self.config_data["logging_config"]["filemode"]
+
+        logging.basicConfig(
+            filename=log_file,
+            level=log_level,
+            format=log_format,
+            filemode=log_file_mode,
+        )
+        logger = logging.getLogger()
 
 
 # Create an instance of the ConfigurationManager

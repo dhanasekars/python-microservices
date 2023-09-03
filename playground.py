@@ -2,6 +2,11 @@
 Created on : 26/08/23 6:15 pm
 @author : ds  
 """
+
+import logging
+from config.config_manager import config_manager
+
+
 # import uuid
 #
 #
@@ -28,3 +33,10 @@ Created on : 26/08/23 6:15 pm
 #     output = Foo(f1="test", f2=None, f4="hello")
 # except ValidationError as e:
 #     print(e)
+
+config_manager.load_config()
+
+print(config_manager.config_data["logging_config"])
+
+logging.debug("This is test message.")
+logging.info("This is info message")
