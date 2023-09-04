@@ -58,7 +58,7 @@ class UpdateTodo(BaseModel):
     """Model with optional fields where at least one must have a value."""
 
     title: Optional[constr(min_length=1)] = None
-    description: Optional[constr(min_length=1)] = None
+    description: Optional[str] = None
     doneStatus: Optional[bool] = None
 
     @model_validator(mode="before")
@@ -75,6 +75,6 @@ class UpdateTodo(BaseModel):
 
 
 try:
-    output = UpdateTodo(description="Hello", doneStatus=True)
+    output = UpdateTodo(description="", doneStatus=True)
 except ValidationError as e:
     print(e)

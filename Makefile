@@ -1,3 +1,5 @@
+MSG ?= Daily practise
+
 install:
 	#install commands
 	curl -sSL https://install.python-poetry.org | python3 - &&\
