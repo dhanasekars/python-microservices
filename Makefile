@@ -11,7 +11,7 @@ lint:
 	pylint *.py apis/*.py tests/*.py utils/*.py
 test:
 	#test
-	python -m pytest -vv #  --cov=apis --cov=utils
+	python -m pytest -vv --cov=apis --cov=utils
 	coverage report --show-missing
 
 git:

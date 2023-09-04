@@ -4,8 +4,12 @@ Created on : 30/08/23 11:34 am
 """
 import json
 import unittest
-import uuid
+import pytest
 from unittest.mock import mock_open, patch
+from fastapi import HTTPException
+
+import pytest
+
 from utils.todo_helper import (
     save_list,
     load_list,
@@ -155,20 +159,22 @@ class TestRemoveTodo(unittest.TestCase):
     """module to test Remove todo item"""
 
     def test_remove_existing_todo(self, mock_load, mock_save):
-        result = remove_todo(1)
-        self.assertEqual(result, {"success": "Item with ID 1 removed"})
+        with pytest.raises(HTTPException) as execinfo:
+            remove_todo(1)
+        self.assertEqual(execinfo.value.status_code, 200)
+        self.assertEqual(execinfo.value.detail, "Item with ID 1 removed")
 
     def test_remove_nonexistent_todo(self, mock_load, mock_save):
-        result = remove_todo(3)
-        self.assertEqual(result, {"error": "ID not found"})
+        with pytest.raises(HTTPException) as execinfo:
+            remove_todo(3)
+        self.assertEqual(execinfo.value.status_code, 404)
+        self.assertEqual(execinfo.value.detail, "ID not found")
 
     def test_remove_last_todo(self, mock_load, mock_save):
-        result = remove_todo(2)
-        self.assertEqual(result, {"success": "Item with ID 2 removed"})
-
-    def test_remove_todo_without_change(self, mock_load, mock_save):
-        result = remove_todo(4)
-        self.assertEqual(result, {"error": "ID not found"})
+        with pytest.raises(HTTPException) as execinfo:
+            remove_todo(2)
+        self.assertEqual(execinfo.value.status_code, 200)
+        self.assertEqual(execinfo.value.detail, "Item with ID 2 removed")
 
 
 class TestGenerateID(unittest.TestCase):
@@ -201,8 +207,10 @@ class TestUpdateTodo(unittest.TestCase):
 
     def test_update_nonexistent_todo(self, mock_save, mock_load):
         # Try to update a nonexistent todo
-        result = update_todo(3, {"task": "Updated Task"})
-        self.assertEqual(result, {"error": "3 not found."})
+        with pytest.raises(HTTPException) as execinfo:
+            update_todo(5, {"task": "Updated Task"})
+        self.assertEqual(execinfo.value.status_code, 404)
+        self.assertEqual(execinfo.value.detail, "5 not found.")
         self.assertIsNone(mock_save.call_args)
 
     def test_update_with_invalid_key(self, mock_save, mock_load):

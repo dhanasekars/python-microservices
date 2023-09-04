@@ -219,7 +219,16 @@ Have to focus on unit tests tomorrow.
 
 </details>
 
+<details> 
+    <summary> Day 16: Sep 04</summary>
 
+`Time Spent : 90 minutes`
+
+- No new functionality added.
+- Appropriate 404 and 500 exception returned 
+- Unit tests refactored as per the changes.
+
+</details>
 
 -------------------------------
 

@@ -5,9 +5,13 @@
 - [x] Unit tests for all function.
 - [x] Add debug logging to the project
 - [x] Create a config.json file
-- [ ] Return appropriate HTTP status code like 204
-- [ ] Establish CI/CD
-- [ ] Host it in cloud
+- [x] Return appropriate HTTP status codes 
+- [ ] Integration / functional tests
+- [ ] Make Production ready
+  - [ ] Restructure project
+  - [ ] Containerization  
+  - [ ] Establish CI/CD
+  - [ ] Host it in cloud
 
 ## Later
 - [ ] Head, Options, Patch and Trace

@@ -114,7 +114,8 @@ async def read_todo(todo_id):
 async def delete_todo(todo_id):
     """Delete an item"""
     logging.debug(f"Deleting item with ID: {todo_id}")
-    return remove_todo(todo_id)
+    result = remove_todo(todo_id)
+    return result
 
 
 @router.put("/todos/{todo_id}")

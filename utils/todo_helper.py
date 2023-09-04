@@ -6,6 +6,7 @@ import json
 import uuid
 import logging
 from config.config_manager import config_manager
+from fastapi import HTTPException
 
 config_manager.configure_logging()
 
@@ -108,11 +109,11 @@ def remove_todo(todo_id):
     if len(data) == len(updated_data):
         error_message = "ID not found"
         logging.warning(error_message)
-        return {"error": error_message}
-
+        raise HTTPException(status_code=404, detail=error_message)
+    save_list(updated_data)
     success_message = f"Item with ID {todo_id} removed"
     logging.info(success_message)
-    return {"success": success_message}
+    raise HTTPException(status_code=200, detail=success_message)
 
 
 def update_todo(todo_id, todo):
@@ -134,7 +135,7 @@ def update_todo(todo_id, todo):
     if not updated:
         error_message = f"{todo_id} not found."
         logging.warning(error_message)
-        return {"error": error_message}
+        raise HTTPException(status_code=404, detail=error_message)
 
     save_list(data)
     success_message = f"{todo_id} updated successfully."

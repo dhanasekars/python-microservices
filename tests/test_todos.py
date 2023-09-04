@@ -5,7 +5,7 @@ Created on : 02/09/23 11:49 am
 import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
-
+from fastapi import HTTPException
 from apis import todos
 from main import app  # Import your FastAPI app instance
 from unittest.mock import patch
@@ -252,7 +252,7 @@ class TestDeleteTodoByID:
     def test_delete_todo_success(self, test_client):
         # Mock the remove_todo() function
         mock_remove_todo = MagicMock()
-        mock_remove_todo.return_value = True
+        mock_remove_todo.return_value = "Item with ID 1 removed"
 
         # Patch the remove_todo() function
         with patch.object(todos, "remove_todo", mock_remove_todo):
@@ -261,6 +261,7 @@ class TestDeleteTodoByID:
 
         # Assert the response
         assert response.status_code == 200
+        assert response.json() == "Item with ID 1 removed"
 
         # Assert that the `remove_todo()` function was called
         mock_remove_todo.assert_called_once_with("1")
@@ -268,18 +269,21 @@ class TestDeleteTodoByID:
     def test_delete_todo_not_found(self, test_client):
         # Mock the remove_todo() function
         mock_remove_todo = MagicMock()
-        mock_remove_todo.return_value = False
+        mock_remove_todo.side_effect = HTTPException(
+            status_code=404, detail="ID not found"
+        )
 
         # Patch the remove_todo() function
         with patch.object(todos, "remove_todo", mock_remove_todo):
             # Make a request to the `/todos/{todo_id}` route
-            response = test_client.delete("/todos/1")
+            response = test_client.delete("/todos/4")
 
         # Assert the response
-        assert response.status_code == 200
+        assert response.status_code == 404
+        assert response.json() == {"detail": "ID not found"}
 
         # Assert that the `remove_todo()` function was called
-        mock_remove_todo.assert_called_once_with("1")
+        mock_remove_todo.assert_called_once_with("4")
 
 
 class TestUpdateTodo:
