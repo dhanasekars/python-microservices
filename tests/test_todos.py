@@ -331,3 +331,21 @@ class TestUpdateTodo:
             mock_update_todo.assert_called_once_with(
                 "1", {"description": None, "doneStatus": False, "title": "Todo 1"}
             )
+
+    def test_update_blank_body(self, test_client):
+        mock_update_todo = MagicMock()
+        mock_update_todo.return_value = {"error": "Todo not found"}
+
+        # Patch the update_todo() function
+        with patch.object(todos, "update_todo", mock_update_todo):
+            # Make a request to the `/todos/{todo_id}` route
+            response = test_client.put("/todos/1", json={})
+
+            # Assert the expected results.
+            assert response.status_code == 422
+            assert (
+                response.json()["detail"][0]["msg"]
+                == "Value error, At least one of 'title', 'description', or 'doneStatus' must have a value"
+            )
+
+            mock_update_todo.assert_not_called()

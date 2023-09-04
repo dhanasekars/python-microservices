@@ -9,6 +9,9 @@ using Python and FastAPI
 2. Unit Test coverage
 3. Poetry
 
+## Additional learning
+1. Pytantic
+2. Make File
 
 ### Spend one hour daily on this project
 
@@ -222,11 +225,12 @@ Have to focus on unit tests tomorrow.
 <details> 
     <summary> Day 16: Sep 04</summary>
 
-`Time Spent : 90 minutes`
+`Time Spent : 120 minutes`
 
 - No new functionality added.
 - Appropriate 404 and 500 exception returned 
 - Unit tests refactored as per the changes.
+- Fixed "PUT - Handle updating an existing todo item with empty body {}" - Good learning about Pytantic
 
 </details>
 

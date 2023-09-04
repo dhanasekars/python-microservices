@@ -17,7 +17,7 @@ test:
 git:
 	#git push
 	git add .
-	git commit -m "daily practise"
+	git commit -m "$(MSG)"
 	git push
 start:
 	uvicorn main:app --reload

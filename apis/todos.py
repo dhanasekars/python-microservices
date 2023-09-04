@@ -7,7 +7,7 @@ from typing import Optional, List
 import logging
 import fastapi
 from fastapi import Query, HTTPException
-from pydantic import BaseModel, Field, constr
+from pydantic import BaseModel, Field, constr, model_validator, ValidationError
 from utils.todo_helper import (
     load_list,
     save_list,
@@ -37,11 +37,22 @@ class ReturnTodo(TodoItem):
 
 
 class UpdateTodo(BaseModel):
-    """base model with optional field for updating"""
+    """Model with optional fields where at least one must have a value."""
 
-    title: Optional[str] = None
-    description: Optional[str] = None
+    title: Optional[constr(min_length=1)] = None
+    description: Optional[constr(min_length=1)] = None
     doneStatus: Optional[bool] = None
+
+    @model_validator(mode="before")
+    def check_blank_fields(cls, values):
+        num_fields_with_values = sum(
+            1 for value in values.values() if value is not None
+        )
+        if num_fields_with_values < 1:
+            raise ValueError(
+                "At least one of 'title', 'description', or 'doneStatus' must have a value"
+            )
+        return values
 
 
 @router.get("/")
