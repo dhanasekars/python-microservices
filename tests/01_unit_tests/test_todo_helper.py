@@ -48,7 +48,8 @@ class TestLoadListFromJSON(unittest.TestCase):
         "json.loads",
         side_effect=json.JSONDecodeError("Expecting value.", "Test.", 0),
     )
-    def test_json_decode_error(self, mock_json_loads):
+    @patch("builtins.open", new_callable=mock_open, read_data="[1, 2, 3, 4, 5]")
+    def test_json_decode_error(self, mock_file_open, mock_json_loads):
         self.assertEqual(load_list().msg, "Expecting value.")
         self.assertEqual(load_list().doc, "Test.")
 
