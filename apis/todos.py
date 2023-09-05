@@ -107,19 +107,9 @@ async def add_todo(todo: TodoItem):
 @router.get("/todos/{todo_id}")
 async def read_todo(todo_id):
     """return todo details for a given id"""
-    try:
-        result = get_todo_details(todo_id)
-        if "error" in result:
-            error_message = result["error"]
-            logging.error(f"Error while retrieving todo: {error_message}")
-            raise HTTPException(status_code=404, detail=error_message)
-
-        return result
-
-    except Exception as e:
-        error_message = f"Internal Server Error: {e}"
-        logging.error(error_message)
-        raise HTTPException(status_code=500, detail=error_message)
+    result = get_todo_details(todo_id)
+    logging.error(f"Retrieved details for given id {todo_id} ")
+    return result
 
 
 @router.delete("/todos/{todo_id}")

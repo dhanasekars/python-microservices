@@ -237,9 +237,12 @@ Have to focus on unit tests tomorrow.
 <details> 
     <summary> Day 17: Sep 05 </summary>
 
-`Time Spent : 150 minutes`
+`Time Spent : 180 minutes`
 
 - Added integration tests for all 200 status code
+- Added integration tests for 4xx status code 
+  - Resulted in some logic change
+  - Unit test updated 
 
 
 </details>

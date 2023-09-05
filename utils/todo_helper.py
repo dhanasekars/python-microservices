@@ -57,8 +57,9 @@ def get_todo_details(todo_id):
             logging.debug(f"Found todo details for ID {todo_id}: {item}")
             return item
 
-    logging.warning(f"Todo not found for the given ID: {todo_id}")
-    return {"error": f"Todo not found for the given id: {todo_id}"}
+    error_message = f"Todo not found for the given ID: {todo_id}"
+    logging.warning(error_message)
+    raise HTTPException(status_code=404, detail=error_message)
 
 
 def save_list(todo_list):

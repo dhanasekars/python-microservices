@@ -66,10 +66,10 @@ class TestGetTodoDetails(unittest.TestCase):
     def test_invalid_todo_id(self, mock_load_list):
         mock_data = [{"id": 1, "task": "Task 1", "status": "Incomplete"}]
         mock_load_list.return_value = mock_data
-        result = get_todo_details(2)
-        self.assertIsInstance(result, dict)
-        assert "error" in result
-        self.assertEqual(result["error"], "Todo not found for the given id: 2")
+        with pytest.raises(HTTPException) as execinfo:
+            remove_todo(2)
+        self.assertEqual(execinfo.value.status_code, 404)
+        self.assertEqual(execinfo.value.detail, "ID not found")
 
     def test_invalid_data_format(self, mock_load_list):
         mock_data = "invalid json"

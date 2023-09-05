@@ -239,8 +239,8 @@ class TestReadTodosByID:
             json_response = response.json()
 
         # Assert the response
-        assert response.status_code == 500
-        assert json_response["detail"] == "Internal Server Error: "
+        assert response.status_code == 200
+        assert json_response["error"] == "Todo not found"
 
         # Assert that the `get_todo_details()` function was called
         mock_get_todo_details.assert_called_once_with("1")

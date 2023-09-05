@@ -25,7 +25,7 @@ def start_app():
     uvicorn.run(app, host="127.0.0.1", port=8001)
 
 
-class TestTodoHappyPath:
+class TestTodo2xx:
     @pytest.fixture(scope="module", autouse=True)
     def setup_teardown_app(self, request):
         app_process = Process(target=start_app)
@@ -124,3 +124,110 @@ class TestTodoHappyPath:
         assert isinstance(response_data, dict)
         assert "detail" in response_data
         assert response_data["detail"] == f"Item with ID {generated_uuid} removed"
+
+
+class TestTodo4xx:
+    @pytest.fixture(scope="module", autouse=True)
+    def setup_teardown_app(self, request):
+        app_process = Process(target=start_app)
+        app_process.start()
+        yield client
+
+        app_process.terminate()
+        app_process.join()
+
+    @pytest.fixture()
+    def generated_uuid(self):
+        # create a todo item and capture the generated UUID
+        response = client.post("/todos", json=payload)
+        assert response.status_code == 200
+        todo_data = response.json()
+        generated_uuid = todo_data["id"]
+        assert todo_data["title"] == payload["title"]
+        assert todo_data["description"] == payload["description"]
+        assert todo_data["doneStatus"] is False
+        assert generated_uuid is not None
+        assert re.match(uuid_regex_pattern, generated_uuid)
+        assert len(generated_uuid) == 32
+
+        yield generated_uuid
+
+    def test_pagination_page_less_than_one(self, generated_uuid):
+        response = client.get(f"todos?page=0&per_page=1")
+        assert response.status_code == 400
+        todo_data = response.json()
+        assert isinstance(todo_data, dict)
+        assert "detail" in todo_data
+        assert todo_data["detail"] == "Page and per_page must be positive integer."
+
+    def test_pagination_per_page_less_than_one(self, generated_uuid):
+        response = client.get(f"todos?page=1&per_page=0")
+        assert response.status_code == 400
+        todo_data = response.json()
+        assert isinstance(todo_data, dict)
+        assert "detail" in todo_data
+        assert todo_data["detail"] == "Page and per_page must be positive integer."
+
+    def test_pagination_422(self, generated_uuid):
+        response = client.get(f"todos?page=notNumber&per_page=1")
+        assert response.status_code == 422
+        todo_data = response.json()
+        assert isinstance(todo_data, dict)
+        assert "detail" in todo_data
+        assert (
+            todo_data["detail"][0]["msg"]
+            == "Input should be a valid integer, unable to parse string as an integer"
+        )
+
+    def test_get_invalid_todo(self):
+        response = client.get(f"/todos/aninvalidID123")
+        assert response.status_code == 404
+        todo_data = response.json()
+        print(todo_data)
+        assert isinstance(todo_data, dict)
+        assert "detail" in todo_data
+        assert todo_data["detail"] == "Todo not found for the given ID: aninvalidID123"
+
+    def test_update_invalid_todo(self):
+        response = client.put(
+            f"/todos/aninvalidID123", json={"title": "Update invalid id"}
+        )
+        assert response.status_code == 404
+        todo_data = response.json()
+        print(todo_data)
+        assert isinstance(todo_data, dict)
+        assert "detail" in todo_data
+        assert todo_data["detail"] == "aninvalidID123 not found."
+
+    def test_delete_invalid_todo(self):
+        response = client.delete(f"/todos/aninvalidID123")
+        assert response.status_code == 404
+        todo_data = response.json()
+        print(todo_data)
+        assert isinstance(todo_data, dict)
+        assert "detail" in todo_data
+        assert todo_data["detail"] == "ID not found"
+
+    def test_update_with_blank_422(self, generated_uuid):
+        response = client.put(
+            f"/todos/{generated_uuid}",
+            json={
+                "title": " ",
+                "description": "This is updated description.",
+                "doneStatus": True,
+            },
+        )
+        assert response.status_code == 422
+        assert response.json()["detail"][0]["type"] == "string_too_short"
+
+    def test_post_todo_with_blank_422(self, generated_uuid):
+        response = client.post(
+            f"/todos",
+            json={
+                "title": " ",
+                "description": "This is updated description.",
+                "doneStatus": True,
+            },
+        )
+        assert response.status_code == 422
+        assert response.json()["detail"][0]["type"] == "string_too_short"
