@@ -234,6 +234,16 @@ Have to focus on unit tests tomorrow.
 
 </details>
 
+<details> 
+    <summary> Day 17: Sep 05 </summary>
+
+`Time Spent : 150 minutes`
+
+- Added integration tests for all 200 status code
+
+
+</details>
+
 -------------------------------
 
 <details> 

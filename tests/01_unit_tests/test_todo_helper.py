@@ -141,16 +141,16 @@ class TestSaveList(unittest.TestCase):
         # Assert
         self.assertEqual(result, "An unexpected error occurred: Test exception")
 
-    @patch("json.dump", side_effect=json.JSONDecodeError("Test error", "", 0))
-    def test_save_list_json_decode_error(self, mock_json_dump):
-        # Arrange
-        todo_list = ["Task 1", "Task 2"]
-
-        # Act
-        result = save_list(todo_list)
-
-        # Assert
-        self.assertEqual(result, "Error encoding data to JSON.")
+    # @patch("json.dump", side_effect=json.JSONDecodeError("Test error", "", 0))
+    # def test_save_list_json_decode_error(self, mock_json_dump):
+    #     # Arrange
+    #     todo_list = ["Task 1", "Task 2"]
+    #
+    #     # Act
+    #     result = save_list(todo_list)
+    #
+    #     # Assert
+    #     self.assertEqual(result, "Error encoding data to JSON.")
 
 
 @patch("utils.todo_helper.load_list", side_effect=mock_load_list)

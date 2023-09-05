@@ -5,8 +5,9 @@ Created on : 26/08/23 11:27 am
 import json
 import uuid
 import logging
-from config.config_manager import config_manager
 from fastapi import HTTPException
+
+from config.config_manager import config_manager
 
 config_manager.configure_logging()
 
@@ -25,9 +26,7 @@ def load_list():
             )
             return data
     except FileNotFoundError:
-        logging.info(
-            f"Data file not found. Returning an empty list.: {config_manager.config_data.get('data_file')}"
-        )
+        logging.info(f"Data file not found. Returning an empty list.")
         return []
     except ValueError as e:
         logging.error(f"Error loading data. Value Error: {str(e)}")

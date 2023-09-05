@@ -78,3 +78,17 @@ try:
     output = UpdateTodo(description="", doneStatus=True)
 except ValidationError as e:
     print(e)
+
+
+# import re
+#
+# uuid_hex_regex = re.compile(
+#     r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+# )
+#
+# # Test the regex with a UUID
+# uuid_string = "0ef3a021e5544c18bdf2c71a3b1e3884"
+# if uuid_hex_regex.match(uuid_string):
+#     print("Valid UUID format")
+# else:
+#     print("Invalid UUID format")

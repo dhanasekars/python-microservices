@@ -45,6 +45,7 @@ class UpdateTodo(BaseModel):
 
     @model_validator(mode="before")
     def check_blank_fields(cls, values):
+        """function to check at least one of the three fields is given"""
         num_fields_with_values = sum(
             1 for value in values.values() if value is not None
         )

@@ -20,6 +20,7 @@ requests = "^2.31.0"
 httpx = "^0.24.1"
 attr = "^0.3.2"
 coverage = "^7.3.0"
+hypothesis = "^6.84.0"
 
 
 [build-system]

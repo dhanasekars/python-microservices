@@ -28,3 +28,4 @@
 - [x] PUT endpoint needs all three fields, fix the Pydantic BaseModel with non-mandatory fields
 - [x] PUT - Handle updating an existing todo item with empty body {} 
 - [ ] A test is creating the json.data - fix that. This happens when there is no json file 
+- [ ] a todo_helper test `test_save_list_json_decode_error` is disabled as it's corrupting the json, that makes integration tests fail.
