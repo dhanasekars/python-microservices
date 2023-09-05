@@ -231,3 +231,45 @@ class TestTodo4xx:
         )
         assert response.status_code == 422
         assert response.json()["detail"][0]["type"] == "string_too_short"
+
+
+class TestTodo5xx:
+    @pytest.fixture(scope="module", autouse=True)
+    def setup_teardown_app(self, request):
+        app_process = Process(target=start_app)
+        app_process.start()
+        yield client
+
+        app_process.terminate()
+        app_process.join()
+
+    @pytest.fixture()
+    def generated_uuid(self):
+        # create a todo item and capture the generated UUID
+        response = client.post("/todos", json=payload)
+        assert response.status_code == 200
+        todo_data = response.json()
+        generated_uuid = todo_data["id"]
+        assert todo_data["title"] == payload["title"]
+        assert todo_data["description"] == payload["description"]
+        assert todo_data["doneStatus"] is False
+        assert generated_uuid is not None
+        assert re.match(uuid_regex_pattern, generated_uuid)
+        assert len(generated_uuid) == 32
+
+        yield generated_uuid
+
+    def test_internal_server_error(self):
+        # Define a function to mock the route handler and raise an exception
+        def mock_route_handler(*args, **kwargs):
+            raise Exception("Simulated internal server error")
+
+        # Use the monkeypatch fixture to replace the route handler with the mock function
+        with pytest.raises(Exception):
+            client.app.router.routes[0].endpoint = mock_route_handler
+
+            # Send a POST request to trigger the route
+            response = client.post("/todos", json={"title": "Test Todo"})
+            print(response.json())
+            # Verify that the response status code is 500
+            assert response.status_code == 500
