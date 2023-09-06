@@ -246,8 +246,23 @@ Have to focus on unit tests tomorrow.
   - Unit test updated 
 - Bug fixes
 
+</details>
+
+
+<details> 
+    <summary> Day 18: Sep 06</summary>
+
+`Time Spent : 150 minutes`
+
+- Some more restructuring of code. 
+- removed absolute paths
+- Dockerfile and dockerignore added
+- Docker image ready
+- :thumbsdown: Port mappting. Still the endpoints are not exposed to outside world
 
 </details>
+
+
 
 -------------------------------
 

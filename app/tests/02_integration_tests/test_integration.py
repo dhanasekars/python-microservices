@@ -6,7 +6,7 @@ Created on : 04/09/23 1:08 pm
 from multiprocessing import Process
 import pytest
 from fastapi.testclient import TestClient
-from app.main import app
+from main import app
 import re
 
 # from hypothesis import given, strategies as st

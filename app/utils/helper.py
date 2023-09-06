@@ -33,9 +33,6 @@ def load_list():
         return e
 
 
-load_list()
-
-
 def get_todo_details(todo_id):
     """to get the details for a given id"""
     logging.info(f"Fetching todo details for ID: {todo_id}")

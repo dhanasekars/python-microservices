@@ -9,8 +9,8 @@
 - [X] Integration / functional tests
 - [ ] Make Production ready
   - [x] Restructure project
-  - [ ] Containerization  
-  - [ ] Establish CI/CD
+  - [x] Containerization  
+  - [ ] Establish CI/CD in Cloud
   - [ ] Host it in cloud
 - [ ] Explore Fire
 - [ ] Authentication 

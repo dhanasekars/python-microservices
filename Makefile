@@ -46,3 +46,6 @@ source:
 routine: deletelog clean_cache test clean_cache git
 
 check: format lint
+
+listvenv:
+	find / -type d -name 'bin' -exec sh -c 'if [ -f "{}/activate" ]; then dirname "{}"; fi' \;
