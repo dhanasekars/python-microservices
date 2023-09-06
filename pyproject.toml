@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "microservices"
 version = "0.1.0"
-description = ""
+description = "A CRUD microservices using FastAPI"
 authors = ["DS <dhanasekars@gmail.com>"]
 readme = "README.md"
 

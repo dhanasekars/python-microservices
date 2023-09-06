@@ -8,10 +8,11 @@
 - [x] Return appropriate HTTP status codes 
 - [X] Integration / functional tests
 - [ ] Make Production ready
-  - [ ] Restructure project
+  - [x] Restructure project
   - [ ] Containerization  
   - [ ] Establish CI/CD
   - [ ] Host it in cloud
+- [ ] Explore Fire
 - [ ] Authentication 
 - [ ] Tracking and limiting usage 
 - [ ] Have an error message json

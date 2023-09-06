@@ -8,8 +8,9 @@ using Python and FastAPI
 1. Pytest
 2. Unit Test coverage
 3. Poetry
+4. Fire
 
-## Additional learning
+## Additional learnings
 1. Pytantic
 2. Make File
 
@@ -168,7 +169,7 @@ Have to focus on unit tests tomorrow.
 - Productive time creating unit tests and coverage report 
 - Config file added using `Singleton` design pattern
 
-![unit_test_coverage.png](images/unit_test_coverage.png)
+![unit_test_coverage.png](Extras/images/unit_test_coverage.png)
 
 </details>
 
@@ -218,7 +219,7 @@ Have to focus on unit tests tomorrow.
 - Some refactoring while adding debug log
 - Learnt about --show-missing in coverage to show missing lines 
 
-![unit_coverage_Sep_03.png](images/unit_coverage_Sep_03.png)
+![unit_coverage_Sep_03.png](Extras/images/unit_coverage_Sep_03.png)
 
 </details>
 

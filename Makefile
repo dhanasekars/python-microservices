@@ -8,15 +8,15 @@ install:
 
 format:
 	#format code
-	black *.py apis/*.py tests/../*.py utils/*.py
+	black *.py todos/apis/*.py todos/tests/../*.py todos/utils/*.py
 
 lint:
 	#flake8 or #pylint
-	pylint *.py apis/*.py tests/*.py utils/*.py
+	pylint *.py todos/apis/*.py todos/tests/*.py todos/utils/*.py
 
 test:
 	#test
-	python -m pytest -vv --cov=apis --cov=utils
+	python -m pytest -vv --cov=todos/apis --cov=todos/utils
 	coverage report --show-missing
 
 git:
@@ -38,11 +38,11 @@ coverage_for_function:
 
 deletelog:
 	# Delete the log file
-	/bin/rm -f log/*
+	/bin/rm -f todos/log/*
 
 source:
 	source ~/.zshrc
 
-routine: deletelog clean_cache test git
+routine: deletelog clean_cache test clean_cache git
 
 check: format lint

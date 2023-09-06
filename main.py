@@ -3,8 +3,7 @@ Created on : 18/08/23 8:37 am
 @author : ds  
 """
 from fastapi import FastAPI
-from apis import todos
-from config.config_manager import config_manager
+from todos.apis import todos
 
 app = FastAPI()
 

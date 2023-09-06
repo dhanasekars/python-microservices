@@ -7,8 +7,8 @@ from typing import Optional, List
 import logging
 import fastapi
 from fastapi import Query, HTTPException
-from pydantic import BaseModel, Field, constr, model_validator, ValidationError
-from utils.todo_helper import (
+from pydantic import BaseModel, Field, constr, model_validator
+from todos.utils.helper import (
     load_list,
     save_list,
     generate_id,
@@ -16,7 +16,7 @@ from utils.todo_helper import (
     remove_todo,
     update_todo,
 )
-from config.config_manager import config_manager
+from todos.utils.config_manager import config_manager
 
 router = fastapi.APIRouter()
 config_manager.configure_logging()

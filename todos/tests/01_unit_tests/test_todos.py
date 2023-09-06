@@ -4,9 +4,9 @@ Created on : 02/09/23 11:49 am
 """
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock
 from fastapi import HTTPException
-from apis import todos
+from todos.apis import todos
 from main import app  # Import your FastAPI app instance
 from unittest.mock import patch
 
@@ -55,7 +55,7 @@ class TestReadTodos:
         mock_load_list = MagicMock()
         mock_load_list.return_value = self.dummy_data
 
-        with patch("apis.todos.load_list", mock_load_list):
+        with patch("todos.apis.todos.load_list", mock_load_list):
             # Make a request to the `/todos` route
             response = test_client.get("/todos?page=1&per_page=3")
 
@@ -70,7 +70,7 @@ class TestReadTodos:
         mock_load_list = MagicMock()
 
         # Test for invalid page
-        with patch("apis.todos.load_list", mock_load_list):
+        with patch("todos.apis.todos.load_list", mock_load_list):
             # Make a request to the `/todos` route
             response = test_client.get("/todos?page=0&per_page=3")
 
@@ -84,7 +84,7 @@ class TestReadTodos:
         mock_load_list.assert_not_called()
 
         # Test for invalid per_page
-        with patch("apis.todos.load_list", mock_load_list):
+        with patch("todos.apis.todos.load_list", mock_load_list):
             # Make a request to the `/todos` route
             response = test_client.get("/todos?page=1&per_page=-1")
 
