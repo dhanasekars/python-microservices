@@ -6,8 +6,8 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import MagicMock
 from fastapi import HTTPException
-from todos.apis import todos
-from main import app  # Import your FastAPI app instance
+from app.apis import todos
+from app.main import app  # Import your FastAPI app instance
 from unittest.mock import patch
 
 
@@ -55,8 +55,8 @@ class TestReadTodos:
         mock_load_list = MagicMock()
         mock_load_list.return_value = self.dummy_data
 
-        with patch("todos.apis.todos.load_list", mock_load_list):
-            # Make a request to the `/todos` route
+        with patch("app.apis.todos.load_list", mock_load_list):
+            # Make a request to the `/app` route
             response = test_client.get("/todos?page=1&per_page=3")
 
         # Assert the response
@@ -70,8 +70,8 @@ class TestReadTodos:
         mock_load_list = MagicMock()
 
         # Test for invalid page
-        with patch("todos.apis.todos.load_list", mock_load_list):
-            # Make a request to the `/todos` route
+        with patch("app.apis.todos.load_list", mock_load_list):
+            # Make a request to the `/app` route
             response = test_client.get("/todos?page=0&per_page=3")
 
         # Assert the response
@@ -84,8 +84,8 @@ class TestReadTodos:
         mock_load_list.assert_not_called()
 
         # Test for invalid per_page
-        with patch("todos.apis.todos.load_list", mock_load_list):
-            # Make a request to the `/todos` route
+        with patch("app.apis.todos.load_list", mock_load_list):
+            # Make a request to the `/app` route
             response = test_client.get("/todos?page=1&per_page=-1")
 
         # Assert the response
@@ -115,7 +115,7 @@ class TestAddTodo:
         with patch.object(todos, "load_list", mock_load_list), patch.object(
             todos, "save_list", mock_save_list
         ), patch.object(todos, "generate_id", mock_generate_id):
-            # Make a request to the `/todos` route
+            # Make a request to the `/app` route
             response = test_client.post("/todos", json={"title": "Todo 1"})
 
             # Get the JSON response
@@ -155,7 +155,7 @@ class TestAddTodo:
         with patch.object(todos, "load_list", mock_load_list), patch.object(
             todos, "save_list", mock_save_list
         ), patch.object(todos, "generate_id", mock_generate_id):
-            # Make a request to the `/todos` route with invalid data
+            # Make a request to the `/app` route with invalid data
             response = test_client.post("/todos", json={"title": "     "})
 
         # Assert the response
@@ -185,7 +185,7 @@ class TestAddTodo:
         with patch.object(todos, "load_list", mock_load_list), patch.object(
             todos, "save_list", mock_save_list
         ), patch.object(todos, "generate_id", mock_generate_id):
-            # Make a request to the `/todos` route
+            # Make a request to the `/app` route
             response = test_client.post("/todos", json={"title": "Todo 1"})
 
         # Assert the response
@@ -212,7 +212,7 @@ class TestReadTodosByID:
 
         # Patch the get_todo_details() function
         with patch.object(todos, "get_todo_details", mock_get_todo_details):
-            # Make a request to the `/todos/{todo_id}` route
+            # Make a request to the `/app/{todo_id}` route
             response = test_client.get("/todos/1")
 
             # Get the JSON response
@@ -232,7 +232,7 @@ class TestReadTodosByID:
 
         # Patch the get_todo_details() function
         with patch.object(todos, "get_todo_details", mock_get_todo_details):
-            # Make a request to the `/todos/{todo_id}` route
+            # Make a request to the `/app/{todo_id}` route
             response = test_client.get("/todos/1")
 
             # Get the JSON response
@@ -256,7 +256,7 @@ class TestDeleteTodoByID:
 
         # Patch the remove_todo() function
         with patch.object(todos, "remove_todo", mock_remove_todo):
-            # Make a request to the `/todos/{todo_id}` route
+            # Make a request to the `/app/{todo_id}` route
             response = test_client.delete("/todos/1")
 
         # Assert the response
@@ -275,7 +275,7 @@ class TestDeleteTodoByID:
 
         # Patch the remove_todo() function
         with patch.object(todos, "remove_todo", mock_remove_todo):
-            # Make a request to the `/todos/{todo_id}` route
+            # Make a request to the `/app/{todo_id}` route
             response = test_client.delete("/todos/4")
 
         # Assert the response
@@ -296,7 +296,7 @@ class TestUpdateTodo:
 
         # Patch the update_todo() function
         with patch.object(todos, "update_todo", mock_update_todo):
-            # Make a request to the `/todos/{todo_id}` route
+            # Make a request to the `/app/{todo_id}` route
             response = test_client.put(
                 "/todos/1", json={"title": "Todo 1", "doneStatus": False}
             )
@@ -319,7 +319,7 @@ class TestUpdateTodo:
 
         # Patch the update_todo() function
         with patch.object(todos, "update_todo", mock_update_todo):
-            # Make a request to the `/todos/{todo_id}` route
+            # Make a request to the `/app/{todo_id}` route
             response = test_client.put(
                 "/todos/1", json={"title": "Todo 1", "doneStatus": False}
             )
@@ -338,7 +338,7 @@ class TestUpdateTodo:
 
         # Patch the update_todo() function
         with patch.object(todos, "update_todo", mock_update_todo):
-            # Make a request to the `/todos/{todo_id}` route
+            # Make a request to the `/app/{todo_id}` route
             response = test_client.put("/todos/1", json={})
 
             # Assert the expected results.

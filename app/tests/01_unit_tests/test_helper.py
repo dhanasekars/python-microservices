@@ -9,7 +9,7 @@ from fastapi import HTTPException
 
 import pytest
 
-from todos.utils.helper import (
+from app.utils.helper import (
     save_list,
     load_list,
     get_todo_details,
@@ -17,7 +17,7 @@ from todos.utils.helper import (
     generate_id,
     update_todo,
 )
-from todos.utils.config_manager import config_manager
+from app.utils.config_manager import config_manager
 
 
 # ------------------------test setup ----------------------------------#
@@ -53,7 +53,7 @@ class TestLoadListFromJSON(unittest.TestCase):
         self.assertEqual(load_list().doc, "Test.")
 
 
-@patch("todos.utils.helper.load_list")
+@patch("app.utils.helper.load_list")
 class TestGetTodoDetails(unittest.TestCase):
     """create test class that inherits from unitest.Testcase to test Get Todo Details helper function"""
 
@@ -154,8 +154,8 @@ class TestSaveList(unittest.TestCase):
         self.assertEqual(result, "Error encoding data to JSON.")
 
 
-@patch("todos.utils.helper.load_list", side_effect=mock_load_list)
-@patch("todos.utils.helper.save_list", side_effect=mock_save_list)
+@patch("app.utils.helper.load_list", side_effect=mock_load_list)
+@patch("app.utils.helper.save_list", side_effect=mock_save_list)
 class TestRemoveTodo(unittest.TestCase):
     """module to test Remove todo item"""
 
@@ -192,8 +192,8 @@ class TestGenerateID(unittest.TestCase):
         self.assertEqual(len(id_list), len(set(id_list)))  # Check for uniqueness
 
 
-@patch("todos.utils.helper.load_list", side_effect=mock_load_list)
-@patch("todos.utils.helper.save_list", side_effect=mock_save_list)
+@patch("app.utils.helper.load_list", side_effect=mock_load_list)
+@patch("app.utils.helper.save_list", side_effect=mock_save_list)
 class TestUpdateTodo(unittest.TestCase):
     def test_update_existing_todo(self, mock_save, mock_load):
         # Update an existing todo

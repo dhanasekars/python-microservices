@@ -6,9 +6,10 @@ Created on : 04/09/23 1:08 pm
 from multiprocessing import Process
 import pytest
 from fastapi.testclient import TestClient
-from main import app
+from app.main import app
 import re
-from hypothesis import given, strategies as st
+
+# from hypothesis import given, strategies as st
 
 client = TestClient(app)
 
@@ -63,6 +64,7 @@ class TestTodo2xx:
         response = client.get(f"/todos/{generated_uuid}")
         assert response.status_code == 200
         todo_data = response.json()
+        print(todo_data)
         assert todo_data["title"] == payload["title"]
         assert todo_data["description"] == payload["description"]
         assert todo_data["id"] == generated_uuid

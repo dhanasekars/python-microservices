@@ -8,7 +8,7 @@ import logging
 import fastapi
 from fastapi import Query, HTTPException
 from pydantic import BaseModel, Field, constr, model_validator
-from todos.utils.helper import (
+from app.utils.helper import (
     load_list,
     save_list,
     generate_id,
@@ -16,7 +16,7 @@ from todos.utils.helper import (
     remove_todo,
     update_todo,
 )
-from todos.utils.config_manager import config_manager
+from app.utils.config_manager import config_manager
 
 router = fastapi.APIRouter()
 config_manager.configure_logging()
@@ -69,7 +69,7 @@ async def read_todos(
     per_page: int = Query(default=5, description="Items per page"),
 ):
     """Get list of to-do items"""
-    logging.debug(f"Fetching todos for page {page}, per_page {per_page}")
+    logging.debug(f"Fetching app for page {page}, per_page {per_page}")
     if page < 1 or per_page < 1:
         raise HTTPException(
             status_code=400, detail="Page and per_page must be positive integer."
@@ -78,7 +78,7 @@ async def read_todos(
     skip = (page - 1) * per_page
     todos = load_list()[skip : skip + per_page]
 
-    logging.debug(f"Returning {len(todos)} todos")
+    logging.debug(f"Returning {len(todos)} app")
 
     return todos
 

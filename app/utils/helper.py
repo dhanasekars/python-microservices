@@ -7,7 +7,7 @@ import uuid
 import logging
 from fastapi import HTTPException
 
-from todos.utils.config_manager import config_manager
+from app.utils.config_manager import config_manager
 
 config_manager.configure_logging()
 

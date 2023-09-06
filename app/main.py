@@ -3,7 +3,7 @@ Created on : 18/08/23 8:37 am
 @author : ds  
 """
 from fastapi import FastAPI
-from todos.apis import todos
+from app.apis import todos
 
 app = FastAPI()
 
