@@ -263,7 +263,7 @@ Have to focus on unit tests tomorrow.
 </details>
 
 <details> 
-    <summary> Day 18: Sep 06</summary>
+    <summary> Day 18: Sep 07</summary>
 
 `Time Spent : 60 minutes`
 
