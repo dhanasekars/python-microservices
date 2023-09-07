@@ -273,6 +273,17 @@ Have to focus on unit tests tomorrow.
 </details>
 
 
+<details> 
+    <summary> Day 18: Sep 07</summary>
+
+`Time Spent : 120 minutes`
+
+- Setting up Git up actions
+- Failing in tests, not able to find the config file path.
+- Should be config issue. Need to explore tomorrow
+
+</details>
+
 -------------------------------
 
 <details> 
