@@ -21,8 +21,10 @@ class ConfigurationManager:
     def load_config(self):
         # Get the directory of the current script
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        config_file_path = os.path.join(script_dir, "../config/config.json")
-
+        config_file_relative_path = "../config/config.json"
+        config_file_path = os.path.abspath(
+            os.path.join(script_dir, config_file_relative_path)
+        )
         try:
             with open(config_file_path, "r") as config_file:
                 self.config_data = json.load(config_file)
