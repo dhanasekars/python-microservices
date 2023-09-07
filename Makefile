@@ -14,10 +14,18 @@ lint:
 	#flake8 or #pylint
 	pylint *.py app/../*.py
 
-test:
-	#test
-	python -m pytest -vv --cov=app/apis --cov=app/utils
+unittests:
+	# Run all unittests
+	python -m pytest app/tests/01_unit_tests
 	coverage report --show-missing
+
+integrationstests:
+	# Run all integration tests
+	python -m pytest app/tests/02_integration_tests
+
+
+alltests: unittests integrationstests
+
 
 git:
 	#git push
@@ -43,7 +51,7 @@ deletelog:
 source:
 	source ~/.zshrc
 
-routine: deletelog clean_cache test clean_cache git
+routine: deletelog clean_cache alltests clean_cache git
 
 check: format lint
 
@@ -53,3 +61,4 @@ listvenv:
 docker_build:
 	docker pull dhanasekars/my-todos:latest
 	docker run -p 80:8000 my-todos
+
