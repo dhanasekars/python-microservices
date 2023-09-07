@@ -3,8 +3,6 @@ name: Makefile CI
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
@@ -24,7 +22,7 @@ jobs:
         installer-parallel: true
 
     - name: Install python dependencies
-      uses: poetry install
+      run: poetry install
 
     - name: Run tests
       run: make unittests
