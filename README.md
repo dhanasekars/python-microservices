@@ -267,7 +267,8 @@ Have to focus on unit tests tomorrow.
 
 `Time Spent : 60 minutes`
 
-- Port mapping. Still the endpoints are not exposed to outside world
+- Port mapping. Still the endpoints are not exposed to outside world.
+- Uploaded docker image - https://hub.docker.com/r/dhanasekars/my-todos/tags 
 
 </details>
 
