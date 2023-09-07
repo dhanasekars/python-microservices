@@ -7,11 +7,14 @@
 - [x] Create a config.json file
 - [x] Return appropriate HTTP status codes 
 - [X] Integration / functional tests
+- [ ] Move bugs and TODOs inside GitHub Issues / Project
 - [ ] Make Production ready
   - [x] Restructure project
   - [x] Containerization  
-  - [ ] Establish CI/CD in Cloud
+  - [ ] Establish CI/CD in - Git Actions
   - [ ] Host it in cloud
+  - [ ] Add release notes
+  - [ ] Maintain release version numbers
 - [ ] Explore Fire
 - [ ] Authentication 
 - [ ] Tracking and limiting usage 

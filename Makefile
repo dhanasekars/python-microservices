@@ -49,3 +49,7 @@ check: format lint
 
 listvenv:
 	find / -type d -name 'bin' -exec sh -c 'if [ -f "{}/activate" ]; then dirname "{}"; fi' \;
+
+docker_build:
+	docker pull dhanasekars/my-todos:latest
+	docker run -p 80:8000 my-todos

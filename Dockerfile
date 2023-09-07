@@ -27,3 +27,4 @@ RUN poetry config virtualenvs.create false \
 COPY . /app/
 
 CMD ["python", "main.py"]
+EXPOSE 8000

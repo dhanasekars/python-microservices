@@ -258,7 +258,7 @@ Have to focus on unit tests tomorrow.
 - removed absolute paths
 - Dockerfile and dockerignore added
 - Docker image ready
-- :thumbsdown: Port mappting. Still the endpoints are not exposed to outside world
+- :thumbsdown: Port mapping. Still the endpoints are not exposed to outside world
 
 </details>
 
