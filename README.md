@@ -262,6 +262,14 @@ Have to focus on unit tests tomorrow.
 
 </details>
 
+<details> 
+    <summary> Day 18: Sep 06</summary>
+
+`Time Spent : 60 minutes`
+
+- Port mapping. Still the endpoints are not exposed to outside world
+
+</details>
 
 
 -------------------------------
