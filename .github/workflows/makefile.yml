@@ -1,4 +1,4 @@
-name: test
+name: Python CI CD
 
 on: pull_request
 
@@ -15,7 +15,7 @@ jobs:
         id: setup-python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.10'
       #----------------------------------------------
       #  -----  install & configure poetry  -----
       #----------------------------------------------
@@ -48,5 +48,5 @@ jobs:
       - name: Run tests
         run: |
           source .venv/bin/activate
-          pytest app/tests/
+          python -m pytest app/tests/
           coverage report
