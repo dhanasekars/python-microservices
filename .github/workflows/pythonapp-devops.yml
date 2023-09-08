@@ -51,4 +51,5 @@
           run: |
             pwd
             ls -la
+            poetry shell
             make unittests
