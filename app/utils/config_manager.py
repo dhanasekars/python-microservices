@@ -30,7 +30,7 @@ class ConfigurationManager:
                 )
 
             config_file_relative_path = (
-                "../config/config.json"  # Relative to the root of your repository
+                "app/config/config.json"  # Relative to the root of your repository
             )
             config_file_path = os.path.join(github_workspace, config_file_relative_path)
         else:
