@@ -31,7 +31,7 @@ git:
 	#git push
 	git add .
 	git commit -m "$(MSG)"
-	git push origin working-tree
+	git push
 
 start:
 	uvicorn main:app --reload

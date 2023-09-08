@@ -284,6 +284,16 @@ Have to focus on unit tests tomorrow.
 
 </details>
 
+
+<details> 
+    <summary> Day 18: Sep 08</summary>
+
+`Time Spent : 120 minutes`
+
+- Gitactions complete - building code and pushing to docker hub
+
+</details>
+
 -------------------------------
 
 <details> 
