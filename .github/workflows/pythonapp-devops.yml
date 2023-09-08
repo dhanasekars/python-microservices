@@ -69,6 +69,12 @@
             DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
             DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_TOKEN }}
           run: |
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        #----------------------------------------------
+        #              Build and Push Docker image 
+        #----------------------------------------------
+        - name: Build and Push Docker image 
+          run: |
             docker buildx create --use
             docker buildx build --push -t dhanasekars/my-todos:latest -f Dockerfile .
             docker logout
