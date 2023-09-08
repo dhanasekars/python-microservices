@@ -56,3 +56,20 @@
         - name: Run integration tests
           run: |
             python -m pytest app/tests/02_integration_tests
+
+        #----------------------------------------------
+        #              Set up Docker Buildx
+        #----------------------------------------------
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v1
+
+        - name: Build and Push Docker Image
+          env:
+            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          run: |
+            docker buildx create --use
+            docker buildx build -t dhanasekars/my-todos:latest -f Dockerfile .
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker push dhanasekars/my-todos:latest
