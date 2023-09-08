@@ -28,7 +28,6 @@ def mock_load_list():
 
 def mock_save_list(data):
     mock_save_list.updated_data = data
-    pass
 
 
 class TestLoadListFromJSON(unittest.TestCase):

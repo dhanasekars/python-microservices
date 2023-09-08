@@ -12,7 +12,7 @@ format:
 
 lint:
 	#flake8 or #pylint
-	pylint *.py app/../*.py
+	pylint -j 4 --rcfile=pylint.rc app/
 
 unittests:
 	# Run all unittests

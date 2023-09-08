@@ -46,7 +46,6 @@
         - name: Check Venv and Poetry Version
           run: |
               poetry --version
-              ls -la  # List files and directories in the current directory
 
           #----------------------------------------------
           #  -----  run unit and integration tests  -----

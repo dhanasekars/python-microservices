@@ -108,7 +108,7 @@ async def add_todo(todo: TodoItem):
 async def read_todo(todo_id):
     """return todo details for a given id"""
     result = get_todo_details(todo_id)
-    logging.error(f"Retrieved details for given id {todo_id} ")
+    logging.info(f"Retrieved details for given id {todo_id} ")
     return result
 
 

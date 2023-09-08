@@ -26,11 +26,11 @@ def load_list():
             )
             return data
     except FileNotFoundError:
-        logging.info(f"Data file not found. Returning an empty list.")
+        logging.info("Data file not found. Returning an empty list.")
         return []
-    except ValueError as e:
-        logging.error(f"Error loading data. Value Error: {str(e)}")
-        return e
+    except ValueError as err:
+        logging.error(f"Error loading data. Value Error: {str(err)}")
+        return err
 
 
 def get_todo_details(todo_id):
@@ -89,8 +89,8 @@ def save_list(todo_list):
         logging.error(error_message)
         return error_message
 
-    except Exception as e:
-        error_message = f"An unexpected error occurred: {str(e)}"
+    except Exception as err:
+        error_message = f"An unexpected error occurred: {str(err)}"
         logging.error(error_message)
         return error_message
 

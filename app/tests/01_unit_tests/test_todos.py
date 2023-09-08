@@ -6,9 +6,10 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import MagicMock
 from fastapi import HTTPException
+from unittest.mock import patch
+
 from app.apis import todos
 from main import app  # Import your FastAPI app instance
-from unittest.mock import patch
 
 
 # Create a test client using the TestClient class
@@ -333,6 +334,7 @@ class TestUpdateTodo:
             )
 
     def test_update_blank_body(self, test_client):
+        """test update with blank body"""
         mock_update_todo = MagicMock()
         mock_update_todo.return_value = {"error": "Todo not found"}
 
