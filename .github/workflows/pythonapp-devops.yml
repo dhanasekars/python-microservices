@@ -32,6 +32,10 @@
         #----------------------------------------------
         # install dependencies if cache does not exist
         #----------------------------------------------
+        - uses: actions/checkout@v2
+          with:
+            submodules: 'recursive'
+
         - name: Install dependencies
           if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
           run: poetry install --no-interaction --no-root
@@ -42,10 +46,6 @@
               poetry env info
               poetry env list
               ls -la  # List files and directories in the current directory
-
-        - uses: actions/checkout@v2
-          with:
-            submodules: 'recursive'
 
         - name: Run unit tests
           run: |
