@@ -29,6 +29,7 @@
           with:
             path: .venv
             key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
         #----------------------------------------------
         # install dependencies if cache does not exist
         #----------------------------------------------
@@ -43,10 +44,15 @@
         - name: Check Venv and Poetry Version
           run: |
               poetry --version
-              poetry env info
-              poetry env list
               ls -la  # List files and directories in the current directory
 
+          #----------------------------------------------
+          #  -----  run unit and integration tests  -----
+          #----------------------------------------------
         - name: Run unit tests
           run: |
             python -m pytest --cov=app/apis --cov=app/utils app/tests/01_unit_tests
+
+        - name: Run integration tests
+          run: |
+            python -m pytest app/tests/02_integration_tests
