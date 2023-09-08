@@ -49,4 +49,4 @@
 
         - name: Run unit tests
           run: |
-            make unittests
+            python -m pytest --cov=app/apis --cov=app/utils app/tests/01_unit_tests
