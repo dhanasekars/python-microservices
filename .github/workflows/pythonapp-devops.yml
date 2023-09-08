@@ -70,5 +70,6 @@
             DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           run: |
             docker buildx create --use
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
             docker buildx build --push -t dhanasekars/my-todos:latest -f Dockerfile .
             docker logout
