@@ -48,4 +48,6 @@
 
         - name: Run unit tests
           run: |
+            source .venv/bin/activate
+            pwd
             make unittests
