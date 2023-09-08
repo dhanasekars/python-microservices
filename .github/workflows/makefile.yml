@@ -11,6 +11,16 @@ jobs:
       #----------------------------------------------
       - name: Check out repository
         uses: actions/checkout@v3
+
+      - name: Check if config.json exists
+        run: |
+            if [ -f "app/config/config.json" ]; then
+              echo "config.json exists."
+            else
+              echo "config.json does not exist."
+              exit 1  # Exit the workflow with an error status code
+            fi
+
       - name: Set up python
         id: setup-python
         uses: actions/setup-python@v4
