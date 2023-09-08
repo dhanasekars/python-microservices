@@ -3,7 +3,7 @@ name: Python CI CD
 on: pull_request
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
