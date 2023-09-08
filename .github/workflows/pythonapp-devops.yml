@@ -34,3 +34,7 @@
               source "$(poetry env info --path)/bin/activate"
               pwd  # Print the current working directory
               ls -la  # List files and directories in the current directory
+
+        - name: Run unit tests
+          run: |
+            make unittests
