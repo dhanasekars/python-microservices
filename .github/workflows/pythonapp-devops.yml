@@ -49,5 +49,4 @@
 
         - name: Run unit tests
           run: |
-            python -m pytest app/tests/01_unit_tests
-            coverage report --show-missing
+            make unittests
