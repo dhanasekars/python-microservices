@@ -51,4 +51,11 @@
           run: |
             pwd
             ls -la
-            make unittests
+            cd app
+            ls -la
+            cd config
+            ls -la
+            cd ..
+            cd .. 
+            python -m pytest app/tests/01_unit_tests
+            coverage report --show-missing
