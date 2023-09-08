@@ -1,0 +1,36 @@
+  name: Python application test with Github actions
+  on: [push]
+
+  jobs:
+    build:
+      runs-on:  ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+          with:
+            submodules: 'recursive'
+
+        - name: Set up Python 3.9
+          uses: actions/setup-python@v1
+          with:
+            python-version: 3.9.6
+
+        - name: Install Poetry
+          run: |
+            curl -sSL https://install.python-poetry.org | python3
+            poetry --version
+
+        - name: Create and Activate Venv
+          run: |
+            poetry config virtualenvs.create true
+            poetry install
+
+        - name: Check Venv and Poetry Version
+          run: |
+            poetry --version
+            python -c "import sys; print(sys.prefix)"
+
+        - name: Activate Venv and Check Code Location
+          run: |
+              source "$(poetry env info --path)/bin/activate"
+              pwd  # Print the current working directory
+              ls -la  # List files and directories in the current directory
