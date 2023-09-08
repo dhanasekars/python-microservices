@@ -7,19 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
-      #       check-out repo and set-up python
+      #       check-out repo and set up python
       #----------------------------------------------
-      - name: Check out repository
+      - name: Check out the repository
         uses: actions/checkout@v3
 
-      - name: Check if config.json exists
+      - name: list files in the working directory
         run: |
-            if [ -f "app/config/config.json" ]; then
-              echo "config.json exists."
-            else
-              echo "config.json does not exist."
-              exit 1  # Exit the workflow with an error status code
-            fi
+          ls -1
 
       - name: Set up python
         id: setup-python
