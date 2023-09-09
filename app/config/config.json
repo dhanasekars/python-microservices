@@ -2,8 +2,13 @@
   "data_file": "./app/data/todo.json",
   "logging_config": {
     "filename": "./app/log/debug.log",
-    "level":"DEBUG",
-    "format":"%(levelname)s %(asctime)s - %(message)s",
-    "filemode":"a"
+    "level": "DEBUG",
+    "format": "%(levelname)s %(asctime)s - %(message)s",
+    "filemode": "a"
+  },
+  "postgres_config": {
+    "username": "${DATABASE_USERNAME}",
+    "password": "${DATABASE_PASSWORD}",
+    "dbname": "${DATABASE_NAME}"
   }
 }
