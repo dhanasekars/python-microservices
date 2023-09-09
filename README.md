@@ -294,6 +294,23 @@ Have to focus on unit tests tomorrow.
 
 </details>
 
+
+<details> 
+    <summary> Day 19: Sep 09</summary>
+
+`Time Spent : 180 minutes`
+
+- Created a seprate project simple CRUD , the lite weight version without db
+- Figured out why poetry was giving trouble in Docker and git actions - should use
+  
+    ```shell
+          poetry run python main.py 
+          poetry run pyhon pytest tests/
+    ```
+- Attempting to create a postgres docker and create a db 
+
+</details>
+
 -------------------------------
 
 <details> 
