@@ -3,6 +3,8 @@
 Create an API tutorial ( mimic ) https://www.eviltester.com/page/tools/apichallenges/ 
 using Python and FastAPI 
 
+⚠️ main branch will be updated every Saturday. For the latest code, check working-tree
+
 ## Other Learning Objectives
 
 1. Pytest
