@@ -66,9 +66,9 @@ class TestGetTodoDetails(unittest.TestCase):
         mock_data = [{"id": 1, "task": "Task 1", "status": "Incomplete"}]
         mock_load_list.return_value = mock_data
         with pytest.raises(HTTPException) as execinfo:
-            remove_todo(2)
+            get_todo_details(2)
         self.assertEqual(execinfo.value.status_code, 404)
-        self.assertEqual(execinfo.value.detail, "ID not found")
+        self.assertEqual(execinfo.value.detail, "Todo not found for the given ID: 2")
 
     def test_invalid_data_format(self, mock_load_list):
         mock_data = "invalid json"

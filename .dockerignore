@@ -1,7 +1,2 @@
-Extras
-Dockerfile
-.coverage
-.coveragerc
-.pytest_cache
-pytest.ini
-.gitignore
+app/log/*.log
+app/data/todo.json
