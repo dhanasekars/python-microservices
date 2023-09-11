@@ -24,3 +24,7 @@
 - [ ] Generate total time spent for this project from README.md
 - [ ] Fix all lint issues
 - [ ] Explore Fire
+
+
+### Action items
+ - [ ] is it necessary to install libpq separately using brew? 
