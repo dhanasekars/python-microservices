@@ -213,4 +213,4 @@ pyrightconfig.json
 /data.json
 .coveragerc
 log/*.*
-/app/secrets/secrets.json
+/app/secrets/secrets.env

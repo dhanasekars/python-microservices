@@ -313,6 +313,28 @@ Have to focus on unit tests tomorrow.
 
 </details>
 
+
+<details> 
+    <summary> Day 20: Sep 10</summary>
+
+`Time Spent : 180 minutes`
+
+- Exploring various ways to install postgres 
+- Nothing worked - failed attempt to install and make a docker postgres up and running from python code.
+- Decided to try local installation first to get familiarise with postgres db 
+
+</details>
+
+
+<details> 
+    <summary> Day 21: Sep 11</summary>
+
+`Time Spent : 75 minutes`
+
+- local instance set up using postgress.app
+- Still not able to access from python code
+
+</details>
 -------------------------------
 
 <details> 

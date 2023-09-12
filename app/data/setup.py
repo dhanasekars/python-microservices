@@ -9,13 +9,34 @@ from passlib.context import CryptContext
 
 # from jose import JWTError, jwt
 from datetime import datetime, timedelta
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import (
+    create_engine,
+    Column,
+    Integer,
+    String,
+    Boolean,
+    ForeignKey,
+    text,
+    MetaData,
+)
 from sqlalchemy.orm import relationship, sessionmaker, declarative_base
 from pydantic import BaseModel
 import json
+import os
+from dotenv import load_dotenv
 
-with open("../secrets/secrets.json", "r") as config_file:
-    config = json.load(config_file)
+# Get the directory containing your script (data folder)
+script_directory = os.path.dirname(__file__)
+
+# Construct the path to the secrets.env file relative to your script's location
+dotenv_path = os.path.join(script_directory, "..", "secrets", "secrets.env")
+load_dotenv(dotenv_path)
+
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST")
+db_port = os.getenv("DB_PORT")
+db_name = os.getenv("DB_NAME")
 
 
 # SQLAlchemy models
@@ -25,8 +46,21 @@ Base = declarative_base()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
+# Create the database engine
+db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+engine = create_engine(db_url)
+
+# Specify a scheme name
+schema_name = "new_schema"
+create_schema_sql = text(f"CREATE SCHEMA {schema_name};")
+
+# Execute the SQL query to create the schema
+with engine.connect() as connection:
+    connection.execute(create_schema_sql)
+
+
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = f"{schema_name}.users"
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
@@ -47,28 +81,22 @@ class User(Base):
 
 
 class Todo(Base):
-    __tablename__ = "todos"
+    __tablename__ = f"{schema_name}.todos"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     description = Column(String)
     status = Column(Boolean, default=False)
 
     # Establish a many-to-one relationship with User
-    owner_id = Column(Integer, ForeignKey("users.id"))
-    owner = relationship("User", back_populates="todos")
+    owner_id = Column(Integer, ForeignKey(f"{schema_name}.users.id"))
+    owner = relationship("User", back_populates=f"{schema_name}.todos")
 
 
-# Create the database engine
-db_url = (
-    f"postgresql://{config['postgres']['db_user']}:{config['postgres']['db_password']}"
-    f"@{config['postgres']['db_host']}:{config['postgres']['db_port']}/{config['postgres']['db_name']}"
-)
-
-# db_url = "postgresql://postgres:D@rkpostgresgr33n@localhost:5432/mytest"
-
-engine = create_engine(db_url)
+# Create a MetaData object
+metadata = MetaData(schema=schema_name)
 
 # Create tables
+Base.metadata.clear()
 Base.metadata.create_all(engine)
 
 # Create a session
