@@ -11,7 +11,11 @@
 - [x] Containerization  
 - [x] Establish CI/CD in - Git Actions
 - [ ] Move data store from json to db
-- [ ] Authentication 
+  - [x] Create a db connection
+  - [x] Create a db tables
+  - [x] Create a db connection pool
+  - [ ] Update all functions to use db connection 
+- [ ] Authentication
 - [ ] Tracking and limiting usage 
 - [ ] Have an error message json
 - [ ] Host it in cloud
@@ -25,7 +29,7 @@
 - [ ] Fix all lint issues
 - [ ] Explore Fire
 - [ ] Confirm schema for db by passing the schema name in secrets.env
-
+- [ ] Create admin API - to activate, de-active, delete users. 
 
 ### Action items
  - [ ] is it necessary to install libpq separately using brew? 

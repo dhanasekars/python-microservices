@@ -359,6 +359,7 @@ Have to focus on unit tests tomorrow.
 - Able to connect to local postgres db using python code.
 - Able to create a table and insert data
 - Not sure what the issue was. Reinstalling postgres.app and restarting the system fixed the issue.
+- Able to create use and send bearer token 
 
 </details>
 

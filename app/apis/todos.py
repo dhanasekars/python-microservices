@@ -19,7 +19,14 @@ from app.utils.helper import (
     update_todo,
 )
 from app.utils.config_manager import config_manager
-from app.data.setup import connect_to_database, create_tables, create_access_token
+from app.data.setup import (
+    connect_to_database,
+    create_tables,
+    create_access_token,
+    User,
+    Todo,
+    get_db,
+)
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 14  # 2 weeks
 
@@ -83,14 +90,12 @@ async def read_root():
 
 # Registration endpoint
 @router.post("/registration/")
-def register_user(
-    user: RegistrationRequest, db: Session = Depends(connect_to_database)
-):
+def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
     # Hash the user's password
     hashed_password = pwd_context.hash(user.password)
 
     # Create a new user in the database
-    db_user = create_tables.User(
+    db_user = User(
         username=user.username, email=user.email, password_hash=hashed_password
     )
     db.add(db_user)

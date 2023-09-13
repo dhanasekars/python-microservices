@@ -5,12 +5,5 @@
     "level": "DEBUG",
     "format": "%(levelname)s %(asctime)s - %(message)s",
     "filemode": "a"
-  },
-    "postgres": {
-    "db_user": "todoadmin",
-    "db_password": "wdv-efb-753-951",
-    "db_host": "localhost",
-    "db_port": 5432,
-    "db_name": "todolist"
   }
 }
