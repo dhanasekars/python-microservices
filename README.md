@@ -1,7 +1,7 @@
-# Building microservices using FastAPI 
+# Building microservices using FastAPI
 
-Create an API tutorial ( mimic ) https://www.eviltester.com/page/tools/apichallenges/ 
-using Python and FastAPI 
+Create an API tutorial ( mimic ) https://www.eviltester.com/page/tools/apichallenges/
+using Python and FastAPI
 
 ⚠️ main branch will be updated every Saturday. For the latest code, check working-tree
 
@@ -13,12 +13,14 @@ using Python and FastAPI
 4. Fire
 
 ## Additional learnings
+
 1. Pytantic
 2. Make File
 
 ### Spend one hour daily on this project
 
 # Progress
+
 <details>
     <summary>Day 1 : Aug 18  </summary>
 
@@ -29,7 +31,8 @@ using Python and FastAPI
 - Basic understanding of `Poetry`
 - Setup `sample_endpoint.py` and test file for it to configure pytest and test coverage
 
-### References 
+### References
+
 - https://www.youtube.com/watch?v=YB-_FsssK8E
 - https://python-poetry.org/docs/basic-usage/
 - https://www.gnu.org/software/make/manual/make.html
@@ -44,10 +47,8 @@ using Python and FastAPI
 
 `Time Spent : 50 minutes`
 
-
-- :thumbsup: Set up route and todo route that returns  hardcoded value
+- :thumbsup: Set up route and todo route that returns hardcoded value
 - :thumbsdown: Unable to have the todo route as a separate module from main
-
 
 </details>
 
@@ -58,8 +59,8 @@ using Python and FastAPI
 `Time Spent : 50 minutes`
 
 - Pydantic
-    For GET request
-- Async function 
+  For GET request
+- Async function
 - Pagination and per page
 
 </details>
@@ -71,7 +72,8 @@ using Python and FastAPI
 
 - Validation for page and per_page
 - Unitest - statuscode done
-- :thumbsdown: Unitest - content unable to do 
+- :thumbsdown: Unitest - content unable to do
+
 </details>
 
 <details> 
@@ -97,13 +99,17 @@ Learned the problems of circular import, could not find the right solution but l
 Also, learn to rebase to last working version
 
 This will undo any changes you've made to tracked files and restore deleted files:
+
 ```commandline
 git reset HEAD --hard
 ```
+
 This will delete any new files that were added since the last commit:
+
 ```commandline
 git clean -fd
 ```
+
 Files that are not tracked due to .gitignore are preserved; they will not be removed
 Warning: using -x instead of -fd would delete ignored files. You probably don't want to do this.
 
@@ -117,10 +123,9 @@ Reference : [stack-overflow](https://stackoverflow.com/questions/4630312/reset-a
 `Time Spent : 90 minutes`
 
 - created helper file to read and save data to json file
-- UUID generated 
+- UUID generated
 - stuck with absolute path issue.
 - Unit test is not working - need to use mock
-
 
 _Added a step in Make file to test and push to git_
 
@@ -132,7 +137,7 @@ _Added a step in Make file to test and push to git_
 `Time Spent : 45 minutes`
 
 - Route to read an item using id
-- Route to remove an item using id 
+- Route to remove an item using id
 
 </details>
 
@@ -140,8 +145,8 @@ _Added a step in Make file to test and push to git_
     <summary> Day 9: Aug 28</summary>
 
 - Route for update using PUT
-- Learnt about limitation in FastAPI pydantic base model 
-- This is the most complex so for. 
+- Learnt about limitation in FastAPI pydantic base model
+- This is the most complex so for.
 
 `Time Spent : 75 minutes`
 
@@ -150,7 +155,7 @@ _Added a step in Make file to test and push to git_
 <details> 
     <summary> Day 10: Aug 29</summary>
 
-- No progress 
+- No progress
 - Poetry env got screwed up while adding unit test (not sure about the root cause)
 - Fixed the issue
 - Then git screwed because of POSTMAN json directly updating remote and me add some __init__.py file
@@ -168,7 +173,7 @@ Have to focus on unit tests tomorrow.
 
 `Time Spent : 120 minutes`
 
-- Productive time creating unit tests and coverage report 
+- Productive time creating unit tests and coverage report
 - Config file added using `Singleton` design pattern
 
 ![unit_test_coverage.png](Extras/images/unit_test_coverage.png)
@@ -194,7 +199,7 @@ Have to focus on unit tests tomorrow.
 `Time Spent : 70 minutes`
 
 - Refactored update list
-- Added unit tests for update list and UUID generation 
+- Added unit tests for update list and UUID generation
 
 </details>
 
@@ -219,7 +224,7 @@ Have to focus on unit tests tomorrow.
 - Debug log added for all functions
 - Again `Singleton pattern` used to invoke error config
 - Some refactoring while adding debug log
-- Learnt about --show-missing in coverage to show missing lines 
+- Learnt about --show-missing in coverage to show missing lines
 
 ![unit_coverage_Sep_03.png](Extras/images/unit_coverage_Sep_03.png)
 
@@ -231,7 +236,7 @@ Have to focus on unit tests tomorrow.
 `Time Spent : 120 minutes`
 
 - No new functionality added.
-- Appropriate 404 and 500 exception returned 
+- Appropriate 404 and 500 exception returned
 - Unit tests refactored as per the changes.
 - Fixed "PUT - Handle updating an existing todo item with empty body {}" - Good learning about Pytantic
 
@@ -243,9 +248,9 @@ Have to focus on unit tests tomorrow.
 `Time Spent : 180 minutes`
 
 - Added integration tests for all 200 status code
-- Added integration tests for 4xx status code 
-  - Resulted in some logic change
-  - Unit test updated 
+- Added integration tests for 4xx status code
+    - Resulted in some logic change
+    - Unit test updated
 - Bug fixes
 
 </details>
@@ -256,7 +261,7 @@ Have to focus on unit tests tomorrow.
 
 `Time Spent : 150 minutes`
 
-- Some more restructuring of code. 
+- Some more restructuring of code.
 - removed absolute paths
 - Dockerfile and dockerignore added
 - Docker image ready
@@ -270,7 +275,7 @@ Have to focus on unit tests tomorrow.
 `Time Spent : 60 minutes`
 
 - Port mapping. Still the endpoints are not exposed to outside world.
-- Uploaded docker image - https://hub.docker.com/r/dhanasekars/my-todos/tags 
+- Uploaded docker image - https://hub.docker.com/r/dhanasekars/my-todos/tags
 
 </details>
 
@@ -304,12 +309,12 @@ Have to focus on unit tests tomorrow.
 
 - Created a seprate project simple CRUD , the lite weight version without db
 - Figured out why poetry was giving trouble in Docker and git actions - should use
-  
+
     ```shell
           poetry run python main.py 
           poetry run pyhon pytest tests/
     ```
-- Attempting to create a postgres docker and create a db 
+- Attempting to create a postgres docker and create a db
 
 </details>
 
@@ -319,9 +324,9 @@ Have to focus on unit tests tomorrow.
 
 `Time Spent : 180 minutes`
 
-- Exploring various ways to install postgres 
+- Exploring various ways to install postgres
 - Nothing worked - failed attempt to install and make a docker postgres up and running from python code.
-- Decided to try local installation first to get familiarise with postgres db 
+- Decided to try local installation first to get familiarise with postgres db
 
 </details>
 
@@ -335,6 +340,29 @@ Have to focus on unit tests tomorrow.
 - Still not able to access from python code
 
 </details>
+
+<details> 
+    <summary> Day 22: Sep 12</summary>
+
+`Time Spent : 75 minutes`
+
+- local instance set up using postgress.app
+- Still not able to access from python code
+
+</details>
+
+<details> 
+    <summary> Day 23: Sep 13</summary>
+
+`Time Spent : 180 minutes`
+
+- Able to connect to local postgres db using python code.
+- Able to create a table and insert data
+- Not sure what the issue was. Reinstalling postgres.app and restarting the system fixed the issue.
+
+</details>
+
+
 -------------------------------
 
 <details> 

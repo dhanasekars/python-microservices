@@ -24,6 +24,7 @@
 - [ ] Generate total time spent for this project from README.md
 - [ ] Fix all lint issues
 - [ ] Explore Fire
+- [ ] Confirm schema for db by passing the schema name in secrets.env
 
 
 ### Action items

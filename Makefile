@@ -62,3 +62,5 @@ docker_build:
 	docker pull dhanasekars/my-todos:latest
 	docker run -p 80:8000 my-todos
 
+hardstart:
+	poetry run python main.py
