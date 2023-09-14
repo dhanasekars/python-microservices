@@ -20,8 +20,6 @@ from app.utils.helper import (
 )
 from app.utils.config_manager import config_manager
 from app.data.setup import (
-    connect_to_database,
-    create_tables,
     create_access_token,
     User,
     Todo,
@@ -32,9 +30,10 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(
     config_manager.config_data["authentication"]["token_expiry"]
 )  # 2 weeks
 
+router = fastapi.APIRouter()
+
 
 # Configure logging
-router = fastapi.APIRouter()
 config_manager.configure_logging()
 
 

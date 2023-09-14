@@ -16,12 +16,11 @@ lint:
 
 unittests:
 	# Run all unittests
-	python -m pytest app/tests/01_unit_tests
-	coverage report --show-missing
+	poetry run python -m pytest --cov=app  --cov-report=term-missing app/tests/01_unit_tests
 
 integrationstests:
 	# Run all integration tests
-	python -m pytest app/tests/02_integration_tests
+	poetry run python -m pytest --cov=app --cov-report=term-missing app/tests/02_integration_tests
 
 
 alltests: unittests integrationstests

@@ -364,6 +364,19 @@ Have to focus on unit tests tomorrow.
 </details>
 
 
+<details> 
+    <summary> Day 24: Sep 14</summary>
+
+`Time Spent : 180 minutes`
+
+- Unit test for setup.py 
+- Achieved 90% coverge. Need to figure out how to test the exception handling
+
+
+</details>
+
+
+
 -------------------------------
 
 <details> 

@@ -73,7 +73,11 @@ class User(Base):
     todos = relationship("Todo", back_populates="owner")
 
     def set_password(self, password):
-        self.password_hash = pwd_context.hash(password)
+        min_password_length = 8
+        if password and len(password) >= min_password_length:
+            self.password_hash = pwd_context.hash(password)
+        else:
+            self.password_hash = None
 
     def verify_password(self, password):
         return pwd_context.verify(password, self.password_hash)
@@ -94,8 +98,6 @@ class Todo(Base):
 def connect_to_database():
     """Connect to the database and create it if it doesn't exist."""
     try:
-        # Connect to the PostgreSQL server
-
         # Check if the database already exists
         if not database_exists(engine.url):
             # If it doesn't exist, create the new database
@@ -145,7 +147,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 def get_db():
     db = SessionLocal()
     try:
-        yield db
+        return db
     finally:
         db.close()
 

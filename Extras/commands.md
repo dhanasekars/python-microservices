@@ -21,3 +21,14 @@ psql -h localhost -p 5432 -U postgres
 > \l  # inside postgres prompt
 # lists all database 
 ```
+
+Stop tracking after check in
+
+```shell
+git update-index --assume-unchanged FILE_NAME
+```
+To start tracking again
+
+```shell
+git update-index --no-assume-unchanged FILE_NAME
+```
