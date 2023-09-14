@@ -28,7 +28,9 @@ from app.data.setup import (
     get_db,
 )
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 14  # 2 weeks
+ACCESS_TOKEN_EXPIRE_MINUTES = int(
+    config_manager.config_data["authentication"]["token_expiry"]
+)  # 2 weeks
 
 
 # Configure logging

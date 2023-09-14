@@ -28,9 +28,6 @@ from datetime import datetime, timedelta
 from app.utils.config_manager import config_manager
 from sqlalchemy.orm import sessionmaker
 
-# Configure JWT settings (you can use your own secret key)
-SECRET_KEY = "your-secret-key"
-ALGORITHM = "HS256"
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -50,6 +47,10 @@ db_port = os.getenv("DB_PORT")
 db_name = os.getenv("DB_NAME")
 db_schema = os.getenv("DB_SCHEMA", "public")
 
+# Configure JWT settings
+SECRET_KEY = os.getenv("JWT_SECRET")
+ALGORITHM = "HS256"
+print(f"{SECRET_KEY=}")
 
 # Create the database engine
 db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"

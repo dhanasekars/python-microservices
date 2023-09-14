@@ -40,7 +40,6 @@ class ConfigurationManager:
             config_file_path = os.path.abspath(
                 os.path.join(script_dir, config_file_relative_path)
             )
-
         try:
             with open(config_file_path, "r") as config_file:
                 self.config_data = json.load(config_file)

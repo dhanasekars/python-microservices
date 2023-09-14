@@ -5,5 +5,8 @@
     "level": "DEBUG",
     "format": "%(levelname)s %(asctime)s - %(message)s",
     "filemode": "a"
+  },
+  "authentication": {
+    "token_expiry": 20160
   }
 }

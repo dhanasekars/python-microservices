@@ -13,9 +13,9 @@ app = FastAPI()
 def configuration():
     """To include router from other modules"""
     app.include_router(todos.router)
-    engine = connect_to_database()
-    create_tables(engine)
-    engine.dispose()
+    # engine = connect_to_database()
+    # create_tables(engine)
+    # engine.dispose()
 
 
 configuration()
