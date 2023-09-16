@@ -2,65 +2,87 @@
 Created on : 14/09/23 9:12 am
 @author : ds  
 """
-import json
 import unittest
-from unittest.mock import mock_open, patch, MagicMock, Mock
-from passlib.hash import bcrypt
+from unittest.mock import patch, MagicMock, Mock
 from fastapi import HTTPException
-import pytest
 from datetime import datetime, timedelta
 from app.data.setup import (
     connect_to_database,
-    create_database,
     create_tables,
     get_db,
-    Base,
     User,
     create_access_token,
-    SessionLocal,
+    db_name,
 )
-from app.utils.config_manager import config_manager
 
 
 class TestDBConnection(unittest.TestCase):
-    """Class to test connect_to_database"""
+    """class to test database connection connect_to_database()"""
 
     @patch("app.data.setup.database_exists")
     @patch("app.data.setup.create_database")
-    def test_connect_to_database_creates_database_if_it_does_not_exist(
-        self, mock_create_database, mock_database_exists
+    @patch("app.data.setup.logging.info")
+    def test_connect_to_database_creates_database_if_it_doesnt_exist(
+        self, mock_logging_info, mock_create_database, mock_database_exists
     ):
+        # Mock the database_exists() function to return False
         mock_database_exists.return_value = False
-        mock_create_database.return_value = True
 
-        connect_to_database()
-
-        mock_create_database.assert_called_once()
-
-    @patch("app.data.setup.database_exists")
-    @patch("app.data.setup.create_database")
-    def test_connect_to_database_does_not_create_database_if_it_already_exists(
-        self, mock_create_database, mock_database_exists
-    ):
-        mock_database_exists.return_value = True
+        # Mock the create_database() function to do nothing
         mock_create_database.return_value = None
 
-        connect_to_database()
+        # Call the connect_to_database() function
+        engine = connect_to_database()
 
-        mock_create_database.assert_not_called()
+        # Assert that the create_database() function was called
+        mock_create_database.assert_called_once()
+
+        # Assert that the logging.info() function was called with the correct message
+        mock_logging_info.assert_called_once_with(
+            f"Database '{db_name}' created successfully."
+        )
 
     @patch("app.data.setup.database_exists")
     @patch("app.data.setup.create_database")
-    def test_connect_to_database_handles_exception_from_create_database(
-        self, mock_create_database, mock_database_exists
+    @patch("app.data.setup.logging.info")
+    def test_connect_to_database_does_not_create_database_if_it_already_exists(
+        self, mock_logging_info, mock_create_database, mock_database_exists
     ):
-        mock_database_exists.return_value = False
-        mock_create_database.side_effect = Exception("Failed to create database")
+        # Mock the database_exists() function to return True
+        mock_database_exists.return_value = True
 
-        with self.assertRaises(Exception):
+        # Mock the create_database() function to do nothing
+        mock_create_database.return_value = None
+
+        # Call the connect_to_database() function
+        engine = connect_to_database()
+
+        # Assert that the create_database() function was not called
+        mock_create_database.assert_not_called()
+
+        # Assert that the logging.info() function was called with the correct message
+        mock_logging_info.assert_called_once_with(
+            f"Database '{db_name}' already exists."
+        )
+
+    @patch("app.data.setup.database_exists")
+    @patch("app.data.setup.create_database")
+    @patch("app.data.setup.logging.error")
+    def test_connect_to_database_handles_exception(
+        self, mock_logging_error, mock_create_database, mock_database_exists
+    ):
+        # Mock the database_exists() function to return False
+        mock_database_exists.return_value = False
+
+        # Mock the create_database() function to raise an Exception
+        mock_create_database.side_effect = Exception("Database connection failed.")
+
+        # Assert that the connect_to_database() function throws an HTTPException
+        with self.assertRaises(HTTPException):
             connect_to_database()
-        assert mock_create_database.call_count == 1
-        assert mock_database_exists.call_count == 1
+
+        # Assert that the logging.error() function was called with the correct message
+        mock_logging_error.assert_called_once_with("Error: Database connection failed.")
 
 
 class TestUserPasswordHashing(unittest.TestCase):

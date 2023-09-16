@@ -376,6 +376,16 @@ Have to focus on unit tests tomorrow.
 </details>
 
 
+<details> 
+    <summary> Day 25: Sep 16</summary>
+
+`Time Spent : 180 minutes`
+
+- Unit test for setup.py
+- Achieved 100% coverge.
+- Added integration test for REGISTRATION route
+
+</details>
 
 -------------------------------
 

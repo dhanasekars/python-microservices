@@ -33,7 +33,7 @@
             self.assertEqual(load_list().msg, "Expecting value.")
             self.assertEqual(load_list().doc, "Test.")
     ```
-6. Missing unit test coverage
+6. :white_check_mark: Missing unit test coverage
     Fix : Silly copy paste error. 
     Instead of calling get_todo_details(2) the code was calling remove_todo(2) and passing.
     Thus, coverage was missing. Moved this from Todo to Bugs.
@@ -47,3 +47,4 @@
         self.assertEqual(execinfo.value.status_code, 404)
         self.assertEqual(execinfo.value.detail, "Todo not found for the given ID: 2")
     ```
+7. Minimum password requirement is not working, fix it and add integration test.

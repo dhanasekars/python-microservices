@@ -4,6 +4,7 @@ Created on : 24/08/23 8:39 am
 """
 from datetime import timedelta
 from typing import Optional, List
+from sqlalchemy.exc import IntegrityError
 import logging
 import fastapi
 from fastapi import Query, HTTPException, Depends
@@ -92,25 +93,32 @@ async def read_root():
 # Registration endpoint
 @router.post("/registration/")
 def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
-    # Hash the user's password
-    hashed_password = pwd_context.hash(user.password)
+    try:
+        # Hash the user's password
+        hashed_password = pwd_context.hash(user.password)
 
-    # Create a new user in the database
-    db_user = User(
-        username=user.username, email=user.email, password_hash=hashed_password
-    )
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
+        # Create a new user in the database
+        db_user = User(
+            username=user.username,
+            email=user.email,
+            password_hash=hashed_password,
+        )
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
 
-    # Generate an access token for the registered user
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.email},
-        expires_delta=access_token_expires,
-    )
+        # Generate an access token for the registered user
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user.email},
+            expires_delta=access_token_expires,
+        )
 
-    return {"access_token": access_token, "token_type": "bearer"}
+        return {"access_token": access_token, "token_type": "bearer"}
+    except IntegrityError as e:
+        # Handle unique constraint violation errors (username or email already exists)
+        db.rollback()
+        raise HTTPException(status_code=400, detail="Username or email already exists")
 
 
 @router.get("/todos", response_model=List[ReturnTodo])

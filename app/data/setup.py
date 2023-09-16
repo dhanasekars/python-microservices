@@ -5,11 +5,8 @@ Created on : 09/09/23 6:02 pm
 
 from fastapi import HTTPException
 import logging
-from passlib.context import CryptContext
 from sqlalchemy_utils import create_database, database_exists
-from sqlalchemy.exc import SQLAlchemyError
-import psycopg2
-from psycopg2 import errors
+
 from sqlalchemy import (
     create_engine,
     Column,
@@ -50,7 +47,6 @@ db_schema = os.getenv("DB_SCHEMA", "public")
 # Configure JWT settings
 SECRET_KEY = os.getenv("JWT_SECRET")
 ALGORITHM = "HS256"
-print(f"{SECRET_KEY=}")
 
 # Create the database engine
 db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
@@ -64,8 +60,6 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
     password_hash = Column(String)
-    first_name = Column(String)
-    last_name = Column(String)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
 
@@ -111,14 +105,8 @@ def connect_to_database():
 
         return engine
 
-    except SQLAlchemyError as sae:
-        if isinstance(sae.orig, errors.DuplicateDatabase):
-            logging.info(f"Database '{db_name}' already exists.")
-        else:
-            logging.error(f"SQLAlchemy Error: {sae}")
-            raise HTTPException(status_code=500, detail="Database connection error")
-    except psycopg2.Error as pe:
-        logging.error(f"Psycopg2 Error: {pe}")
+    except Exception as e:
+        logging.error(f"Error: {e}")
         raise HTTPException(status_code=500, detail="Database connection error")
 
 
@@ -130,12 +118,6 @@ def create_tables(db_engine):
         print("Tables created successfully.")
         logging.info("Tables created successfully.")
 
-    except SQLAlchemyError as sae:
-        logging.error(f"SQLAlchemy Error: {sae}")
-        raise HTTPException(status_code=500, detail="Database connection error")
-    except psycopg2.Error as pe:
-        logging.error(f"Psycopg2 Error: {pe}")
-        raise HTTPException(status_code=500, detail="Database connection error")
     except Exception as e:
         logging.error(f"Error: {e}")
         raise HTTPException(status_code=500, detail="Database connection error")

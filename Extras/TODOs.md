@@ -15,7 +15,9 @@
   - [x] Create a db tables
   - [x] Create a db connection pool
   - [ ] Update all functions to use db connection 
+  - [ ] Connect to more than one type of DB and test ( Postgres, MySQL, SQLite)
 - [ ] Authentication
+- [ ] Update the test fixture @generateUDID 
 - [ ] Tracking and limiting usage 
 - [ ] Have an error message json
 - [ ] Host it in cloud
