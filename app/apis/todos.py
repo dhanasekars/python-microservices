@@ -2,12 +2,15 @@
 Created on : 24/08/23 8:39 am
 @author : ds  
 """
-
+from datetime import timedelta
 from typing import Optional, List
+from sqlalchemy.exc import IntegrityError
 import logging
 import fastapi
-from fastapi import Query, HTTPException
+from fastapi import Query, HTTPException, Depends
+from passlib.context import CryptContext
 from pydantic import BaseModel, Field, constr, model_validator
+from sqlalchemy.orm import Session
 from app.utils.helper import (
     load_list,
     save_list,
@@ -17,9 +20,33 @@ from app.utils.helper import (
     update_todo,
 )
 from app.utils.config_manager import config_manager
+from app.data.setup import (
+    create_access_token,
+    User,
+    Todo,
+    get_db,
+)
+
+ACCESS_TOKEN_EXPIRE_MINUTES = int(
+    config_manager.config_data["authentication"]["token_expiry"]
+)  # 2 weeks
 
 router = fastapi.APIRouter()
+
+
+# Configure logging
 config_manager.configure_logging()
+
+
+# Password hashing context
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+# Registration request model
+class RegistrationRequest(BaseModel):
+    username: str
+    email: str
+    password: str
 
 
 class TodoItem(BaseModel):
@@ -61,6 +88,37 @@ async def read_root():
     """root route"""
     logging.info("Request received at root route.")
     return {"message": "Welcome to API Challenge"}
+
+
+# Registration endpoint
+@router.post("/registration/")
+def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
+    try:
+        # Hash the user's password
+        hashed_password = pwd_context.hash(user.password)
+
+        # Create a new user in the database
+        db_user = User(
+            username=user.username,
+            email=user.email,
+            password_hash=hashed_password,
+        )
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+
+        # Generate an access token for the registered user
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user.email},
+            expires_delta=access_token_expires,
+        )
+
+        return {"access_token": access_token, "token_type": "bearer"}
+    except IntegrityError as e:
+        # Handle unique constraint violation errors (username or email already exists)
+        db.rollback()
+        raise HTTPException(status_code=400, detail="Username or email already exists")
 
 
 @router.get("/todos", response_model=List[ReturnTodo])

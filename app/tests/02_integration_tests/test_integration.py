@@ -6,6 +6,8 @@ Created on : 04/09/23 1:08 pm
 from multiprocessing import Process
 import pytest
 from fastapi.testclient import TestClient
+
+from app.utils.helper import generate_id
 from main import app
 import re
 
@@ -18,6 +20,11 @@ payload = {
     "title": "Integration Happy Path.",
     "description": "This is created using automated Integration tests.",
 }
+
+
+username = f"IntegrationTestUser{generate_id()}"
+email = f"IntegrationTestUser{generate_id()}@example.com"
+password = "IntegrationTestUserPassword"
 
 
 def start_app():
@@ -51,6 +58,24 @@ class TestTodo2xx:
         assert len(generated_uuid) == 32
 
         yield generated_uuid
+
+    @pytest.fixture()
+    def create_user(self):
+        response = client.post(
+            "/registration",
+            json={
+                "username": username,
+                "email": email,
+                "password": password,
+            },
+        )
+        assert response.status_code == 200
+        user_data = response.json()
+        assert isinstance(user_data, dict)
+        assert "access_token" in user_data
+        assert "token_type" in user_data
+        assert user_data["token_type"] == "bearer"
+        yield username, email
 
     def test_read_root(self):
         response = client.get("/")
@@ -127,6 +152,10 @@ class TestTodo2xx:
         assert "detail" in response_data
         assert response_data["detail"] == f"Item with ID {generated_uuid} removed"
 
+    def test_user_creation(self, create_user):
+        # Retrieve updated data and assert for its correctness
+        pass
+
 
 class TestTodo4xx:
     @pytest.fixture(scope="module", autouse=True)
@@ -153,6 +182,19 @@ class TestTodo4xx:
         assert len(generated_uuid) == 32
 
         yield generated_uuid
+
+    @pytest.fixture()
+    def create_user(self):
+        response = client.post(
+            "/registration",
+            json={
+                "username": username,
+                "email": email,
+                "password": password,
+            },
+        )
+
+        yield username, email
 
     def test_pagination_page_less_than_one(self, generated_uuid):
         response = client.get(f"todos?page=0&per_page=1")
@@ -233,6 +275,36 @@ class TestTodo4xx:
         )
         assert response.status_code == 422
         assert response.json()["detail"][0]["type"] == "string_too_short"
+
+    def test_registration_duplicate_email(self, create_user):
+        test_username, test_email = create_user
+        json = dict(username="testing", email=test_email, password=password)
+        print(f"{json=}")
+        response = client.post(
+            "/registration",
+            json=json,
+        )
+        assert response.status_code == 400
+        assert "Username or email already exists" == response.json()["detail"]
+
+    def test_registration_duplicate_username(self, create_user):
+        test_username, test_email = create_user
+        response = client.post(
+            "/registration",
+            json=dict(
+                username=test_username, email="2mail@3mail.com", password=password
+            ),
+        )
+        assert response.status_code == 400
+        assert "Username or email already exists" == response.json()["detail"]
+
+    def test_registration_missing_fields(self):
+        response = client.post(
+            "/registration",
+            json={"username": username},
+        )
+        assert response.status_code == 422
+        assert response.json()["detail"][0]["type"] == "missing"
 
 
 class TestTodo5xx:

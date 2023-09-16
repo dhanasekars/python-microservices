@@ -16,15 +16,14 @@ lint:
 
 unittests:
 	# Run all unittests
-	python -m pytest app/tests/01_unit_tests
-	coverage report --show-missing
+	poetry run python -m pytest --cov=app  --cov-report=term-missing app/tests/01_unit_tests
 
-integrationstests:
+integrationtests:
 	# Run all integration tests
-	python -m pytest app/tests/02_integration_tests
+	poetry run python -m pytest --cov=app --cov-report=term-missing app/tests/02_integration_tests
 
 
-alltests: unittests integrationstests
+alltests: unittests integrationtests
 
 
 git:
@@ -62,3 +61,5 @@ docker_build:
 	docker pull dhanasekars/my-todos:latest
 	docker run -p 80:8000 my-todos
 
+hardstart:
+	poetry run python main.py

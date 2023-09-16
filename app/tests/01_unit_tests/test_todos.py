@@ -6,18 +6,88 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import MagicMock
 from fastapi import HTTPException
-from unittest.mock import patch
-
+from unittest.mock import patch, Mock
+import unittest
+from sqlalchemy.exc import IntegrityError
+from app.apis.todos import register_user, RegistrationRequest
 from app.apis import todos
 from main import app  # Import your FastAPI app instance
 
 
-# Create a test client using the TestClient class
-# client = TestClient(app)
 @pytest.fixture
 def test_client():
     """Creates a test client for the API"""
     return TestClient(app)
+
+
+class MockSession:
+    def add(self, db_user):
+        pass
+
+    def commit(self):
+        pass
+
+    def refresh(self, db_user):
+        pass
+
+    def rollback(self):
+        pass
+
+
+def mock_get_db():
+    return MockSession()
+
+
+class MockPwdContext:
+    def hash(self, password):
+        return "hashed_password"
+
+
+def mock_create_access_token(data, expires_delta):
+    return "access_token"
+
+
+@patch("app.apis.todos.get_db", mock_get_db)
+@patch("app.apis.todos.pwd_context", MockPwdContext())
+@patch("app.apis.todos.create_access_token", mock_create_access_token)
+class TestRegisterUser(unittest.TestCase):
+    def test_register_user_success(self):
+        # Create a valid RegistrationRequest object
+        registration_request = RegistrationRequest(
+            username="test_user", email="test_user@example.com", password="r"
+        )
+
+        # Call the register_user function
+        response = register_user(registration_request, db=MockSession())
+
+        # Assert that the response is correct
+        self.assertEqual(response["access_token"], "access_token")
+        self.assertEqual(response["token_type"], "bearer")
+
+    def test_register_user_duplicate_username(self):
+        # Create a valid RegistrationRequest object
+        registration_request = RegistrationRequest(
+            username="test_user", email="test_user@example.com", password="r"
+        )
+
+        # Create a mock object for the `db.add()` function
+        mock_add = MagicMock()
+        mock_add.side_effect = IntegrityError(
+            "duplicate key value violates unique constraint", None, None
+        )
+
+        # Patch the `db.add()` function
+        with patch.object(MockSession, "add", mock_add):
+            # Call the register_user function
+            with self.assertRaises(HTTPException) as cm:
+                register_user(registration_request, db=MockSession())
+
+        # Assert that the exception is correct
+        self.assertEqual(cm.exception.status_code, 400)
+        self.assertEqual(cm.exception.detail, "Username or email already exists")
+
+        # Assert that the `db.add()` function was called
+        mock_add.assert_called_once()
 
 
 class TestRootRoute:

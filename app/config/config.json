@@ -6,9 +6,7 @@
     "format": "%(levelname)s %(asctime)s - %(message)s",
     "filemode": "a"
   },
-  "postgres_config": {
-    "username": "${DATABASE_USERNAME}",
-    "password": "${DATABASE_PASSWORD}",
-    "dbname": "${DATABASE_NAME}"
+  "authentication": {
+    "token_expiry": 20160
   }
 }

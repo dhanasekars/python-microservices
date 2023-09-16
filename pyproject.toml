@@ -21,6 +21,16 @@ httpx = "^0.24.1"
 attr = "^0.3.2"
 coverage = "^7.3.0"
 hypothesis = "^6.84.0"
+sqlalchemy = "^2.0.20"
+bcrypt = "^4.0.1"
+passlib = "^1.7.4"
+jose = "^1.0.0"
+psycopg2 = "^2.9.7"
+psycopg2-binary = "^2.9.7"
+python-dotenv = "^1.0.0"
+sqlalchemy-utils = "^0.41.1"
+python-jose = "^3.3.0"
+alchemy-mock = "^0.4.3"
 
 
 [build-system]

@@ -33,3 +33,18 @@
             self.assertEqual(load_list().msg, "Expecting value.")
             self.assertEqual(load_list().doc, "Test.")
     ```
+6. :white_check_mark: Missing unit test coverage
+    Fix : Silly copy paste error. 
+    Instead of calling get_todo_details(2) the code was calling remove_todo(2) and passing.
+    Thus, coverage was missing. Moved this from Todo to Bugs.
+
+    ```python
+       def test_invalid_todo_id(self, mock_load_list):
+        mock_data = [{"id": 1, "task": "Task 1", "status": "Incomplete"}]
+        mock_load_list.return_value = mock_data
+        with pytest.raises(HTTPException) as execinfo:
+            get_todo_details(2) # - Here remove_todo(2) was called
+        self.assertEqual(execinfo.value.status_code, 404)
+        self.assertEqual(execinfo.value.detail, "Todo not found for the given ID: 2")
+    ```
+7. Minimum password requirement is not working, fix it and add integration test.
