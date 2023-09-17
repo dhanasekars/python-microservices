@@ -63,19 +63,25 @@
           #  -----  run unit and integration tests  -----
           #----------------------------------------------
         - name: Run unit tests
-          run: |
-            python -m pytest --cov=app/apis --cov=app/utils app/tests/01_unit_tests
-
-        - name: Set up and run integration tests
           env:
             DB_USER: ${{ secrets.DB_USER }}
             DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
             DB_NAME: ${{ secrets.DB_NAME }}
             DB_PORT: ${{ secrets.DB_PORT }}
             JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
+          run: |
+	          poetry run python -m pytest --cov=app  --cov-report=term-missing app/tests/01_unit_tests
+
+        - name: Set up and run  tests
+          env:
+              DB_USER: ${{ secrets.DB_USER }}
+              DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+              DB_NAME: ${{ secrets.DB_NAME }}
+              DB_PORT: ${{ secrets.DB_PORT }}
+              JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
 
           run: |
-            python -m pytest app/tests/02_integration_tests
+	          poetry run python -m pytest --cov=app --cov-report=term-missing app/tests/02_integration_tests
 
         #----------------------------------------------
         #              Set up Docker Buildx
