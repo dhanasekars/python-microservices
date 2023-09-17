@@ -14,8 +14,9 @@
             POSTGRES_USER: ${{ secrets.DB_USER }}
             POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
             POSTGRES_DB: ${{ secrets.DB_NAME }}
+            POSTGRES_PORT: ${{ secrets.DB_PORT }}
           ports:
-            - ${{ secrets.DB_PORT }}:${{ secrets.DB_PORT }}
+            - POSTGRES_PORT:POSTGRES_PORT
           options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
       steps:
@@ -70,7 +71,7 @@
             DB_PORT: ${{ secrets.DB_PORT }}
             JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
           run: |
-	          poetry run python -m pytest --cov=app  --cov-report=term-missing app/tests/01_unit_tests
+            python -m pytest --cov=app/apis --cov=app/utils --cov=app/data  app/tests/01_unit_tests
 
         - name: Set up and run  tests
           env:
@@ -81,7 +82,7 @@
               JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
 
           run: |
-	          poetry run python -m pytest --cov=app --cov-report=term-missing app/tests/02_integration_tests
+            python -m pytest app/tests/02_integration_tests
 
         #----------------------------------------------
         #              Set up Docker Buildx
