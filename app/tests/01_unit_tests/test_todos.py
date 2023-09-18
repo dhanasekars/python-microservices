@@ -8,13 +8,13 @@ from fastapi import HTTPException, FastAPI
 from unittest.mock import patch
 from app.apis import todos
 
-test_app = FastAPI()
-test_client = TestClient(test_app)
+app_test = FastAPI()
+test_client = TestClient(app_test)
 
 
 def config_app():
     """To include router from other modules"""
-    test_app.include_router(todos.router)
+    app_test.include_router(todos.router)
 
 
 config_app()
