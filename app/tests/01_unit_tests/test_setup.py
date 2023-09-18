@@ -6,14 +6,15 @@ import unittest
 from unittest.mock import patch, MagicMock, Mock
 from fastapi import HTTPException
 from datetime import datetime, timedelta
+
 from app.data.setup import (
     connect_to_database,
     create_tables,
     get_db,
-    User,
     create_access_token,
     db_name,
 )
+from app.data.models import User
 
 
 class TestDBConnection(unittest.TestCase):

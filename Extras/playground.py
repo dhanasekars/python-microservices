@@ -3,10 +3,9 @@ Created on : 26/08/23 6:15 pm
 @author : ds  
 """
 
-# import logging
-# from config.config_manager import config_manager
-# from pydantic import BaseModel, Field, constr, model_validator, ValidationError
-# from typing import Optional, List
+import logging
+from pydantic import BaseModel, Field, constr, model_validator, ValidationError, field_validator, EmailStr
+from typing import Optional, List
 
 # import uuid
 #
@@ -53,31 +52,31 @@ from pydantic import (
 )
 from typing import Optional
 
-
-class UpdateTodo(BaseModel):
-    """Model with optional fields where at least one must have a value."""
-
-    title: Optional[constr(min_length=1)] = None
-    description: Optional[str] = None
-    doneStatus: Optional[bool] = None
-
-    @model_validator(mode="before")
-    def check_blank_fields(cls, values):
-        print(values)
-        num_fields_with_values = sum(
-            1 for value in values.values() if value is not None
-        )
-        if num_fields_with_values < 1:
-            raise ValueError(
-                "At least one of 'title', 'description', or 'doneStatus' must have a value"
-            )
-        return values
-
-
-try:
-    output = UpdateTodo(description="", doneStatus=True)
-except ValidationError as e:
-    print(e)
+#
+# class UpdateTodo(BaseModel):
+#     """Model with optional fields where at least one must have a value."""
+#
+#     title: Optional[constr(min_length=1)] = None
+#     description: Optional[str] = None
+#     doneStatus: Optional[bool] = None
+#
+#     @model_validator(mode="before")
+#     def check_blank_fields(cls, values):
+#         print(values)
+#         num_fields_with_values = sum(
+#             1 for value in values.values() if value is not None
+#         )
+#         if num_fields_with_values < 1:
+#             raise ValueError(
+#                 "At least one of 'title', 'description', or 'doneStatus' must have a value"
+#             )
+#         return values
+#
+#
+# try:
+#     output = UpdateTodo(description="", doneStatus=True)
+# except ValidationError as e:
+#     print(e)
 
 
 # import re
@@ -94,3 +93,25 @@ except ValidationError as e:
 #     print("Invalid UUID format")
 
 
+class RegistrationRequest(BaseModel):
+    username: constr(min_length=8, strip_whitespace=True)
+    email: EmailStr
+    password: constr(
+        min_length=8,
+        strip_whitespace=True)  # At least 1 uppercase letter and 1 digit
+
+    @field_validator("password")
+    def validate_password_format(cls, value):
+        if len(value) < 8:
+            raise ValueError("Password must be at least 8 characters long")
+        if not any(char.isupper() for char in value):
+            raise ValueError("Password must contain at least one uppercase letter")
+        if not any(char.isdigit() for char in value):
+            raise ValueError("Password must contain at least one digit")
+        return value
+
+
+try:
+    output = RegistrationRequest(username="asekars", email="dhanasekars@gmail.com", password="12A345678")
+except ValidationError as e:
+    print(e)

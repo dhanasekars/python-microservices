@@ -6,28 +6,17 @@ Created on : 09/09/23 6:02 pm
 from fastapi import HTTPException
 import logging
 from sqlalchemy_utils import create_database, database_exists
-
 from sqlalchemy import (
     create_engine,
-    Column,
-    Integer,
-    String,
-    Boolean,
-    ForeignKey,
-    MetaData,
 )
-from sqlalchemy.orm import relationship, declarative_base
 import os
 from dotenv import load_dotenv
-from passlib.context import CryptContext
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
-from app.utils.config_manager import config_manager
 from sqlalchemy.orm import sessionmaker
+from app.data.models import Base
+from app.utils.config_manager import config_manager
 
-
-# Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 config_manager.configure_logging()
 # Get the directory containing your script (data folder)
@@ -51,42 +40,6 @@ ALGORITHM = "HS256"
 # Create the database engine
 db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 engine = create_engine(db_url)
-Base = declarative_base(metadata=MetaData())
-
-
-class User(Base):
-    __tablename__ = "users"
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    email = Column(String, unique=True, index=True)
-    password_hash = Column(String)
-    is_active = Column(Boolean, default=True)
-    is_superuser = Column(Boolean, default=False)
-
-    # Establish a one-to-many relationship with Todo
-    todos = relationship("Todo", back_populates="owner")
-
-    def set_password(self, password):
-        min_password_length = 8
-        if password and len(password) >= min_password_length:
-            self.password_hash = pwd_context.hash(password)
-        else:
-            self.password_hash = None
-
-    def verify_password(self, password):
-        return pwd_context.verify(password, self.password_hash)
-
-
-class Todo(Base):
-    __tablename__ = "todos"
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String)
-    status = Column(Boolean, default=False)
-
-    # Establish a many-to-one relationship with User
-    owner_id = Column(Integer, ForeignKey("users.id"))
-    owner = relationship("User", back_populates="todos")
 
 
 def connect_to_database():

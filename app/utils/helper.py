@@ -6,10 +6,17 @@ import json
 import uuid
 import logging
 from fastapi import HTTPException
+from passlib.context import CryptContext
+from sqlalchemy.orm import Session
 
+from app.data import models
 from app.utils.config_manager import config_manager
 
 config_manager.configure_logging()
+
+
+# Password hashing context
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def load_list():
@@ -145,3 +152,19 @@ def generate_id():
     new_id = uuid.uuid4().hex
     logging.debug(f"Generated new ID: {new_id}")
     return new_id
+
+
+def register_new_user(db: Session, user_data: models.RegistrationRequest):
+    hashed_password = pwd_context.hash(user_data.password)
+
+    db_user = models.User(
+        username=user_data.username,
+        email=user_data.email,
+        password_hash=hashed_password,
+    )
+
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+
+    return db_user

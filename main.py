@@ -10,15 +10,19 @@ from app.data.setup import connect_to_database, create_tables
 app = FastAPI()
 
 
-def configuration():
+def config_app():
     """To include router from other modules"""
     app.include_router(todos.router)
+
+
+def config_database():
     engine = connect_to_database()
     create_tables(engine)
     engine.dispose()
 
 
-configuration()
+config_app()
+
 
 if __name__ == "__main__":
     import uvicorn
