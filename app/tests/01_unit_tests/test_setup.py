@@ -11,7 +11,6 @@ from app.data.setup import (
     connect_to_database,
     create_tables,
     get_db,
-    create_access_token,
     db_name,
 )
 from app.data.models import User
@@ -184,56 +183,6 @@ class TestCreateTable(unittest.TestCase):
         with self.assertRaises(Exception):
             create_tables(db_engine=MagicMock())
         mock_create_all.assert_called_once()
-
-
-@patch("app.data.setup.jwt.encode")
-@patch("app.data.setup.SECRET_KEY", "mocked_secret_key")
-@patch(
-    "app.data.setup.datetime",
-    Mock(utcnow=Mock(return_value=datetime(2023, 9, 14, 12, 45, 51, 499491))),
-)
-class TestCreateAccessToken(unittest.TestCase):
-    """Class to test create_access_token"""
-
-    def test_create_access_token(self, mock_encode):
-        """Test that create_access_token() returns the expected token."""
-        data = {"user_id": 1, "username": "example_user"}
-        expires_delta = timedelta(minutes=10)
-
-        # Mock the jwt.encode function to return a predefined token
-        mock_encode.return_value = "mocked_access_token"
-
-        # Call the function to be tested
-        access_token = create_access_token(data, expires_delta)
-
-        # Assertions
-        self.assertEqual(access_token, "mocked_access_token")
-
-        # Verify that jwt.encode was called with the expected arguments
-        mock_encode.assert_called_once_with(
-            {
-                "user_id": 1,
-                "username": "example_user",
-                "exp": datetime(2023, 9, 14, 12, 55, 51, 499491),
-            },
-            "mocked_secret_key",
-            algorithm="HS256",
-        )
-
-    def test_create_access_token_expired(self, mock_encode):
-        """Test that create_access_token() returns None if the token has expired."""
-        mock_encode.return_value = None
-        data = {"user_id": 1, "username": "example_user"}
-        expires_delta = timedelta(
-            minutes=-1
-        )  # Negative timedelta for immediate expiration
-
-        # Call the function to be tested
-        access_token = create_access_token(data, expires_delta)
-
-        # Ensure that the access_token is None or an empty string, indicating expiration
-        self.assertIsNone(access_token)  # or self.assertEqual(access_token, "")
-        self.assertTrue(mock_encode.called)
 
 
 class TestGetDB(unittest.TestCase):

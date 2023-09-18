@@ -4,7 +4,6 @@ Created on : 09/09/23 6:02 pm
 """
 import os
 import logging
-from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 from fastapi import HTTPException
@@ -13,7 +12,6 @@ from sqlalchemy import (
     create_engine,
 )
 from sqlalchemy.orm import sessionmaker
-from jose import jwt
 
 from app.data.models import Base
 from app.utils.config_manager import config_manager
@@ -34,9 +32,6 @@ db_port = os.getenv("DB_PORT")
 db_name = os.getenv("DB_NAME")
 db_schema = os.getenv("DB_SCHEMA", "public")
 
-# Configure JWT settings
-SECRET_KEY = os.getenv("JWT_SECRET")
-ALGORITHM = "HS256"
 
 # Create the database engine
 db_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
@@ -87,13 +82,3 @@ def get_db():
         return db_session
     finally:
         db_session.close()
-
-
-# Function to create an access token
-def create_access_token(data: dict, expires_delta: timedelta):
-    """Create an access token with the given data and expiration date."""
-    to_encode = data.copy()
-    expire = datetime.utcnow() + expires_delta
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt

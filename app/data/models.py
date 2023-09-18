@@ -109,3 +109,8 @@ class Todo(Base):
     # Establish a many-to-one relationship with User
     owner_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="todos")
+
+
+# Pydantic model for token data
+class TokenData:
+    username: str = None
