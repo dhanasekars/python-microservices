@@ -2,15 +2,15 @@
 Created on : 24/08/23 8:39 am
 @author : ds  
 """
+from typing import List
 from datetime import timedelta
-from typing import Optional, List
-from sqlalchemy.exc import IntegrityError
 import logging
 import fastapi
+from sqlalchemy.exc import IntegrityError
 from fastapi import Query, HTTPException, Depends
 from sqlalchemy.orm import Session
 
-
+from app.data.setup import create_access_token, get_db
 from app.utils.helper import (
     load_list,
     save_list,
@@ -21,17 +21,7 @@ from app.utils.helper import (
     register_new_user,
 )
 from app.utils.config_manager import config_manager
-from app.data.models import (
-    User,
-    Base,
-    Todo,
-    RegistrationRequest,
-    UpdateTodo,
-    ReturnTodo,
-    UpdateTodo,
-    TodoItem,
-)
-from app.data.setup import get_db, create_access_token
+from app.data.models import ReturnTodo, UpdateTodo, TodoItem, RegistrationRequest
 
 ACCESS_TOKEN_EXPIRE_MINUTES = int(
     config_manager.config_data["authentication"]["token_expiry"]
@@ -39,12 +29,8 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(
 
 router = fastapi.APIRouter()
 
-
 # Configure logging
 config_manager.configure_logging()
-
-
-# Registration request model
 
 
 @router.get("/")
@@ -55,21 +41,22 @@ async def read_root():
 
 
 # Registration endpoint
-# @router.post("/registration/")
-# def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
-#     try:
-#         db_user = register_new_user(db, user)
-#
-#         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-#         access_token = create_access_token(
-#             data={"sub": db_user.email}, expires_delta=access_token_expires
-#         )
-#
-#         return {"access_token": access_token, "token_type": "bearer"}
-#     except IntegrityError as e:
-#         db.rollback()
-#         logging.error(f"Error: {e}")
-#         raise HTTPException(status_code=400, detail="Username or email already exists")
+@router.post("/registration/")
+def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
+    """Register a new user"""
+    try:
+        db_user = register_new_user(db, user)
+
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": db_user.email}, expires_delta=access_token_expires
+        )
+
+        return {"access_token": access_token, "token_type": "bearer"}
+    except IntegrityError as e:
+        db.rollback()
+        logging.error(f"Error: {e}")
+        raise HTTPException(status_code=400, detail="Username or email already exists")
 
 
 @router.get("/todos", response_model=List[ReturnTodo])
@@ -107,8 +94,8 @@ async def add_todo(todo: TodoItem):
         logging.debug(f"Added todo item with ID: {todo['id']}")
 
         return todo
-    except Exception as e:
-        error_message = f"Internal Server Error: {e}"
+    except Exception as err:
+        error_message = f"Internal Server Error: {err}"
         logging.error(error_message)
         raise HTTPException(status_code=500, detail=error_message)
 

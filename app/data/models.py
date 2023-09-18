@@ -2,11 +2,11 @@
 Created on : 18/09/23 5:28 am
 @author : ds  
 """
+from typing import Optional
 from pydantic import BaseModel, EmailStr, constr, Field, model_validator
 from pydantic import field_validator
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, MetaData
 from sqlalchemy.orm import relationship, declarative_base
-from typing import Optional, List
 from passlib.context import CryptContext
 
 
@@ -16,6 +16,8 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class RegistrationRequest(BaseModel):
+    """Model for user registration"""
+
     username: constr(min_length=8, strip_whitespace=True)
     email: EmailStr
     password: constr(
@@ -24,6 +26,7 @@ class RegistrationRequest(BaseModel):
 
     @field_validator("password")
     def validate_password_format(cls, value):
+        """function to validate password format"""
         if len(value) < 8:
             raise ValueError("Password must be at least 8 characters long")
         if not any(char.isupper() for char in value):
@@ -34,6 +37,8 @@ class RegistrationRequest(BaseModel):
 
 
 class User(Base):
+    """Base model for user"""
+
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
@@ -46,6 +51,7 @@ class User(Base):
     todos = relationship("Todo", back_populates="owner")
 
     def set_password(self, password):
+        """function to set password hash"""
         min_password_length = 8
         if password and len(password) >= min_password_length:
             self.password_hash = pwd_context.hash(password)
@@ -53,6 +59,7 @@ class User(Base):
             self.password_hash = None
 
     def verify_password(self, password):
+        """function to verify password hash"""
         return pwd_context.verify(password, self.password_hash)
 
 
@@ -78,7 +85,7 @@ class UpdateTodo(BaseModel):
     doneStatus: Optional[bool] = None
 
     @model_validator(mode="before")
-    def check_blank_fields(cls, values):
+    def check_blank_fields(cls, values):  # noqa: E0213
         """function to check at least one of the three fields is given"""
         num_fields_with_values = sum(
             1 for value in values.values() if value is not None
@@ -91,6 +98,8 @@ class UpdateTodo(BaseModel):
 
 
 class Todo(Base):
+    """Base model for to-do list"""
+
     __tablename__ = "todos"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)

@@ -15,7 +15,7 @@
   - [x] Create a db tables
   - [x] Create a db connection pool
   - [ ] Update all functions to use db connection
-  - [ ] test_todo.py tests fail if the db server is not running, fix it
+  - [x] test_todo.py tests fail if the db server is not running, fix it
   - [ ] Connect to more than one type of DB and test ( Postgres, MySQL, SQLite)
 - [ ] Authentication
 - [ ] Update the test fixture @generateUDID 

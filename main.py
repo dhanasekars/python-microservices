@@ -16,13 +16,14 @@ def config_app():
 
 
 def config_database():
+    """To create database and tables"""
     engine = connect_to_database()
     create_tables(engine)
     engine.dispose()
 
 
 config_app()
-
+config_database()
 
 if __name__ == "__main__":
     import uvicorn

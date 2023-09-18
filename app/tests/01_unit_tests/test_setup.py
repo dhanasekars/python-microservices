@@ -4,9 +4,9 @@ Created on : 14/09/23 9:12 am
 """
 import unittest
 from unittest.mock import patch, MagicMock, Mock
-from fastapi import HTTPException
 from datetime import datetime, timedelta
 
+from fastapi import HTTPException
 from app.data.setup import (
     connect_to_database,
     create_tables,
@@ -26,14 +26,14 @@ class TestDBConnection(unittest.TestCase):
     def test_connect_to_database_creates_database_if_it_doesnt_exist(
         self, mock_logging_info, mock_create_database, mock_database_exists
     ):
-        # Mock the database_exists() function to return False
+        """Test that connect_to_database() creates the database if it doesn't exist."""
         mock_database_exists.return_value = False
 
         # Mock the create_database() function to do nothing
         mock_create_database.return_value = None
 
         # Call the connect_to_database() function
-        engine = connect_to_database()
+        connect_to_database()
 
         # Assert that the create_database() function was called
         mock_create_database.assert_called_once()
@@ -49,14 +49,14 @@ class TestDBConnection(unittest.TestCase):
     def test_connect_to_database_does_not_create_database_if_it_already_exists(
         self, mock_logging_info, mock_create_database, mock_database_exists
     ):
-        # Mock the database_exists() function to return True
+        """Test that connect_to_database() does not create the database if it already exists."""
         mock_database_exists.return_value = True
 
         # Mock the create_database() function to do nothing
         mock_create_database.return_value = None
 
         # Call the connect_to_database() function
-        engine = connect_to_database()
+        connect_to_database()
 
         # Assert that the create_database() function was not called
         mock_create_database.assert_not_called()
@@ -72,7 +72,7 @@ class TestDBConnection(unittest.TestCase):
     def test_connect_to_database_handles_exception(
         self, mock_logging_error, mock_create_database, mock_database_exists
     ):
-        # Mock the database_exists() function to return False
+        """Test that connect_to_database() handles an exception."""
         mock_database_exists.return_value = False
 
         # Mock the create_database() function to raise an Exception
@@ -87,8 +87,10 @@ class TestDBConnection(unittest.TestCase):
 
 
 class TestUserPasswordHashing(unittest.TestCase):
+    """Class to test password hashing and verification."""
+
     def test_set_password(self):
-        # Create an instance of the User class
+        """Test that the set_password() method sets the password_hash attribute."""
         user = User()
 
         # Set a password
@@ -102,6 +104,7 @@ class TestUserPasswordHashing(unittest.TestCase):
         self.assertTrue(user.verify_password(password))
 
     def test_set_password_empty(self):
+        """Test with an empty password."""
         user = User()
 
         # Test with an empty password
@@ -112,6 +115,7 @@ class TestUserPasswordHashing(unittest.TestCase):
         self.assertIsNone(user.password_hash)
 
     def test_set_password_invalid_format(self):
+        """Test with a password that doesn't meet requirements (e.g., no uppercase letter)."""
         user = User()
 
         # Test with a password that doesn't meet requirements (e.g., too short)
@@ -122,6 +126,7 @@ class TestUserPasswordHashing(unittest.TestCase):
         self.assertIsNone(user.password_hash)
 
     def test_set_password_none(self):
+        """Test with None as the password."""
         user = User()
 
         # Test with None as the password
@@ -133,8 +138,10 @@ class TestUserPasswordHashing(unittest.TestCase):
 
 
 class TestUserPasswordVerification(unittest.TestCase):
+    """Class to test password verification."""
+
     def test_verify_password_correct(self):
-        # Create a User instance and set a password
+        """Test that the verify_password() method returns True for a correct password."""
         user = User()
         password = "my_secure_password"
         user.set_password(password)
@@ -143,7 +150,7 @@ class TestUserPasswordVerification(unittest.TestCase):
         self.assertTrue(user.verify_password(password))
 
     def test_verify_password_incorrect(self):
-        # Create a User instance and set a password
+        """Test that the verify_password() method returns False for an incorrect password."""
         user = User()
         password = "my_secure_password"
         user.set_password(password)
@@ -153,7 +160,7 @@ class TestUserPasswordVerification(unittest.TestCase):
         self.assertFalse(user.verify_password(incorrect_password))
 
     def test_verify_password_empty_hash(self):
-        # Create a User instance with no password_hash (e.g., uninitialized or invalid state)
+        """Test that the verify_password() method returns False for an empty password_hash."""
         user = User()
 
         # Verify any password with an empty hash should return False
@@ -166,11 +173,13 @@ class TestCreateTable(unittest.TestCase):
 
     @patch("app.data.setup.Base.metadata.create_all")
     def test_create_tables(self, mock_create_all):
+        """Test that create_tables() calls Base.metadata.create_all()"""
         create_tables(db_engine=MagicMock())
         mock_create_all.assert_called_once()
 
     @patch("app.data.setup.Base.metadata.create_all")
     def test_create_tables_handles_exception(self, mock_create_all):
+        """Test that create_tables() handles an exception."""
         mock_create_all.side_effect = Exception("Failed to create tables")
         with self.assertRaises(Exception):
             create_tables(db_engine=MagicMock())
@@ -184,8 +193,10 @@ class TestCreateTable(unittest.TestCase):
     Mock(utcnow=Mock(return_value=datetime(2023, 9, 14, 12, 45, 51, 499491))),
 )
 class TestCreateAccessToken(unittest.TestCase):
+    """Class to test create_access_token"""
+
     def test_create_access_token(self, mock_encode):
-        # Define test data and parameters
+        """Test that create_access_token() returns the expected token."""
         data = {"user_id": 1, "username": "example_user"}
         expires_delta = timedelta(minutes=10)
 
@@ -210,6 +221,7 @@ class TestCreateAccessToken(unittest.TestCase):
         )
 
     def test_create_access_token_expired(self, mock_encode):
+        """Test that create_access_token() returns None if the token has expired."""
         mock_encode.return_value = None
         data = {"user_id": 1, "username": "example_user"}
         expires_delta = timedelta(
@@ -225,17 +237,19 @@ class TestCreateAccessToken(unittest.TestCase):
 
 
 class TestGetDB(unittest.TestCase):
+    """Class to test get_db"""
+
     @patch("app.data.setup.SessionLocal")
     def test_get_db(self, mock_session_local):
-        # Mock the SessionLocal class
+        """Test that get_db() returns the expected session."""
         mock_session = MagicMock()
         mock_session_local.return_value = mock_session
 
         # Call the function to be tested
-        db = get_db()
+        result_db = get_db()
 
         # Assertions
-        self.assertEqual(db, mock_session)
+        self.assertEqual(result_db, mock_session)
         mock_session_local.assert_called_once()
 
         # Verify that the session is closed

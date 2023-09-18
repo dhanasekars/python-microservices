@@ -155,6 +155,7 @@ def generate_id():
 
 
 def register_new_user(db: Session, user_data: models.RegistrationRequest):
+    """function to register a new user"""
     hashed_password = pwd_context.hash(user_data.password)
 
     db_user = models.User(

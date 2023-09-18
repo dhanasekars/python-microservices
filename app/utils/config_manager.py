@@ -9,6 +9,8 @@ import logging
 
 
 class ConfigurationManager:
+    """Singleton class to load and store the configuration data."""
+
     config_data: object
     _instance = None  # Private class variable to store the singleton instance
 
@@ -19,7 +21,7 @@ class ConfigurationManager:
         return cls._instance
 
     def load_config(self):
-        # Get the directory of the current script
+        """Get the directory of the current script"""
 
         if "GITHUB_ACTIONS" in os.environ:
             # Running in GitHub Actions
@@ -41,17 +43,17 @@ class ConfigurationManager:
                 os.path.join(script_dir, config_file_relative_path)
             )
         try:
-            with open(config_file_path, "r") as config_file:
+            with open(config_file_path, "r", encoding="UTF8") as config_file:
                 self.config_data = json.load(config_file)
         except FileNotFoundError:
             raise FileNotFoundError("Config file not found.")
         except json.JSONDecodeError:
             raise ValueError("Invalid JSON format in config file.")
-        except Exception as e:
-            raise Exception(f"Error loading config file: {str(e)}")
+        except Exception as err:
+            raise Exception(f"Error loading config file: {str(err)}")
 
     def configure_logging(self):
-        # Configure logging using the loaded configuration
+        """Configure logging using the loaded configuration"""
         log_level_str = self.config_data["logging_config"]["level"].upper()
         log_level = getattr(logging, log_level_str)
         log_format = self.config_data["logging_config"]["format"]
@@ -64,7 +66,7 @@ class ConfigurationManager:
             format=log_format,
             filemode=log_file_mode,
         )
-        logger = logging.getLogger()
+        logging.getLogger()
 
 
 # Create an instance of the ConfigurationManager
