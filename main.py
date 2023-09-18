@@ -22,7 +22,7 @@ def config_database():
 
 
 config_app()
-
+config_database()
 
 if __name__ == "__main__":
     import uvicorn

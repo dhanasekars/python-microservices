@@ -2,25 +2,27 @@
 Created on : 02/09/23 11:49 am
 @author : ds  
 """
-import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import MagicMock
-from fastapi import HTTPException
-from unittest.mock import patch, Mock
-
+from fastapi import HTTPException, FastAPI
+from unittest.mock import patch
 from app.apis import todos
-from main import app  # Import your FastAPI app instance
+
+test_app = FastAPI()
+test_client = TestClient(test_app)
 
 
-@pytest.fixture
-def test_client():
-    """Creates a test client for the API"""
-    return TestClient(app)
+def config_app():
+    """To include router from other modules"""
+    test_app.include_router(todos.router)
+
+
+config_app()
 
 
 class TestRootRoute:
     # Define a test function
-    def test_read_root(self, test_client: TestClient):
+    def test_read_root(self):
         # Send a GET request to the root endpoint
         response = test_client.get("/")
 
@@ -49,7 +51,7 @@ class TestReadTodos:
         },
     ]
 
-    def test_read_todos_valid(self, test_client: TestClient):
+    def test_read_todos_valid(self):
         # mock load_list()
         mock_load_list = MagicMock()
         mock_load_list.return_value = self.dummy_data
@@ -64,7 +66,7 @@ class TestReadTodos:
         # Assert that the `load_list()` function was called
         mock_load_list.assert_called_once()
 
-    def test_read_todos_invalid(self, test_client: TestClient):
+    def test_read_todos_invalid(self):
         # mock load_list()
         mock_load_list = MagicMock()
 
@@ -98,7 +100,7 @@ class TestReadTodos:
 
 
 class TestAddTodo:
-    def test_add_todo_success(self, test_client):
+    def test_add_todo_success(self):
         # Mock the load_list() function
         mock_load_list = MagicMock()
         mock_load_list.return_value = []
@@ -138,7 +140,7 @@ class TestAddTodo:
         # Assert that the `generate_id()` function was called
         mock_generate_id.assert_called_once()
 
-    def test_add_todo_invalid_data(self, test_client):
+    def test_add_todo_invalid_data(self):
         # Mock the load_list() function
         mock_load_list = MagicMock()
         mock_load_list.return_value = []
@@ -167,7 +169,7 @@ class TestAddTodo:
         # Assert that the `save_list()` function was not called
         mock_save_list.assert_not_called()
 
-    def test_add_todo_exception(self, test_client):
+    def test_add_todo_exception(self):
         # Mock the load_list() function
         mock_load_list = MagicMock()
         mock_load_list.return_value = []
@@ -204,7 +206,7 @@ class TestAddTodo:
 class TestReadTodosByID:
     """Tests for read todo by id route"""
 
-    def test_read_todo_success(self, test_client):
+    def test_read_todo_success(self):
         # Mock the get_todo_details() function
         mock_get_todo_details = MagicMock()
         mock_get_todo_details.return_value = {"id": "1", "title": "Todo 1"}
@@ -224,7 +226,7 @@ class TestReadTodosByID:
         # Assert that the `get_todo_details()` function was called
         mock_get_todo_details.assert_called_once_with("1")
 
-    def test_read_todo_not_found(self, test_client):
+    def test_read_todo_not_found(self):
         # Mock the get_todo_details() function
         mock_get_todo_details = MagicMock()
         mock_get_todo_details.return_value = {"error": "Todo not found"}
@@ -248,7 +250,7 @@ class TestReadTodosByID:
 class TestDeleteTodoByID:
     """class to test the delete route"""
 
-    def test_delete_todo_success(self, test_client):
+    def test_delete_todo_success(self):
         # Mock the remove_todo() function
         mock_remove_todo = MagicMock()
         mock_remove_todo.return_value = "Item with ID 1 removed"
@@ -265,7 +267,7 @@ class TestDeleteTodoByID:
         # Assert that the `remove_todo()` function was called
         mock_remove_todo.assert_called_once_with("1")
 
-    def test_delete_todo_not_found(self, test_client):
+    def test_delete_todo_not_found(self):
         # Mock the remove_todo() function
         mock_remove_todo = MagicMock()
         mock_remove_todo.side_effect = HTTPException(
@@ -288,7 +290,7 @@ class TestDeleteTodoByID:
 class TestUpdateTodo:
     """Tests for the `update_todo()` route"""
 
-    def test_update_todo_success(self, test_client):
+    def test_update_todo_success(self):
         # Mock the update_todo() function
         mock_update_todo = MagicMock()
         mock_update_todo.return_value = {"title": "Todo 1", "doneStatus": False}
@@ -309,7 +311,7 @@ class TestUpdateTodo:
             "1", {"description": None, "doneStatus": False, "title": "Todo 1"}
         )
 
-    def test_update_todo_list_error(self, test_client):
+    def test_update_todo_list_error(self):
         """Test that the `update_todo_list()` function handles errors."""
 
         # Create a mock object for the `update_todo()` function.
@@ -331,7 +333,7 @@ class TestUpdateTodo:
                 "1", {"description": None, "doneStatus": False, "title": "Todo 1"}
             )
 
-    def test_update_blank_body(self, test_client):
+    def test_update_blank_body(self):
         """test update with blank body"""
         mock_update_todo = MagicMock()
         mock_update_todo.return_value = {"error": "Todo not found"}

@@ -63,3 +63,9 @@ docker_build:
 
 hardstart:
 	poetry run python main.py
+
+startpg:
+	brew services start postgresql@15
+
+stoppg:
+	brew services stop postgresql@15
