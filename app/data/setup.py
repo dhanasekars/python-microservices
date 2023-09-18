@@ -2,18 +2,19 @@
 Created on : 09/09/23 6:02 pm
 @author : ds  
 """
+import os
+import logging
+from datetime import datetime, timedelta
+from dotenv import load_dotenv
 
 from fastapi import HTTPException
-import logging
 from sqlalchemy_utils import create_database, database_exists
 from sqlalchemy import (
     create_engine,
 )
-import os
-from dotenv import load_dotenv
-from jose import JWTError, jwt
-from datetime import datetime, timedelta
 from sqlalchemy.orm import sessionmaker
+from jose import jwt
+
 from app.data.models import Base
 from app.utils.config_manager import config_manager
 
@@ -58,8 +59,8 @@ def connect_to_database():
 
         return engine
 
-    except Exception as e:
-        logging.error(f"Error: {e}")
+    except Exception as err:
+        logging.error(f"Error: {err}")
         raise HTTPException(status_code=500, detail="Database connection error")
 
 
@@ -71,8 +72,8 @@ def create_tables(db_engine):
         print("Tables created successfully.")
         logging.info("Tables created successfully.")
 
-    except Exception as e:
-        logging.error(f"Error: {e}")
+    except Exception as err:
+        logging.error(f"Error: {err}")
         raise HTTPException(status_code=500, detail="Database connection error")
 
 
@@ -80,15 +81,17 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def get_db():
-    db = SessionLocal()
+    """Get a database connection."""
+    db_session = SessionLocal()
     try:
-        return db
+        return db_session
     finally:
-        db.close()
+        db_session.close()
 
 
 # Function to create an access token
 def create_access_token(data: dict, expires_delta: timedelta):
+    """Create an access token with the given data and expiration date."""
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta
     to_encode.update({"exp": expire})

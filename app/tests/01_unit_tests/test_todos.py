@@ -2,10 +2,11 @@
 Created on : 02/09/23 11:49 am
 @author : ds  
 """
-from fastapi.testclient import TestClient
 from unittest.mock import MagicMock
-from fastapi import HTTPException, FastAPI
 from unittest.mock import patch
+from fastapi.testclient import TestClient
+from fastapi import HTTPException, FastAPI
+
 from app.apis import todos
 
 app_test = FastAPI()
@@ -21,9 +22,10 @@ config_app()
 
 
 class TestRootRoute:
-    # Define a test function
+    """Tests for the root route"""
+
     def test_read_root(self):
-        # Send a GET request to the root endpoint
+        """Test for the root route"""
         response = test_client.get("/")
 
         # Check if the response status code is 200 (OK)
@@ -52,7 +54,7 @@ class TestReadTodos:
     ]
 
     def test_read_todos_valid(self):
-        # mock load_list()
+        """Test for the read_todos() route"""
         mock_load_list = MagicMock()
         mock_load_list.return_value = self.dummy_data
 
@@ -67,7 +69,7 @@ class TestReadTodos:
         mock_load_list.assert_called_once()
 
     def test_read_todos_invalid(self):
-        # mock load_list()
+        """Test for the read_todos() route with invalid page and per_page"""
         mock_load_list = MagicMock()
 
         # Test for invalid page
@@ -100,8 +102,10 @@ class TestReadTodos:
 
 
 class TestAddTodo:
+    """Tests for the add_todo() route"""
+
     def test_add_todo_success(self):
-        # Mock the load_list() function
+        """Test for the add_todo() route 200"""
         mock_load_list = MagicMock()
         mock_load_list.return_value = []
 
@@ -141,7 +145,7 @@ class TestAddTodo:
         mock_generate_id.assert_called_once()
 
     def test_add_todo_invalid_data(self):
-        # Mock the load_list() function
+        """Test for the add_todo() route with invalid data"""
         mock_load_list = MagicMock()
         mock_load_list.return_value = []
 
@@ -170,7 +174,7 @@ class TestAddTodo:
         mock_save_list.assert_not_called()
 
     def test_add_todo_exception(self):
-        # Mock the load_list() function
+        """Test for the add_todo() route with exception"""
         mock_load_list = MagicMock()
         mock_load_list.return_value = []
 
@@ -207,7 +211,7 @@ class TestReadTodosByID:
     """Tests for read todo by id route"""
 
     def test_read_todo_success(self):
-        # Mock the get_todo_details() function
+        """Test for the read_todo() route"""
         mock_get_todo_details = MagicMock()
         mock_get_todo_details.return_value = {"id": "1", "title": "Todo 1"}
 
@@ -227,7 +231,7 @@ class TestReadTodosByID:
         mock_get_todo_details.assert_called_once_with("1")
 
     def test_read_todo_not_found(self):
-        # Mock the get_todo_details() function
+        """Test for the read_todo() route with invalid data"""
         mock_get_todo_details = MagicMock()
         mock_get_todo_details.return_value = {"error": "Todo not found"}
 
@@ -251,7 +255,7 @@ class TestDeleteTodoByID:
     """class to test the delete route"""
 
     def test_delete_todo_success(self):
-        # Mock the remove_todo() function
+        """Test for the delete_todo() route"""
         mock_remove_todo = MagicMock()
         mock_remove_todo.return_value = "Item with ID 1 removed"
 
@@ -268,7 +272,7 @@ class TestDeleteTodoByID:
         mock_remove_todo.assert_called_once_with("1")
 
     def test_delete_todo_not_found(self):
-        # Mock the remove_todo() function
+        """Test for the delete_todo() route with invalid data"""
         mock_remove_todo = MagicMock()
         mock_remove_todo.side_effect = HTTPException(
             status_code=404, detail="ID not found"
@@ -291,7 +295,7 @@ class TestUpdateTodo:
     """Tests for the `update_todo()` route"""
 
     def test_update_todo_success(self):
-        # Mock the update_todo() function
+        """Test for the update_todo() route"""
         mock_update_todo = MagicMock()
         mock_update_todo.return_value = {"title": "Todo 1", "doneStatus": False}
 
@@ -347,7 +351,8 @@ class TestUpdateTodo:
             assert response.status_code == 422
             assert (
                 response.json()["detail"][0]["msg"]
-                == "Value error, At least one of 'title', 'description', or 'doneStatus' must have a value"
+                == "Value error, At least one of 'title', 'description', "
+                "or 'doneStatus' must have a value"  # noqa: C0301
             )
 
             mock_update_todo.assert_not_called()

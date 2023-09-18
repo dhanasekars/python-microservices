@@ -16,6 +16,7 @@ def config_app():
 
 
 def config_database():
+    """To create database and tables"""
     engine = connect_to_database()
     create_tables(engine)
     engine.dispose()

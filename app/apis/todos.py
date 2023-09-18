@@ -2,14 +2,10 @@
 Created on : 24/08/23 8:39 am
 @author : ds  
 """
-from datetime import timedelta
-from typing import Optional, List
-from sqlalchemy.exc import IntegrityError
+from typing import List
 import logging
 import fastapi
-from fastapi import Query, HTTPException, Depends
-from sqlalchemy.orm import Session
-
+from fastapi import Query, HTTPException
 
 from app.utils.helper import (
     load_list,
@@ -18,20 +14,13 @@ from app.utils.helper import (
     get_todo_details,
     remove_todo,
     update_todo,
-    register_new_user,
 )
 from app.utils.config_manager import config_manager
 from app.data.models import (
-    User,
-    Base,
-    Todo,
-    RegistrationRequest,
-    UpdateTodo,
     ReturnTodo,
     UpdateTodo,
     TodoItem,
 )
-from app.data.setup import get_db, create_access_token
 
 ACCESS_TOKEN_EXPIRE_MINUTES = int(
     config_manager.config_data["authentication"]["token_expiry"]
@@ -39,10 +28,8 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(
 
 router = fastapi.APIRouter()
 
-
 # Configure logging
 config_manager.configure_logging()
-
 
 # Registration request model
 
@@ -107,8 +94,8 @@ async def add_todo(todo: TodoItem):
         logging.debug(f"Added todo item with ID: {todo['id']}")
 
         return todo
-    except Exception as e:
-        error_message = f"Internal Server Error: {e}"
+    except Exception as err:
+        error_message = f"Internal Server Error: {err}"
         logging.error(error_message)
         raise HTTPException(status_code=500, detail=error_message)
 
