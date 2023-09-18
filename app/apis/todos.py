@@ -3,10 +3,14 @@ Created on : 24/08/23 8:39 am
 @author : ds  
 """
 from typing import List
+from datetime import timedelta
 import logging
 import fastapi
-from fastapi import Query, HTTPException
+from sqlalchemy.exc import IntegrityError
+from fastapi import Query, HTTPException, Depends
+from sqlalchemy.orm import Session
 
+from app.data.setup import create_access_token, get_db
 from app.utils.helper import (
     load_list,
     save_list,
@@ -14,13 +18,10 @@ from app.utils.helper import (
     get_todo_details,
     remove_todo,
     update_todo,
+    register_new_user,
 )
 from app.utils.config_manager import config_manager
-from app.data.models import (
-    ReturnTodo,
-    UpdateTodo,
-    TodoItem,
-)
+from app.data.models import ReturnTodo, UpdateTodo, TodoItem, RegistrationRequest
 
 ACCESS_TOKEN_EXPIRE_MINUTES = int(
     config_manager.config_data["authentication"]["token_expiry"]
@@ -31,8 +32,6 @@ router = fastapi.APIRouter()
 # Configure logging
 config_manager.configure_logging()
 
-# Registration request model
-
 
 @router.get("/")
 async def read_root():
@@ -42,21 +41,22 @@ async def read_root():
 
 
 # Registration endpoint
-# @router.post("/registration/")
-# def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
-#     try:
-#         db_user = register_new_user(db, user)
-#
-#         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-#         access_token = create_access_token(
-#             data={"sub": db_user.email}, expires_delta=access_token_expires
-#         )
-#
-#         return {"access_token": access_token, "token_type": "bearer"}
-#     except IntegrityError as e:
-#         db.rollback()
-#         logging.error(f"Error: {e}")
-#         raise HTTPException(status_code=400, detail="Username or email already exists")
+@router.post("/registration/")
+def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
+    """Register a new user"""
+    try:
+        db_user = register_new_user(db, user)
+
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": db_user.email}, expires_delta=access_token_expires
+        )
+
+        return {"access_token": access_token, "token_type": "bearer"}
+    except IntegrityError as e:
+        db.rollback()
+        logging.error(f"Error: {e}")
+        raise HTTPException(status_code=400, detail="Username or email already exists")
 
 
 @router.get("/todos", response_model=List[ReturnTodo])

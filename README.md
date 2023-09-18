@@ -390,11 +390,12 @@ Have to focus on unit tests tomorrow.
 <details> 
     <summary> Day 26: Sep 18</summary>
 
-`Time Spent : 180 minutes`
+`Time Spent : 240 minutes`
 
 - Expanded unit test for setup and config
 - Fixed the DB connection issue in the unit tests
 - Lint check issues fixed
+- Registration route integration test complete
 
 </details>
 

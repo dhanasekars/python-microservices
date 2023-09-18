@@ -50,7 +50,7 @@ deletelog:
 source:
 	source ~/.zshrc
 
-routine: deletelog clean_cache alltests clean_cache git
+routine: deletelog clean_cache restartpg alltests clean_cache git
 
 check: format lint
 
@@ -69,3 +69,6 @@ startpg:
 
 stoppg:
 	brew services stop postgresql@15
+
+restartpg:
+	brew services restart postgresql@15

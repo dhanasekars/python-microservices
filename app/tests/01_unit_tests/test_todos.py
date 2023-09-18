@@ -3,10 +3,13 @@ Created on : 02/09/23 11:49 am
 @author : ds  
 """
 from unittest.mock import MagicMock
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from fastapi.testclient import TestClient
 from fastapi import HTTPException, FastAPI
-
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
+from app.data.setup import get_db
+from app.data.models import RegistrationRequest
 from app.apis import todos
 
 app_test = FastAPI()
@@ -19,6 +22,61 @@ def config_app():
 
 
 config_app()
+
+
+@patch("app.apis.todos.register_new_user")  # Mock the function
+class TestRegistration:
+    """Tests for the registration route"""
+
+    @patch("app.apis.todos.get_db")  # Mock the get_db function separately
+    def test_register_user_success(self, mock_get_db, mock_register_new_user):
+        """Test for the registration route"""
+
+        # Create a mock user object for registration
+        mock_user = RegistrationRequest(
+            username="testuser", email="test@example.com", password="TestPass123"
+        )
+
+        # Mock the get_db function to return a session
+        mock_db_session = Mock()
+        mock_get_db.return_value = mock_db_session
+
+        # Mock the register_new_user function to return a user
+        mock_register_new_user.return_value = mock_user
+
+        # Send a POST request to the registration endpoint
+        response = test_client.post("/registration/", json=mock_user.model_dump())
+
+        # Assert that the response is successful and contains the access token
+        assert response.status_code == 200
+        assert "access_token" in response.json()
+        assert response.json()["token_type"] == "bearer"
+
+        # Assert that the register_new_user function was called with the correct arguments
+        mock_register_new_user.assert_called_once()
+
+    def test_register_user_exception(self, mock_register_new_user):
+        """Test for the registration route with exception"""
+        mock_user = RegistrationRequest(
+            username="testuser", email="test@example.com", password="TestPass123"
+        )
+
+        # Mock the register_new_user function to raise IntegrityError
+        mock_register_new_user.side_effect = IntegrityError(
+            "IntegrityError message", params={}, orig=None
+        )
+
+        # Send a POST request to the registration endpoint
+        response = test_client.post("/registration/", json=mock_user.model_dump())
+
+        # Assert that the response status code is 400 (Bad Request)
+        assert response.status_code == 400
+
+        # # Assert that the response contains the expected error detail
+        assert "Username or email already exists" in response.json()["detail"]
+
+        # Ensure that the register_new_user function was called
+        mock_register_new_user.assert_called_once()
 
 
 class TestRootRoute:
