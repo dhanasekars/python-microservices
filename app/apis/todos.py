@@ -8,9 +8,9 @@ from sqlalchemy.exc import IntegrityError
 import logging
 import fastapi
 from fastapi import Query, HTTPException, Depends
-from passlib.context import CryptContext
-from pydantic import BaseModel, Field, constr, model_validator
 from sqlalchemy.orm import Session
+
+
 from app.utils.helper import (
     load_list,
     save_list,
@@ -18,14 +18,20 @@ from app.utils.helper import (
     get_todo_details,
     remove_todo,
     update_todo,
+    register_new_user,
 )
 from app.utils.config_manager import config_manager
-from app.data.setup import (
-    create_access_token,
+from app.data.models import (
     User,
+    Base,
     Todo,
-    get_db,
+    RegistrationRequest,
+    UpdateTodo,
+    ReturnTodo,
+    UpdateTodo,
+    TodoItem,
 )
+from app.data.setup import get_db, create_access_token
 
 ACCESS_TOKEN_EXPIRE_MINUTES = int(
     config_manager.config_data["authentication"]["token_expiry"]
@@ -38,49 +44,7 @@ router = fastapi.APIRouter()
 config_manager.configure_logging()
 
 
-# Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
 # Registration request model
-class RegistrationRequest(BaseModel):
-    username: str
-    email: str
-    password: str
-
-
-class TodoItem(BaseModel):
-    """Base model for to-do list"""
-
-    title: constr(min_length=1, strip_whitespace=True)
-    description: Optional[str] = None
-    doneStatus: bool = Field(default=False)
-
-
-class ReturnTodo(TodoItem):
-    """extending TodoItem class with UUID"""
-
-    id: str
-
-
-class UpdateTodo(BaseModel):
-    """Model with optional fields where at least one must have a value."""
-
-    title: Optional[constr(min_length=1, strip_whitespace=True)] = None
-    description: Optional[str] = None
-    doneStatus: Optional[bool] = None
-
-    @model_validator(mode="before")
-    def check_blank_fields(cls, values):
-        """function to check at least one of the three fields is given"""
-        num_fields_with_values = sum(
-            1 for value in values.values() if value is not None
-        )
-        if num_fields_with_values < 1:
-            raise ValueError(
-                "At least one of 'title', 'description', or 'doneStatus' must have a value"
-            )
-        return values
 
 
 @router.get("/")
@@ -91,34 +55,21 @@ async def read_root():
 
 
 # Registration endpoint
-@router.post("/registration/")
-def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
-    try:
-        # Hash the user's password
-        hashed_password = pwd_context.hash(user.password)
-
-        # Create a new user in the database
-        db_user = User(
-            username=user.username,
-            email=user.email,
-            password_hash=hashed_password,
-        )
-        db.add(db_user)
-        db.commit()
-        db.refresh(db_user)
-
-        # Generate an access token for the registered user
-        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-        access_token = create_access_token(
-            data={"sub": user.email},
-            expires_delta=access_token_expires,
-        )
-
-        return {"access_token": access_token, "token_type": "bearer"}
-    except IntegrityError as e:
-        # Handle unique constraint violation errors (username or email already exists)
-        db.rollback()
-        raise HTTPException(status_code=400, detail="Username or email already exists")
+# @router.post("/registration/")
+# def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
+#     try:
+#         db_user = register_new_user(db, user)
+#
+#         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+#         access_token = create_access_token(
+#             data={"sub": db_user.email}, expires_delta=access_token_expires
+#         )
+#
+#         return {"access_token": access_token, "token_type": "bearer"}
+#     except IntegrityError as e:
+#         db.rollback()
+#         logging.error(f"Error: {e}")
+#         raise HTTPException(status_code=400, detail="Username or email already exists")
 
 
 @router.get("/todos", response_model=List[ReturnTodo])
