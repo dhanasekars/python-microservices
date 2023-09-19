@@ -22,7 +22,7 @@ PAYLOAD = {
 
 username = f"IntegrationTestUser{generate_id()}"
 email = f"IntegrationTestUser{generate_id()}@example.com"
-PASSWORD = "IntegrationTestUserPassword"
+PASSWORD = "Integration1TestUser2Password"
 
 
 def start_app():

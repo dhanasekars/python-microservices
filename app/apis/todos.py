@@ -10,7 +10,7 @@ from sqlalchemy.exc import IntegrityError
 from fastapi import Query, HTTPException, Depends
 from sqlalchemy.orm import Session
 
-from app.utils.token import create_access_token
+from app.utils.access_token import create_access_token, get_current_user
 from app.data.setup import get_db
 from app.utils.helper import (
     load_list,
@@ -22,13 +22,22 @@ from app.utils.helper import (
     register_new_user,
 )
 from app.utils.config_manager import config_manager
-from app.data.models import ReturnTodo, UpdateTodo, TodoItem, RegistrationRequest
-from app.utils.token import ACCESS_TOKEN_EXPIRE_MINUTES
+from app.data.models import (
+    ReturnTodo,
+    UpdateTodo,
+    TodoItem,
+    RegistrationRequest,
+    User,
+    Todo,
+)
 
 router = fastapi.APIRouter()
 
 # Configure logging
 config_manager.configure_logging()
+ACCESS_TOKEN_EXPIRE_MINUTES = int(
+    config_manager.config_data["authentication"]["token_expiry"]
+)  # 2 weeks
 
 
 @router.get("/")
