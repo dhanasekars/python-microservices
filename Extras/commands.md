@@ -25,8 +25,7 @@ psql -h localhost -p 5432 -U postgres
 Stop tracking after check in
 
 ```shell
-git update-index --assume-unchanged FILE_NAME
-```
+o```
 To start tracking again
 
 ```shell
