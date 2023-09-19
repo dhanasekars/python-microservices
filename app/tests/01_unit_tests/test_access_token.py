@@ -6,13 +6,13 @@ import unittest
 from datetime import timedelta, datetime
 from unittest.mock import patch, Mock
 
-from app.utils.token import create_access_token
+from app.utils.access_token import create_access_token
 
 
-@patch("app.utils.token.jwt.encode")
-@patch("app.utils.token.JWT_SECRET_KEY", "mocked_secret_key")
+@patch("app.utils.access_token.jwt.encode")
+@patch("app.utils.access_token.JWT_SECRET_KEY", "mocked_secret_key")
 @patch(
-    "app.utils.token.datetime",
+    "app.utils.access_token.datetime",
     Mock(utcnow=Mock(return_value=datetime(2023, 9, 14, 12, 45, 51, 500))),
 )
 class TestCreateAccessToken(unittest.TestCase):

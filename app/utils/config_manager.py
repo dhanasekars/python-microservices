@@ -7,6 +7,8 @@ import json
 import os
 import logging
 
+from dotenv import load_dotenv
+
 
 class ConfigurationManager:
     """Singleton class to load and store the configuration data."""
@@ -67,6 +69,12 @@ class ConfigurationManager:
             filemode=log_file_mode,
         )
         logging.getLogger()
+
+    def get_secrets(self):
+        script_directory = os.path.dirname(__file__)
+        # Construct the path to the secrets.env file relative to your script's location
+        dotenv_path = os.path.join(script_directory, "..", "secrets", "secrets.env")
+        load_dotenv(dotenv_path)
 
 
 # Create an instance of the ConfigurationManager

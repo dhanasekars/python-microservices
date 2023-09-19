@@ -63,6 +63,20 @@ class User(Base):
         return pwd_context.verify(password, self.password_hash)
 
 
+class Todo(Base):
+    """Base model for to-do list"""
+
+    __tablename__ = "todos"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    description = Column(String)
+    status = Column(Boolean, default=False)
+
+    # Establish a many-to-one relationship with User
+    owner_id = Column(Integer, ForeignKey("users.id"))
+    owner = relationship("User", back_populates="todos")
+
+
 class TodoItem(BaseModel):
     """Base model for to-do list"""
 
@@ -97,20 +111,7 @@ class UpdateTodo(BaseModel):
         return values
 
 
-class Todo(Base):
-    """Base model for to-do list"""
-
-    __tablename__ = "todos"
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String)
-    status = Column(Boolean, default=False)
-
-    # Establish a many-to-one relationship with User
-    owner_id = Column(Integer, ForeignKey("users.id"))
-    owner = relationship("User", back_populates="todos")
-
-
-# Pydantic model for token data
 class TokenData:
+    """Pydantic model for token data"""
+
     username: str = None

@@ -73,7 +73,7 @@
           run: |
             python -m pytest --cov=app/apis --cov=app/utils --cov=app/data  app/tests/01_unit_tests
 
-        - name: Set up and run  tests
+        - name: Set up and run  Integration tests
           env:
               DB_USER: ${{ secrets.DB_USER }}
               DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
