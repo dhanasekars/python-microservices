@@ -370,7 +370,7 @@ Have to focus on unit tests tomorrow.
 `Time Spent : 180 minutes`
 
 - Unit test for setup.py 
-- Achieved 90% coverge. Need to figure out how to test the exception handling
+- Achieved 90% coverage. Need to figure out how to test the exception handling
 
 
 </details>
@@ -382,7 +382,7 @@ Have to focus on unit tests tomorrow.
 `Time Spent : 180 minutes`
 
 - Unit test for setup.py
-- Achieved 100% coverge.
+- Achieved 100% coverage.
 - Added integration test for REGISTRATION route
 
 </details>
@@ -395,9 +395,19 @@ Have to focus on unit tests tomorrow.
 - Expanded unit test for setup and config
 - Fixed the DB connection issue in the unit tests
 - Lint check issues fixed
-- Registration route integration test complete
 
 </details>
+
+
+<details> 
+    <summary> Day 0: Template</summary>
+
+`Time Spent : 120 minutes`
+- Registration route integration test complete
+- JWT Secret key issue fixed
+
+</details>
+
 
 -------------------------------
 
