@@ -14,9 +14,11 @@
   - [x] Create a db connection
   - [x] Create a db tables
   - [x] Create a db connection pool
-  - [ ] Update all functions to use db connection
   - [x] test_todo.py tests fail if the db server is not running, fix it
-  - [ ] Connect to more than one type of DB and test ( Postgres, MySQL, SQLite)
+  - [x] Integration test for registration
+  - [ ] Make integration tests to run in Git actions by creating a db server in Git actions
+  - [ ] Update all functions to use db connection
+
 - [ ] Authentication
 - [ ] Update the test fixture @generateUDID 
 - [ ] Tracking and limiting usage 
@@ -27,12 +29,16 @@
 - 
 ## Later
 
+- [ ] Connect to more than one type of DB and test ( Postgres, MySQL, SQLite)
 - [ ] Head, Options, Patch and Trace
 - [ ] Generate total time spent for this project from README.md
 - [ ] Fix all lint issues
 - [ ] Explore Fire
 - [ ] Confirm schema for db by passing the schema name in secrets.env
 - [ ] Create admin API - to activate, de-active, delete users. 
+- [ ] Annotate dependencies using SQLAlchemy type annotations or is it pydantic?
+- [ ] Reqover coverage
+- [ ] Explore query builder 
 
 ### Action items
  - [ ] is it necessary to install libpq separately using brew? 

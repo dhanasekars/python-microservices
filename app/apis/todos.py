@@ -6,12 +6,11 @@ from typing import List
 from datetime import timedelta
 import logging
 import fastapi
-from sqlalchemy.exc import IntegrityError
 from fastapi import Query, HTTPException, Depends
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.utils.access_token import create_access_token, get_current_user
-from app.data.setup import get_db
+from app.utils.access_token import create_access_token
 from app.utils.helper import (
     load_list,
     save_list,
@@ -27,9 +26,9 @@ from app.data.models import (
     UpdateTodo,
     TodoItem,
     RegistrationRequest,
-    User,
-    Todo,
 )
+from app.data.setup import get_db
+
 
 router = fastapi.APIRouter()
 
@@ -60,9 +59,9 @@ def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
         )
 
         return {"access_token": access_token, "token_type": "bearer"}
-    except IntegrityError as e:
+    except IntegrityError as err:
         db.rollback()
-        logging.error(f"Error: {e}")
+        logging.error(f"Error: {err}")
         raise HTTPException(status_code=400, detail="Username or email already exists")
 
 

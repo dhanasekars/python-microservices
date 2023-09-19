@@ -7,8 +7,6 @@ from unittest.mock import patch, Mock
 from fastapi.testclient import TestClient
 from fastapi import HTTPException, FastAPI
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
-from app.data.setup import get_db
 from app.data.models import RegistrationRequest
 from app.apis import todos
 

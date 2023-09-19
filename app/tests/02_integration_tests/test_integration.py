@@ -8,7 +8,6 @@ import re
 
 import pytest
 from fastapi.testclient import TestClient
-from app.utils.helper import generate_id
 from main import app
 
 client = TestClient(app)
@@ -18,11 +17,6 @@ PAYLOAD = {
     "title": "Integration Happy Path.",
     "description": "This is created using automated Integration tests.",
 }
-
-
-username = f"IntegrationTestUser{generate_id()}"
-email = f"IntegrationTestUser{generate_id()}@example.com"
-PASSWORD = "Integration1TestUser2Password"
 
 
 def start_app():
@@ -76,7 +70,6 @@ class TestTodo2xx:
         response = client.get(f"/todos/{generated_uuid}")
         assert response.status_code == 200
         todo_data = response.json()
-        print(todo_data)
         assert todo_data["title"] == PAYLOAD["title"]
         assert todo_data["description"] == PAYLOAD["description"]
         assert todo_data["id"] == generated_uuid
@@ -164,7 +157,6 @@ class TestTodo4xx:
     @pytest.fixture()
     def generated_uuid(self):
         """Create a todo item and capture the generated UUID"""
-        # create a todo item and capture the generated UUID
         response = client.post("/todos", json=PAYLOAD)
         assert response.status_code == 200
         todo_data = response.json()

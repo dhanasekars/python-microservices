@@ -71,6 +71,7 @@ class ConfigurationManager:
         logging.getLogger()
 
     def get_secrets(self):
+        """Load the secrets from the secrets.env file"""
         script_directory = os.path.dirname(__file__)
         # Construct the path to the secrets.env file relative to your script's location
         dotenv_path = os.path.join(script_directory, "..", "secrets", "secrets.env")
