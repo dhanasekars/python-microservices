@@ -3,6 +3,7 @@ Created on : 19/09/23 9:22 am
 @author : ds  
 """
 
+import os
 from multiprocessing import Process
 import pytest
 
@@ -12,12 +13,14 @@ from main import app
 
 from app.utils.access_token import JWT_SECRET_KEY, ALGORITHM
 from app.utils.helper import generate_id
+from app.utils.config_manager import config_manager
 
 client = TestClient(app)
+config_manager.get_secrets()
 
 username = f"IntegrationTestUser{generate_id()}"
 email = f"IntegrationTestUser{generate_id()}@example.com"
-PASSWORD = "Integration1TestUser2Password"
+PASSWORD = os.getenv("TEST_PASSWORD")
 
 
 def start_app():
