@@ -16,9 +16,12 @@
   - [x] Create a db connection pool
   - [x] test_todo.py tests fail if the db server is not running, fix it
   - [x] Integration test for registration
-  - [ ] Make integration tests to run in Git actions by creating a db server in Git actions
   - [ ] Update all functions to use db connection
-
+  - [ ] Set up a Docker container for db server
+  - [ ] Make integration tests to run in Git actions by creating a db server in Git actions
+- [x] - Run unit tests in parallel, measure current execution time before moving to parallel execution. 
+        used pytest-xdist plugin - 57 tests took 3.73s and with 3 workers it took 2.88s. 
+        But for now in pipeline no parallel execution.
 - [ ] Authentication
 - [ ] Update the test fixture @generateUDID 
 - [ ] Tracking and limiting usage 

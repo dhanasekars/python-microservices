@@ -83,7 +83,7 @@ class TestRegistration:
             assert decoded_token is not None
             sub_claim = decoded_token.get("sub")
             # check the 'sub' claim to ensure it matches the registered user's email
-            assert sub_claim == email
+            assert sub_claim == username
 
         except JWTError:
             # If decoding fails, the token is invalid

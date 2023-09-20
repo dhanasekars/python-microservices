@@ -10,15 +10,10 @@ from fastapi import Query, HTTPException, Depends
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.utils.access_token import create_access_token
+from app.utils.access_token import create_access_token, verify_token
 from app.utils.helper import (
-    load_list,
-    save_list,
-    generate_id,
-    get_todo_details,
-    remove_todo,
-    update_todo,
     register_new_user,
+    load_user_todos,
 )
 from app.utils.config_manager import config_manager
 from app.data.models import (
@@ -26,9 +21,11 @@ from app.data.models import (
     UpdateTodo,
     TodoItem,
     RegistrationRequest,
+    User,
+    Todo,
 )
 from app.data.setup import get_db
-
+from app.utils.custom_exceptions import InvalidQueryParameter
 
 router = fastapi.APIRouter()
 
@@ -55,7 +52,7 @@ def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
 
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(
-            data={"sub": db_user.email}, expires_delta=access_token_expires
+            data={"sub": db_user.username}, expires_delta=access_token_expires
         )
 
         return {"access_token": access_token, "token_type": "bearer"}
@@ -65,73 +62,57 @@ def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Username or email already exists")
 
 
-@router.get("/todos", response_model=List[ReturnTodo])
-async def read_todos(
-    page: int = Query(default=1, description="Page Number"),
-    per_page: int = Query(default=5, description="Items per page"),
-):
-    """Get list of to-do items"""
-    logging.debug(f"Fetching app for page {page}, per_page {per_page}")
-    if page < 1 or per_page < 1:
-        raise HTTPException(
-            status_code=400, detail="Page and per_page must be positive integer."
-        )
-
-    skip = (page - 1) * per_page
-    todos = load_list()[skip : skip + per_page]
-
-    logging.debug(f"Returning {len(todos)} app")
-
-    return todos
-
-
 @router.post("/todos")
-async def add_todo(todo: TodoItem):
-    """This is post route to add a To-do item"""
+async def add_todo(
+    todo: TodoItem,
+    current_user: User = Depends(verify_token),
+    db: Session = Depends(get_db),  # Add user authentication dependency
+):
+    """This is a post route to add a To-do item"""
     try:
         logging.debug("Adding a new todo item")
+        # Create a new Todo object and associate it with the current user
+        new_todo = Todo(
+            title=todo.title, description=todo.description, owner=current_user
+        )
 
-        todo = todo.model_dump()
-        todo.update(id=generate_id())
-        data = load_list()
-        data.append(todo)
-        save_list(data)
+        # Add the new todo to the database
+        db.add(new_todo)
+        db.commit()
 
-        logging.debug(f"Added todo item with ID: {todo['id']}")
+        # Refresh and Return the added todo
+        db.refresh(new_todo)
+        return_todo = ReturnTodo(
+            id=new_todo.id,
+            title=new_todo.title,
+            description=new_todo.description,
+            doneStatus=new_todo.status,
+        )
 
-        return todo
+        return return_todo
+
     except Exception as err:
         error_message = f"Internal Server Error: {err}"
         logging.error(error_message)
         raise HTTPException(status_code=500, detail=error_message)
 
 
-@router.get("/todos/{todo_id}")
-async def read_todo(todo_id):
-    """return todo details for a given id"""
-    result = get_todo_details(todo_id)
-    logging.info(f"Retrieved details for given id {todo_id} ")
-    return result
+@router.get("/todos", response_model=List[ReturnTodo])
+async def get_todos(
+    page: int = Query(default=1, description="Page Number"),
+    per_page: int = Query(default=5, description="Items per page"),
+    current_user: User = Depends(verify_token),
+    db: Session = Depends(get_db),
+):
+    if page < 1 or per_page < 1:
+        raise InvalidQueryParameter()  # Raise the custom exception
 
-
-@router.delete("/todos/{todo_id}")
-async def delete_todo(todo_id):
-    """Delete an item"""
-    logging.debug(f"Deleting item with ID: {todo_id}")
-    result = remove_todo(todo_id)
-    return result
-
-
-@router.put("/todos/{todo_id}")
-async def update_todo_list(todo: UpdateTodo, todo_id):
-    """Update an item"""
-    logging.debug(f"Updating item with ID: {todo_id}")
-
-    todo = todo.model_dump()
-    result = update_todo(todo_id, todo)
-
-    if "error" in result:
-        error_message = result["error"]
-        logging.error(f"Error while updating todo: {error_message}")
-
-    return result
+    # Get a list of to-do items for the current user.
+    try:
+        todos = load_user_todos(current_user, page, per_page, db)
+        return_todos = [ReturnTodo(**todo.__dict__) for todo in todos]
+        return return_todos
+    except Exception as err:
+        error_message = f"Internal Server Error: {err}"
+        logging.error(error_message)
+        raise HTTPException(status_code=500, detail=error_message)

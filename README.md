@@ -400,6 +400,30 @@ Have to focus on unit tests tomorrow.
 
 
 <details> 
+    <summary> Day 27: Sep 19</summary>
+
+`Time Spent : 180 minutes`
+
+- Expanded unit test for setup and config
+- Added regirstration route integration test
+
+</details>
+
+<details> 
+    <summary> Day 28: Sep 20</summary>
+
+`Time Spent : 180 minutes`
+
+- Get and post route completed
+- Unit tests added for access_token modules
+- :thumsdown: Not able to mock get / post FastAPI Depends
+https://github.com/tiangolo/fastapi/issues/296
+
+</details>
+
+
+
+<details> 
     <summary> Day 0: Template</summary>
 
 `Time Spent : 120 minutes`
