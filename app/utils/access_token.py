@@ -12,7 +12,7 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from starlette.status import HTTP_401_UNAUTHORIZED
 
-from app.data.models import TokenData, User
+from app.data.models import User
 from app.data.setup import get_db
 from app.utils.config_manager import config_manager
 
@@ -44,14 +44,14 @@ def create_access_token(data: dict, expires_delta: timedelta):
 #     return pwd_context.verify(plain_password, hashed_password)
 
 
-# def get_user(db, username: str):
+# def get_user(db_fixture, username: str):
 #     """Get a user from the database."""
-#     return db, username
+#     return db_fixture, username
 #
 #
-# def authenticate_user(db, username: str, password: str):
+# def authenticate_user(db_fixture, username: str, password: str):
 #     """Authenticate a user and return user details."""
-#     user = get_user(db, username)
+#     user = get_user(db_fixture, username)
 #     if not user:
 #         return None
 #     if not verify_password(password, user.password):
@@ -70,13 +70,10 @@ def verify_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
-            print("username is None. Input blank")
             raise credentials_exception
         user = db.query(User).filter(User.username == username).first()
         if user is None:
-            print("user is None. No user found with that username in db")
             raise credentials_exception
     except JWTError:
-        print("JWTError")
         raise credentials_exception
     return user

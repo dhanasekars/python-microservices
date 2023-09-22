@@ -5,15 +5,12 @@ Created on : 02/09/23 11:49 am
 import unittest
 from unittest.mock import patch, Mock, MagicMock
 from fastapi.testclient import TestClient
-from fastapi import HTTPException, FastAPI
+from fastapi import FastAPI
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
 
-from app.apis.todos import add_todo
-from app.data.models import RegistrationRequest, User, Todo, ReturnTodo
+from app.data.models import RegistrationRequest, User, ReturnTodo
 from app.apis import todos
-import pytest
-
+from app.data.setup import get_db
 from app.utils.access_token import verify_token
 
 app_test = FastAPI()
@@ -26,6 +23,26 @@ def config_app():
 
 
 config_app()
+
+
+# ---------------------------mocking dependencies--------------------------------
+def override_verify_token(
+    token="test_token", db=MagicMock()
+):  # pylint: disable=unused-argument
+    """Override the verify_token function to return a mock user"""
+    current_user = User(id=1, username="test_user")
+    return current_user
+
+
+def override_get_db():
+    """Override the get_db function to return a mock session"""
+    mock_db_session = Mock()
+    return mock_db_session
+
+
+app_test.dependency_overrides[verify_token] = override_verify_token
+app_test.dependency_overrides[get_db] = override_get_db
+HEADER = {"Authorization": "Bearer test_token"}
 
 
 class TestRootRoute:
@@ -46,8 +63,7 @@ class TestRootRoute:
 class TestRegistration:
     """Tests for the registration route"""
 
-    @patch("app.apis.todos.get_db")  # Mock the get_db function separately
-    def test_register_user_success(self, mock_get_db, mock_register_new_user):
+    def test_register_user_success(self, mock_register_new_user):
         """Test for the registration route"""
 
         # Create a mock user object for registration
@@ -57,7 +73,7 @@ class TestRegistration:
 
         # Mock the get_db function to return a session
         mock_db_session = Mock()
-        mock_get_db.return_value = mock_db_session
+        override_get_db.return_value = mock_db_session
 
         # Mock the register_new_user function to return a user
         mock_register_new_user.return_value = mock_user
@@ -97,25 +113,93 @@ class TestRegistration:
         mock_register_new_user.assert_called_once()
 
 
-class TestAddTodo:
+class TestAddTodo(unittest.TestCase):
     """Tests for the add_todo route"""
 
-    # @patch("app.apis.todos.get_db")
-    # @patch("app.apis.todos.verify_token")
-    def test_add_todo_success(self):
-        """Test for the add_todo route"""
-        # Create a mock user object for authentication
-        mock_user = Mock()
-        # mock_verify_token.return_value = User(id=1, username="test_user")
-        # mock_verify_token.return_value = mock_user
+    @patch("app.apis.todos.ReturnTodo")
+    @patch("app.apis.todos.logging")
+    def test_add_todo(self, _, mock_return_todo):
+        """Test that a user can add a todo item."""
+        # Mock the FastAPI request dependencies
+        todo_data = {
+            "title": "Test Todo",
+            "description": "Test Description",
+            "doneStatus": False,
+        }
+        expected_return_todo = ReturnTodo(
+            id=1,
+            title="Test Todo",
+            description="Test Description",
+            doneStatus=False,
+        )
+        mock_return_todo.return_value = expected_return_todo
 
+        # Call the endpoint function with mocked dependencies
+        response = test_client.post("/todos", json=todo_data, headers=HEADER)
+        assert response.status_code == 200
+        assert response.json() == expected_return_todo.model_dump()
+        mock_return_todo.assert_called_once()
+
+    @patch("app.apis.todos.logging.error")  # Mock the logging.error function
+    def test_add_todo_exception(self, _):
+        """Test that a user cannot add a todo item with invalid data."""
+        # Mock the FastAPI request dependencies
+        todo_data = {
+            "title": "Test Todo",
+            "description": "Test Description",
+            "doneStatus": False,
+        }
+
+        override_get_db.return_value = Exception("Simulated database error")
+
+        # Call the endpoint function with mocked dependencies and assert the exception
         response = test_client.post(
             "/todos",
-            json={
-                "title": "Test Todo",
-                "description": "Test Description",
-            },
+            json=todo_data,
             headers={"Authorization": "Bearer test_token"},
         )
+        assert response.status_code == 500
 
-        print(response.json())
+
+class TestGetTodos(unittest.TestCase):
+    """Tests for the get_todos route"""
+
+    @patch("app.apis.todos.load_user_todos")
+    @patch("app.apis.todos.logging")
+    def test_get_2_todo(self, _, mock_load_user_todos):
+        """Test that a user can get a list of todo items."""
+        expected_return_todos = [
+            Mock(id=1, title="Todo 1", description="Description 1"),
+            Mock(id=2, title="Todo 2", description="Description 2"),
+        ]
+        mock_load_user_todos.return_value = expected_return_todos
+        response = test_client.get("/todos?page=1&per_page=2", headers=HEADER)
+        assert response.status_code == 200
+        mock_load_user_todos.assert_called_once()
+
+    def test_get_invalid_query_parameter_page_400(self):
+        """Test that a user cannot get a list of todo items with invalid data."""
+        response = test_client.get("/todos?page=0&per_page=2", headers=HEADER)
+        assert response.status_code == 400
+        assert "Invalid query parameter" in response.json()["detail"]
+
+    def test_get_invalid_query_parameter_per_page_422(self):
+        """Test that a user cannot get a list of todo items with invalid data."""
+        response = test_client.get("/todos?page=2&per_page=abc", headers=HEADER)
+        assert response.status_code == 422
+        assert "Input should be a valid integer" in response.json()["detail"][0]["msg"]
+
+    @patch("app.apis.todos.logging")
+    def test_get_todo_exception(self, _):
+        """Test that a user cannot get a list of todo items with invalid data."""
+        mock_load_user_todos = Mock(side_effect=Exception("Simulated error"))
+        with patch("app.apis.todos.load_user_todos", mock_load_user_todos):
+            response = test_client.get("/todos")
+        self.assertEqual(
+            response.status_code, 500
+        )  # Check for 500 Internal Server Error
+        self.assertEqual(
+            response.json()["detail"],
+            "Internal Server Error: Simulated error",
+        )
+        assert mock_load_user_todos.calledonce()

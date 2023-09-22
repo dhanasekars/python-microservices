@@ -6,6 +6,8 @@ from fastapi import HTTPException
 
 
 class InvalidQueryParameter(HTTPException):
+    """Custom exception for invalid query parameters"""
+
     def __init__(self):
         super().__init__(
             status_code=400,

@@ -2,7 +2,6 @@
 Created on : 26/08/23 11:27 am
 @author : ds  
 """
-import json
 import uuid
 import logging
 from fastapi import HTTPException

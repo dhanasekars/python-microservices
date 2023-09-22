@@ -18,7 +18,6 @@ from app.utils.helper import (
 from app.utils.config_manager import config_manager
 from app.data.models import (
     ReturnTodo,
-    UpdateTodo,
     TodoItem,
     RegistrationRequest,
     User,
@@ -104,6 +103,7 @@ async def get_todos(
     current_user: User = Depends(verify_token),
     db: Session = Depends(get_db),
 ):
+    """This is a get route to get all the To-do items"""
     if page < 1 or per_page < 1:
         raise InvalidQueryParameter()  # Raise the custom exception
 

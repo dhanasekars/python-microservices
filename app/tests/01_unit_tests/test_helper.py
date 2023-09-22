@@ -2,14 +2,11 @@
 Created on : 30/08/23 11:34 am
 @author : ds  
 """
-import json
 import unittest
-from unittest.mock import mock_open, patch, Mock, ANY
+from unittest.mock import patch, Mock, ANY
 from fastapi import HTTPException
-import pytest
 
 from app.utils.helper import load_user_todos, register_new_user, generate_id
-from app.utils.config_manager import config_manager
 from app.data.models import User
 
 
@@ -32,9 +29,9 @@ class TestLoadUserTodos(unittest.TestCase):
         ]
 
         # Configure the mock database session to return the mock to-do data
-        mock_db_session.query.return_value.filter.return_value.offset.return_value.limit.return_value.all.return_value = (
-            mock_todo_data
-        )
+        (
+            mock_db_session.query.return_value.filter.return_value.offset.return_value.limit.return_value.all
+        ).return_value = mock_todo_data
 
         # Call the function under test
         todos = load_user_todos(mock_user, page=1, per_page=5, db=mock_db_session)
@@ -47,7 +44,7 @@ class TestLoadUserTodos(unittest.TestCase):
         assert mock_db_session.query.calledonce()
 
     def test_load_user_todos_exception(self, mock_session):
-        # Create a mock database session
+        """Test that load_user_todos() raises an HTTPException if an error occurs."""
         mock_db_session = Mock()
         mock_session.return_value = mock_db_session
 
@@ -74,7 +71,7 @@ class TestRegisterNewUser(unittest.TestCase):
     """module to test Register new user"""
 
     def test_register_new_user(self):
-        """Test that register_new_user() creates a new user."""
+        """Test that register_new_user() returns the correct user object."""
         mock_db = Mock()
 
         # Create mock user data
@@ -110,11 +107,11 @@ class TestGenerateID(unittest.TestCase):
     """module to test UUID generation and uniqueness"""
 
     def test_generate_id_length(self):
-        # Generate an ID and check if it has the correct length
+        """Test that generate_id() returns a UUID4 hex string with the correct length."""
         generated_id = generate_id()
         self.assertEqual(len(generated_id), 32)  # A UUID4 hex string has 32 characters
 
     def test_generate_id_uniqueness(self):
-        # Generate a list of IDs and ensure they are all unique
+        """Test that generate_id() returns a unique ID."""
         id_list = [generate_id() for _ in range(100)]
         self.assertEqual(len(id_list), len(set(id_list)))  # Check for uniqueness

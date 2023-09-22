@@ -270,7 +270,7 @@ Have to focus on unit tests tomorrow.
 </details>
 
 <details> 
-    <summary> Day 18: Sep 07</summary>
+    <summary> Day 19: Sep 07</summary>
 
 `Time Spent : 60 minutes`
 
@@ -281,7 +281,7 @@ Have to focus on unit tests tomorrow.
 
 
 <details> 
-    <summary> Day 18: Sep 07</summary>
+    <summary> Day 19: Sep 07</summary>
 
 `Time Spent : 120 minutes`
 
@@ -293,7 +293,7 @@ Have to focus on unit tests tomorrow.
 
 
 <details> 
-    <summary> Day 18: Sep 08</summary>
+    <summary> Day 20: Sep 08</summary>
 
 `Time Spent : 120 minutes`
 
@@ -303,7 +303,7 @@ Have to focus on unit tests tomorrow.
 
 
 <details> 
-    <summary> Day 19: Sep 09</summary>
+    <summary> Day 21: Sep 09</summary>
 
 `Time Spent : 180 minutes`
 
@@ -320,7 +320,7 @@ Have to focus on unit tests tomorrow.
 
 
 <details> 
-    <summary> Day 20: Sep 10</summary>
+    <summary> Day 22: Sep 10</summary>
 
 `Time Spent : 180 minutes`
 
@@ -332,7 +332,7 @@ Have to focus on unit tests tomorrow.
 
 
 <details> 
-    <summary> Day 21: Sep 11</summary>
+    <summary> Day 23: Sep 11</summary>
 
 `Time Spent : 75 minutes`
 
@@ -342,7 +342,7 @@ Have to focus on unit tests tomorrow.
 </details>
 
 <details> 
-    <summary> Day 22: Sep 12</summary>
+    <summary> Day 24: Sep 12</summary>
 
 `Time Spent : 75 minutes`
 
@@ -352,7 +352,7 @@ Have to focus on unit tests tomorrow.
 </details>
 
 <details> 
-    <summary> Day 23: Sep 13</summary>
+    <summary> Day 25: Sep 13</summary>
 
 `Time Spent : 180 minutes`
 
@@ -365,7 +365,7 @@ Have to focus on unit tests tomorrow.
 
 
 <details> 
-    <summary> Day 24: Sep 14</summary>
+    <summary> Day 26: Sep 14</summary>
 
 `Time Spent : 180 minutes`
 
@@ -377,7 +377,7 @@ Have to focus on unit tests tomorrow.
 
 
 <details> 
-    <summary> Day 25: Sep 16</summary>
+    <summary> Day 27: Sep 16</summary>
 
 `Time Spent : 180 minutes`
 
@@ -388,7 +388,7 @@ Have to focus on unit tests tomorrow.
 </details>
 
 <details> 
-    <summary> Day 26: Sep 18</summary>
+    <summary> Day 28: Sep 18</summary>
 
 `Time Spent : 240 minutes`
 
@@ -400,7 +400,7 @@ Have to focus on unit tests tomorrow.
 
 
 <details> 
-    <summary> Day 27: Sep 19</summary>
+    <summary> Day 29: Sep 19</summary>
 
 `Time Spent : 180 minutes`
 
@@ -410,7 +410,7 @@ Have to focus on unit tests tomorrow.
 </details>
 
 <details> 
-    <summary> Day 28: Sep 20</summary>
+    <summary> Day 30: Sep 20</summary>
 
 `Time Spent : 180 minutes`
 
@@ -421,7 +421,26 @@ https://github.com/tiangolo/fastapi/issues/296
 
 </details>
 
+<details> 
+    <summary> Day 31: Sep 21</summary>
 
+`Time Spent : 180 minutes`
+
+- 100% unit test coverage for access_token module, todo routes and helper functions
+- :thumsup: Finally, mocked FastAPI Depends https://fastapi.tiangolo.com/advanced/testing-dependencies/
+
+</details>
+
+<details> 
+    <summary> Day 32: Sep 22</summary>
+
+`Time Spent : 120 minutes`
+
+- Register, GET and POST Todo routes done with unit tests and integration tests
+- Linting done for all files created this week
+
+</details>
+"
 
 <details> 
     <summary> Day 0: Template</summary>
