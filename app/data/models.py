@@ -70,7 +70,7 @@ class Todo(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     description = Column(String)
-    status = Column(Boolean, default=False)
+    doneStatus = Column(Boolean, default=False)
 
     # Establish a many-to-one relationship with User
     owner_id = Column(Integer, ForeignKey("users.id"))

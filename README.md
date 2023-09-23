@@ -444,21 +444,10 @@ https://github.com/tiangolo/fastapi/issues/296
 <details> 
     <summary> Day 33: Sep 23</summary>
 
-`Time Spent : 120 minutes`
+`Time Spent : 240 minutes`
 
 - Delete and get todo by id integration and unit test complete
-- Other than PUT, all routes are complete
-
-</details>
-
-
-
-<details> 
-    <summary> Day 0: Template</summary>
-
-`Time Spent : 120 minutes`
-- Registration route integration test complete
-- JWT Secret key issue fixed
+- PUT route, integration and unit test complete
 
 </details>
 

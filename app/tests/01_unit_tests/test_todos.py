@@ -138,7 +138,6 @@ class TestAddTodo(unittest.TestCase):
 
         # Call the endpoint function with mocked dependencies
         response = test_client.post("/todos", json=todo_data, headers=HEADER)
-        print(response.json())
         assert response.status_code == 200
         assert response.json() == expected_return_todo.model_dump()
         mock_return_todo.assert_called_once()
@@ -245,6 +244,35 @@ class TestDeleteTodoByID:
         assert actual_message == expected_message
 
 
+@patch("app.apis.todos.logging")
+class TestUpdateTodoByID:
+    """Tests for the update_todo route"""
+
+    @patch("app.apis.todos.ReturnTodo")
+    def test_update_todo_success(self, mock_return_todo, _):
+        """update an existing todo"""
+        update_todo_data = {
+            "title": "Update Todo",
+            "description": "Update Description",
+            "doneStatus": True,
+        }
+        expected_return_todo = ReturnTodo(
+            id=1,
+            title="Update Todo",
+            description="Update Description",
+            doneStatus=True,
+        )
+
+        # print(expected_return_todo.model_dump())
+        mock_return_todo.return_value = expected_return_todo
+
+        # Call the endpoint function with mocked dependencies
+        response = test_client.put("/todos/1232", json=update_todo_data, headers=HEADER)
+        assert response.status_code == 200
+        assert response.json() == [expected_return_todo.model_dump()]
+        mock_return_todo.assert_called_once()
+
+
 # ------------------ Test  modifying override dependencies---------------------#
 
 
@@ -268,6 +296,7 @@ class TestExceptions:
 
     def test_delete_todo_exception_404(self, _):
         """delete an non-existing todo"""
+        app_test.dependency_overrides = {verify_token: override_verify_token}
 
         with patch("sqlalchemy.orm.Query.filter") as mock_filter, patch(
             "sqlalchemy.orm.Query.first"
@@ -304,6 +333,39 @@ class TestExceptions:
                 "Simulated error"
             )
             response = test_client.get("/todos/4545", headers=HEADER)
+            assert response.status_code == 500
+            assert response.json()["detail"] == "Internal Server Error: Simulated error"
+            mock_filter.assert_called_once()
+
+    def test_update_todo_exception_404(self, _):
+        """Test that a user cannot get a todo item with invalid data."""
+
+        app_test.dependency_overrides = {verify_token: override_verify_token}
+
+        with patch("sqlalchemy.orm.Query.filter") as mock_filter, patch(
+            "sqlalchemy.orm.Query.first"
+        ) as mock_first:
+            mock_filter.return_value.first.return_value = None
+            response = test_client.put(
+                "/todos/4545", json={"title": "Trying to update"}, headers=HEADER
+            )
+            assert response.status_code == 404
+            assert response.json()["detail"] == "Todo not found"
+            mock_filter.assert_called_once()
+
+    def test_update_todo_exception_500(self, _):
+        """Test that a user cannot get a todo item with invalid data."""
+        app_test.dependency_overrides = {verify_token: override_verify_token}
+
+        with patch("sqlalchemy.orm.Query.filter") as mock_filter, patch(
+            "sqlalchemy.orm.Query.first"
+        ) as mock_first:
+            mock_filter.return_value.first.side_effect = NoResultFound(
+                "Simulated error"
+            )
+            response = test_client.put(
+                "/todos/4545", json={"title": "Trying to update"}, headers=HEADER
+            )
             assert response.status_code == 500
             assert response.json()["detail"] == "Internal Server Error: Simulated error"
             mock_filter.assert_called_once()
