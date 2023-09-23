@@ -440,7 +440,18 @@ https://github.com/tiangolo/fastapi/issues/296
 - Linting done for all files created this week
 
 </details>
-"
+
+<details> 
+    <summary> Day 33: Sep 23</summary>
+
+`Time Spent : 120 minutes`
+
+- Delete and get todo by id integration and unit test complete
+- Other than PUT, all routes are complete
+
+</details>
+
+
 
 <details> 
     <summary> Day 0: Template</summary>

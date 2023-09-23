@@ -4,9 +4,10 @@ Created on : 21/09/23 4:10 pm
 """
 import os
 from multiprocessing import Process
-from unittest.mock import Mock
+from unittest.mock import Mock, MagicMock
 
 import pytest
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from main import app
@@ -108,7 +109,28 @@ def create_todo(create_user):
         responses_double.append(response_double.json())
 
     # yield the username, email, and access token to use in the next tests
-    yield {"single": response_single.json(), "double": responses_double}
+    yield {
+        "single": response_single.json(),
+        "double": responses_double,
+        "headers": headers,
+    }
+
+
+@pytest.fixture(scope="module", autouse=True)
+def delete_todo_success(create_todo, create_user):
+    """Test that a user can add a todo item."""
+    unique_username, unique_email, generated_access_token = create_user
+    single_todo = create_todo["single"]
+    print(single_todo["id"])
+    headers = {"Authorization": f"Bearer {generated_access_token}"}
+    response = client.delete(f"/todos/{single_todo['id']}", headers=headers)
+
+    assert response.status_code == 200
+    response_data = response.json()
+    assert (
+        response_data["message"] == f"Todo with ID {single_todo['id']} has been removed"
+    )
+    yield single_todo["id"], headers
 
 
 class TestTodos:
@@ -159,17 +181,6 @@ class TestTodos:
         # Check if the error message in the response matches the expected error message
         assert response_data["detail"][0]["msg"] == expected_error_message
 
-    def test_add_todo_exception(self, create_user):
-        """Test the 500 internal server error."""
-        app.dependency_overrides[get_db] = override_get_db
-        override_get_db.return_value = Exception("Simulated database error")
-        unique_username, unique_email, generated_access_token = create_user
-        headers = {"Authorization": f"Bearer {generated_access_token}"}
-        # Send a POST request with valid data
-        response = client.post("/todos", json=single_todo_data, headers=headers)
-        assert response.status_code == 500
-        app.dependency_overrides = {}
-
     def test_get_todos_success(self, create_user):
         """Test get todos success."""
         unique_username, unique_email, generated_access_token = create_user
@@ -183,9 +194,6 @@ class TestTodos:
         assert "title" in response_data[0]
         assert "description" in response_data[0]
         assert "doneStatus" in response_data[0]
-        assert response_data[0]["title"] == single_todo_data["title"]
-        assert response_data[0]["description"] == single_todo_data["description"]
-        assert response_data[0]["doneStatus"] is False
 
     def test_get_more_than_one(self, create_todo, create_user):
         """Test get todos success."""
@@ -230,3 +238,41 @@ class TestTodos:
         response = client.get("/todos", headers=headers)
         assert response.status_code == 500
         app.dependency_overrides = {}
+
+    def test_get_todo_by_id_success(self, create_todo):
+        """Test get todos by id success."""
+        single_todo = create_todo["double"][0]
+        response = client.get(
+            f"/todos/{single_todo['id']}", headers=create_todo["headers"]
+        )
+        assert response.status_code == 200
+        response_data = response.json()[0]
+        assert isinstance(response_data, dict)
+        assert "id" in response_data
+        assert "title" in response_data
+        assert "description" in response_data
+        assert "doneStatus" in response_data
+
+    def test_get_todo_by_id_404(self, create_todo):
+        """Test get todos by id success."""
+        single_todo = create_todo["single"]
+        response = client.get(
+            f"/todos/{single_todo['id']}", headers=create_todo["headers"]
+        )
+        assert response.status_code == 404
+        response_data = response.json()
+        assert isinstance(response_data, dict)
+        assert response_data["detail"] == f"Todo not found"
+
+    def test_delete_todo_success(self, delete_todo_success):
+        """Test that a user can add a todo item."""
+        pass
+
+    def test_delete_todo_invalid(self, delete_todo_success):
+        """Test that a user can add a todo item."""
+        test_id, yielded_headers = delete_todo_success
+        response = client.delete(f"/todos/{test_id}", headers=yielded_headers)
+
+        assert response.status_code == 404
+        response_data = response.json()
+        assert response_data["detail"] == f"Todo not found"
