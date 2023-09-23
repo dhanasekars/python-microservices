@@ -4,9 +4,21 @@ Created on : 18/09/23 5:03 pm
 """
 import unittest
 from datetime import timedelta, datetime
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, MagicMock
 
-from app.utils.access_token import create_access_token
+import pytest
+from fastapi import HTTPException
+from jose import JWTError
+from sqlalchemy.orm import Session
+
+from app.data.models import User
+from app.utils.access_token import create_access_token, verify_token
+
+
+@pytest.fixture(scope="module", autouse=True)
+def mock_db_session():
+    """Fixture to return a mock database session."""
+    return MagicMock(spec=Session)
 
 
 @patch("app.utils.access_token.jwt.encode")
@@ -15,6 +27,7 @@ from app.utils.access_token import create_access_token
     "app.utils.access_token.datetime",
     Mock(utcnow=Mock(return_value=datetime(2023, 9, 14, 12, 45, 51, 500))),
 )
+@patch("app.utils.access_token.ALGORITHM", "mocked_algorithm")
 class TestCreateAccessToken(unittest.TestCase):
     """Class to test create_access_token"""
 
@@ -40,7 +53,7 @@ class TestCreateAccessToken(unittest.TestCase):
                 "exp": datetime(2023, 9, 14, 12, 55, 51, 500),
             },
             "mocked_secret_key",
-            algorithm="HS256",
+            algorithm="mocked_algorithm",
         )
 
     def test_create_access_token_expired(self, mock_encode):
@@ -57,3 +70,70 @@ class TestCreateAccessToken(unittest.TestCase):
         # Ensure that the access_token is None or an empty string, indicating expiration
         self.assertIsNone(access_token)  # or self.assertEqual(access_token, "")
         self.assertTrue(mock_encode.called)
+
+
+class TestVerifyToken:
+    """Class to test verify_token"""
+
+    @patch("app.utils.access_token.jwt.decode")
+    @patch("app.utils.access_token.JWT_SECRET_KEY", "mocked_secret_key")
+    def test_valid_token(self, mock_decode, mock_db_session):
+        """Test that verify_token() returns the expected user."""
+        # Mock the behavior of jwt.decode
+        mock_decode.return_value = {"sub": "test_user"}
+
+        # Create a mock User object to return from the database query
+        mock_user = User(id=1, username="test_user")
+
+        # Mock the behavior of db_fixture.query(...).filter(...).first() to return the mock_user
+        mock_db_session.query.return_value.filter.return_value.first.return_value = (
+            mock_user
+        )
+
+        # Call the verify_token function
+        user = verify_token("fake_token", db=mock_db_session)
+
+        # Assert the result
+        assert isinstance(user, User)
+        assert user.username == "test_user"
+
+        # Verify that jwt.decode was called with the correct arguments
+        mock_decode.assert_called_once_with(
+            "fake_token", "mocked_secret_key", algorithms=["HS256"]
+        )
+
+    @patch("app.utils.access_token.jwt.decode")
+    def test_invalid_user_not_in_db(self, mock_decode, mock_db_session):
+        """Test that verify_token() raises an exception if the user is not in the database."""
+        mock_decode.return_value = {"sub": "test_user"}
+
+        # Create a mock User object to return from the database query
+        mock_user = User(id=1, username="test_user")
+
+        # Mock the behavior of db_fixture.query(...).filter(...).first() to return the mock_user
+        mock_db_session.query.return_value.filter.return_value.first.return_value = None
+
+        with pytest.raises(HTTPException) as context:
+            verify_token("invalid_token", db=mock_db_session)
+        assert context.value.status_code == 401
+        assert context.value.detail == "Could not validate credentials"
+
+    @patch("app.utils.access_token.jwt.decode")
+    def test_invalid_username_none_in_token(self, mock_decode, mock_db_session):
+        """Test that verify_token() raises an exception if the username is None in the token."""
+        mock_decode.return_value = {"sub": None}
+
+        with pytest.raises(HTTPException) as context:
+            verify_token("invalid_token", db=mock_db_session)
+        assert context.value.status_code == 401
+        assert context.value.detail == "Could not validate credentials"
+
+    @patch("app.utils.access_token.jwt.decode")
+    def test_jwt_error(self, mock_decode, mock_db_session):
+        """Test that verify_token() raises an exception if the username is None in the token."""
+        mock_decode.side_effect = JWTError("JWTError")
+
+        with pytest.raises(HTTPException) as context:
+            verify_token("invalid_token", db=mock_db_session)
+        assert context.value.status_code == 401
+        assert context.value.detail == "Could not validate credentials"

@@ -5,20 +5,21 @@ Created on : 18/09/23 4:53 pm
 import os
 from datetime import datetime, timedelta
 
+from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.orm import Session
 from starlette.status import HTTP_401_UNAUTHORIZED
 
-from app.data.models import TokenData
+from app.data.models import User
+from app.data.setup import get_db
 from app.utils.config_manager import config_manager
 
 config_manager.get_secrets()
 # Configure JWT settings
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = "HS256"
-# Token expiration time (minutes)
 
 # Create an instance of the token security class
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -38,28 +39,28 @@ def create_access_token(data: dict, expires_delta: timedelta):
 
 
 # Function to verify the password
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+# def verify_password(plain_password, hashed_password):
+#     """Verify the password against the hashed password."""
+#     return pwd_context.verify(plain_password, hashed_password)
 
 
-# Function to get the user from the database (you'll need to implement this)
-def get_user(db, username: str):
-    # Replace with your database query logic
-    return None
+# def get_user(db_fixture, username: str):
+#     """Get a user from the database."""
+#     return db_fixture, username
+#
+#
+# def authenticate_user(db_fixture, username: str, password: str):
+#     """Authenticate a user and return user details."""
+#     user = get_user(db_fixture, username)
+#     if not user:
+#         return None
+#     if not verify_password(password, user.password):
+#         return None
+#     return user
 
 
-# Function to authenticate a user and return user details
-def authenticate_user(db, username: str, password: str):
-    user = get_user(db, username)
-    if not user:
-        return None
-    if not verify_password(password, user.password):
-        return None
-    return user
-
-
-# Function to get the current user from the token
-def get_current_user(token: str = Depends(oauth2_scheme)):
+def verify_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    """Get the current user from the access token."""
     credentials_exception = HTTPException(
         status_code=HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -70,7 +71,9 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        user = db.query(User).filter(User.username == username).first()
+        if user is None:
+            raise credentials_exception
     except JWTError:
         raise credentials_exception
-    return token_data.username
+    return user

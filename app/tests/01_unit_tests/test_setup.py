@@ -3,8 +3,7 @@ Created on : 14/09/23 9:12 am
 @author : ds  
 """
 import unittest
-from unittest.mock import patch, MagicMock, Mock
-from datetime import datetime, timedelta
+from unittest.mock import patch, MagicMock
 
 from fastapi import HTTPException
 from app.data.setup import (

@@ -88,7 +88,7 @@ class TodoItem(BaseModel):
 class ReturnTodo(TodoItem):
     """extending TodoItem class with UUID"""
 
-    id: str
+    id: int
 
 
 class UpdateTodo(BaseModel):
@@ -111,7 +111,7 @@ class UpdateTodo(BaseModel):
         return values
 
 
-class TokenData:
+class TokenData(BaseModel):
     """Pydantic model for token data"""
 
-    username: str = None
+    username: str
