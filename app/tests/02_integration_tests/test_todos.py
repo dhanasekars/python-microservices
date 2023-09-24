@@ -28,6 +28,12 @@ single_todo_data = {
     "description": "Created during Integration Tests.",
 }
 
+update_todo_data = {
+    "title": "Integration Test 1 Updated",
+    "description": "Updated during Integration Tests.",
+    "doneStatus": True,
+}
+
 # Test data for creating two todos
 double_todo_data = [
     {"title": "Integration Test 2", "description": "Created during Integration Tests."},
@@ -199,7 +205,6 @@ class TestTodos:
         """Test get todos success."""
         unique_username, unique_email, generated_access_token = create_user
         double_todos = create_todo["double"]
-        print(double_todos)
         headers = {"Authorization": f"Bearer {generated_access_token}"}
         response = client.get("/todos?page=1&per_page=2", headers=headers)
 
@@ -275,4 +280,31 @@ class TestTodos:
 
         assert response.status_code == 404
         response_data = response.json()
+        assert response_data["detail"] == f"Todo not found"
+
+    def test_update_todo_success(self, create_todo):
+        """Test that a user can add a todo item."""
+        single_todo = create_todo["double"][1]
+        response = client.put(
+            f"/todos/{single_todo['id']}",
+            json=update_todo_data,
+            headers=create_todo["headers"],
+        )
+        assert response.status_code == 200
+        response_data = response.json()
+        assert response_data[0]["title"] == update_todo_data["title"]
+        assert response_data[0]["description"] == update_todo_data["description"]
+        assert response_data[0]["doneStatus"] == update_todo_data["doneStatus"]
+
+    def test_update_todo_by_id_404(self, create_todo):
+        """Test get todos by id success."""
+        single_todo = create_todo["single"]
+        response = client.put(
+            f"/todos/{single_todo['id']}",
+            json=update_todo_data,
+            headers=create_todo["headers"],
+        )
+        assert response.status_code == 404
+        response_data = response.json()
+        assert isinstance(response_data, dict)
         assert response_data["detail"] == f"Todo not found"

@@ -22,6 +22,7 @@ from app.data.models import (
     RegistrationRequest,
     User,
     Todo,
+    UpdateTodo,
 )
 from app.data.setup import get_db
 from app.utils.custom_exceptions import InvalidQueryParameter
@@ -72,7 +73,10 @@ async def add_todo(
         logging.debug("Adding a new todo item")
         # Create a new Todo object and associate it with the current user
         new_todo = Todo(
-            title=todo.title, description=todo.description, owner=current_user
+            title=todo.title,
+            description=todo.description,
+            owner=current_user,
+            doneStatus=todo.doneStatus,
         )
 
         # Add the new todo to the database
@@ -85,7 +89,7 @@ async def add_todo(
             id=new_todo.id,
             title=new_todo.title,
             description=new_todo.description,
-            doneStatus=new_todo.status,
+            doneStatus=new_todo.doneStatus,
         )
 
         return return_todo
@@ -169,6 +173,58 @@ async def delete_todo(
 
         # Return a success response
         return {"message": f"Todo with ID {todo_id} has been removed"}
+    except HTTPException as http_exc:
+        # Re-raise the HTTPException to ensure FastAPI handles it
+        raise http_exc
+
+    except Exception as err:
+        # Handle any other exceptions and return a 500 Internal Server Error
+        error_message = f"Internal Server Error: {err}"
+        logging.error(error_message)
+        raise HTTPException(status_code=500, detail=error_message)
+
+
+@router.put("/todos/{todo_id}", response_model=List[ReturnTodo])
+async def update_todo(
+    todo_id: int,
+    update_data: UpdateTodo,
+    current_user: User = Depends(verify_token),
+    db: Session = Depends(get_db),
+):
+    """Update a todo item by ID"""
+    try:
+        # Query the database to find the todo item
+        todo = (
+            db.query(Todo)
+            .filter(Todo.id == todo_id, Todo.owner_id == current_user.id)
+            .first()
+        )
+
+        if not todo:
+            # If the todo item is not found, raise a 404 Not Found exception
+            raise HTTPException(status_code=404, detail="Todo not found")
+
+        # Update the todo item with the provided data
+        if update_data.title is not None:
+            todo.title = update_data.title
+        if update_data.description is not None:
+            todo.description = update_data.description
+        if update_data.doneStatus is not None:
+            todo.doneStatus = update_data.doneStatus
+
+        db.commit()
+
+        # Refresh and Return the updated todo
+        db.refresh(todo)
+        return_todo = ReturnTodo(
+            id=todo.id,
+            title=todo.title,
+            description=todo.description,
+            doneStatus=todo.doneStatus,
+        )
+
+        return [return_todo]
+
     except HTTPException as http_exc:
         # Re-raise the HTTPException to ensure FastAPI handles it
         raise http_exc
