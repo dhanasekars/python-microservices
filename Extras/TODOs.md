@@ -19,6 +19,7 @@
   - [x] Update all functions to use db connection
   - [x] Set up a Docker container for db server
 - [ ] Configure environments to run integrationtest locally with local db and in Git actions with docker db
+- [ ] Move main.py inside /app folder
 - [x] - Run unit tests in parallel, measure current execution time before moving to parallel execution. 
         used pytest-xdist plugin - 57 tests took 3.73s and with 3 workers it took 2.88s. 
 - [x] Authentication
