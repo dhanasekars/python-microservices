@@ -215,3 +215,5 @@ pyrightconfig.json
 log/*.*
 /app/secrets/secrets.env
 logfile
+/secrets.env
+/docker.env

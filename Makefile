@@ -72,3 +72,9 @@ stoppg:
 
 restartpg:
 	brew services restart postgresql@15
+
+dcup:
+	docker-compose --env-file app/secrets/secrets.env up
+
+dcdown:
+	docker-compose down

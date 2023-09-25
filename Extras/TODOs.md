@@ -17,12 +17,13 @@
   - [x] test_todo.py tests fail if the db server is not running, fix it
   - [x] Integration test for registration
   - [x] Update all functions to use db connection
-  - [ ] Set up a Docker container for db server
-  - [ ] Make integration tests to run in Git actions by creating a db server in Git actions
+  - [x] Set up a Docker container for db server
+- [ ] Configure environments to run integrationtest locally with local db and in Git actions with docker db
 - [x] - Run unit tests in parallel, measure current execution time before moving to parallel execution. 
         used pytest-xdist plugin - 57 tests took 3.73s and with 3 workers it took 2.88s. 
 - [x] Authentication
 - [x] Update the test fixture @generateUDID 
+- [ ] Database backup using pg_dump and pg_restore
 - [ ] Tracking and limiting usage 
 - [ ] Have an error message json
 - [ ] Host it in cloud
@@ -444,7 +445,7 @@ Have to focus on unit tests tomorrow.
 
 - Get and post route completed
 - Unit tests added for access_token modules
-- :thumsdown: Not able to mock get / post FastAPI Depends
+- :thumsdown: Not able to mock get / post FastAPI "Depends"
 https://github.com/tiangolo/fastapi/issues/296
 
 </details>
@@ -476,6 +477,19 @@ https://github.com/tiangolo/fastapi/issues/296
 
 - Delete and get todo by id integration and unit test complete
 - PUT route, integration and unit test complete
+
+</details>
+
+
+<details> 
+    <summary> Day 34: Sep 25</summary>
+
+`Time Spent : 180 minutes`
+
+- Created docker for Posgres db
+- Docker for nginx
+  - Acts as reverse proxy and load balancer
+- Docker compose for both
 
 </details>
 

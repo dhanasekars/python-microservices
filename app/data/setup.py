@@ -4,12 +4,16 @@ Created on : 09/09/23 6:02 pm
 """
 import os
 import logging
+from sqlite3 import IntegrityError
+
 from dotenv import load_dotenv
 
 from fastapi import HTTPException
+from sqlalchemy.exc import ProgrammingError
 from sqlalchemy_utils import create_database, database_exists
 from sqlalchemy import (
     create_engine,
+    text,
 )
 from sqlalchemy.orm import sessionmaker
 
@@ -25,12 +29,12 @@ script_directory = os.path.dirname(__file__)
 dotenv_path = os.path.join(script_directory, "..", "secrets", "secrets.env")
 load_dotenv(dotenv_path)
 
-db_user = os.getenv("DB_USER")
-db_password = os.getenv("DB_PASSWORD")
-db_host = os.getenv("DB_HOST")
-db_port = os.getenv("DB_PORT")
-db_name = os.getenv("DB_NAME")
-db_schema = os.getenv("DB_SCHEMA", "public")
+db_user = os.getenv("TODOLIST_ADMIN")
+db_password = os.getenv("TODO_ADMIN_PASSWORD")
+db_host = os.getenv("POSTGRES_HOST")
+db_port = os.getenv("POSTGRES_PORT")
+db_name = os.getenv("TODOLIST_DB")
+db_schema = os.getenv("POSTGRES_SCHEMA", "public")
 
 
 # Create the database engine
