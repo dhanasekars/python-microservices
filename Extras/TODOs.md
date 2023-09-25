@@ -10,7 +10,7 @@
 - [x] Restructure project
 - [x] Containerization  
 - [x] Establish CI/CD in - Git Actions
-- [ ] Move data store from json to db
+- [x] Move data store from json to db
   - [x] Create a db connection
   - [x] Create a db tables
   - [x] Create a db connection pool
@@ -18,19 +18,22 @@
   - [x] Integration test for registration
   - [x] Update all functions to use db connection
   - [x] Set up a Docker container for db server
-- [ ] Configure environments to run integrationtest locally with local db and in Git actions with docker db
-- [ ] Move main.py inside /app folder
+- [ ] Restructure : v2 
+    - [ ] Configure environments to run integrationtest locally with local db and in Git actions with docker db
+    - [ ] Means moving secrets folder outside the app folder and creating more than one environment file
+    - [ ] Move main.py inside /app folder
 - [x] - Run unit tests in parallel, measure current execution time before moving to parallel execution. 
         used pytest-xdist plugin - 57 tests took 3.73s and with 3 workers it took 2.88s. 
 - [x] Authentication
 - [x] Update the test fixture @generateUDID 
+- [ ] Create admin API - to activate, de-active, delete users. 
 - [ ] Database backup using pg_dump and pg_restore
 - [ ] Tracking and limiting usage 
 - [ ] Have an error message json
 - [ ] Host it in cloud
 - [ ] Add release notes
 - [ ] Maintain release version numbers
-- 
+
 ## Later
 
 - [ ] Connect to more than one type of DB and test ( Postgres, MySQL, SQLite)
@@ -38,8 +41,6 @@
 - [ ] Generate total time spent for this project from README.md
 - [x] Fix all lint issues
 - [ ] Explore Fire
-- [ ] Confirm schema for db by passing the schema name in secrets.env
-- [ ] Create admin API - to activate, de-active, delete users. 
 - [ ] Reqover coverage
 - [ ] Explore query builder 
 
