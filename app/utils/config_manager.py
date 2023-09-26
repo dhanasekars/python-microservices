@@ -81,7 +81,7 @@ class ConfigurationManager:
             raise ValueError(
                 "Invalid or unspecified environment. Set MY_ENVIRONMENT to 'local' or 'docker'."
             )
-            
+
         script_directory = os.path.dirname(__file__)
         # Construct the path to the environment-specific .env file
         dotenv_path = os.path.join(script_directory, "..", "secrets", dotenv_file)
