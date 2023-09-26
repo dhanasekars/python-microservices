@@ -73,17 +73,15 @@ class ConfigurationManager:
     def get_secrets(self):
         """Load the secrets from the environment-specific .env file"""
         environment = os.environ.get("MY_ENVIRONMENT")
-        if "GITHUB_ACTIONS" not in os.environ:
-    
-            if environment == "local":
-                dotenv_file = ".env.local"
-            elif environment == "docker":
-                dotenv_file = ".env.docker"
-            else:
-                raise ValueError(
-                    "Invalid or unspecified environment. Set MY_ENVIRONMENT to 'local' or 'docker'."
-                )
-
+        if environment == "local":
+            dotenv_file = ".env.local"
+        elif environment == "docker" or "GITHUB_ACTIONS" in os.environ:
+            dotenv_file = ".env.docker"
+        else:
+            raise ValueError(
+                "Invalid or unspecified environment. Set MY_ENVIRONMENT to 'local' or 'docker'."
+            )
+            
         script_directory = os.path.dirname(__file__)
         # Construct the path to the environment-specific .env file
         dotenv_path = os.path.join(script_directory, "..", "secrets", dotenv_file)
