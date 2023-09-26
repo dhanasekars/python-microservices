@@ -23,7 +23,7 @@ integrationtests:
 	poetry run python -m pytest --cov=app --cov-report=term-missing app/tests/02_integration_tests
 
 
-alltests: unittests integrationtests
+alltests: setlocal unittests integrationtests
 
 
 git:
@@ -74,7 +74,10 @@ restartpg:
 	brew services restart postgresql@15
 
 dcup:
-	docker-compose --env-file app/secrets/secrets.env up
+	docker-compose --env-file app/secrets/.env.docker up
 
 dcdown:
 	docker-compose down
+
+setlocal:
+	export MY_ENVIRONMENT=local

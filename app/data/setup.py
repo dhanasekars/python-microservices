@@ -4,17 +4,12 @@ Created on : 09/09/23 6:02 pm
 """
 import os
 import logging
-from sqlite3 import IntegrityError
 
 from dotenv import load_dotenv
 
 from fastapi import HTTPException
-from sqlalchemy.exc import ProgrammingError
 from sqlalchemy_utils import create_database, database_exists
-from sqlalchemy import (
-    create_engine,
-    text,
-)
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.data.models import Base
@@ -23,11 +18,7 @@ from app.utils.config_manager import config_manager
 
 config_manager.configure_logging()
 # Get the directory containing your script (data folder)
-script_directory = os.path.dirname(__file__)
-
-# Construct the path to the secrets.env file relative to your script's location
-dotenv_path = os.path.join(script_directory, "..", "secrets", "secrets.env")
-load_dotenv(dotenv_path)
+config_manager.get_secrets()
 
 db_user = os.getenv("TODOLIST_ADMIN")
 db_password = os.getenv("TODO_ADMIN_PASSWORD")

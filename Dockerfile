@@ -19,6 +19,7 @@ RUN poetry install
 COPY /app/ /app/app
 COPY main.py /app
 
+
 # Run unittest
 CMD ["make", "alltests"]
 

@@ -6,14 +6,13 @@ services:
     container_name: todo-postgres
     user: postgres
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - MY_ENVIRONMENT=docker
 
     volumes:
-      - ./app/secrets:/run/secrets
+      - ./app/secrets/.env.docker:/run/secrets/.env.docker
       - ./setup-env.sh:/docker-entrypoint-initdb.d/setup-env.sh
-
     env_file:
-      - app/secrets/secrets.env
+      - app/secrets/.env.docker
 
     ports:
       - "${POSTGRES_PORT}:5432"
@@ -29,6 +28,11 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: fastapi-app
+    env_file:
+      - ./app/secrets/.env.docker
+    environment:
+      - MY_ENVIRONMENT=docker
+
     depends_on:
       - postgres
 
