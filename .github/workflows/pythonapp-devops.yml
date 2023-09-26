@@ -62,21 +62,12 @@
               poetry --version
 
           #----------------------------------------------
-          #  -----  run unit and integration tests  -----
+          #  -----  run unit tests  -----
           #----------------------------------------------
         - name: Run unit tests
-          env:
-            TODOLIST_ADMIN: ${{ secrets.DB_USER }}
-            POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-            TODO_ADMIN_PASSWORD: ${{ secrets.TODO_ADMIN_PASSWORD }}
-            TODOLIST_DB: ${{ secrets.DB_NAME }}
-            POSTGRES_PORT: ${{ secrets.DB_PORT }}
-            POSTGRES_HOST: postgres
-            JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
-            TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
           run: |
             cd app
-            poetry run python -m pytest --cov --cov-report=term-missing app/tests/01_unit_tests
+            poetry run python -m pytest --cov --cov-report=term-missing tests/01_unit_tests
 
         #----------------------------------------------
         # ----- Run SQL script to create database -----
