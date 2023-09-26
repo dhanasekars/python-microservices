@@ -21,7 +21,14 @@
             - 5432:5432
           options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
+
+    # Add other environment variables here
+
       steps:
+        - name: Debug Environment Variables
+          run: |
+            echo "MY_ENVIRONMENT: $MY_ENVIRONMENT"
+            echo "DB_USER: $DB_USER"
         - name: Set up Python 3.10
           uses: actions/setup-python@v1
           with:
