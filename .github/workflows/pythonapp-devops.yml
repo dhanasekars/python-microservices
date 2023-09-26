@@ -75,6 +75,7 @@
             JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
             TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
           run: |
+            cd app
             poetry run python -m pytest --cov --cov-report=term-missing app/tests/01_unit_tests
 
         #----------------------------------------------
