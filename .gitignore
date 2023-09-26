@@ -217,6 +217,7 @@ log/*.*
 logfile
 /secrets.env
 /docker.env
-endtoend.md
+Extras/endtoend.md
 /app/secrets/.env.docker
 /app/secrets/.env.local
+/.app/

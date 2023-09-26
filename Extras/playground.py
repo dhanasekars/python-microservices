@@ -4,7 +4,15 @@ Created on : 26/08/23 6:15 pm
 """
 
 import logging
-from pydantic import BaseModel, Field, constr, model_validator, ValidationError, field_validator, EmailStr
+from pydantic import (
+    BaseModel,
+    Field,
+    constr,
+    model_validator,
+    ValidationError,
+    field_validator,
+    EmailStr,
+)
 from typing import Optional, List
 
 # import uuid
@@ -97,8 +105,8 @@ class RegistrationRequest(BaseModel):
     username: constr(min_length=8, strip_whitespace=True)
     email: EmailStr
     password: constr(
-        min_length=8,
-        strip_whitespace=True)  # At least 1 uppercase letter and 1 digit
+        min_length=8, strip_whitespace=True
+    )  # At least 1 uppercase letter and 1 digit
 
     @field_validator("password")
     def validate_password_format(cls, value):
@@ -112,6 +120,8 @@ class RegistrationRequest(BaseModel):
 
 
 try:
-    output = RegistrationRequest(username="asekars", email="dhanasekars@gmail.com", password="12A345678")
+    output = RegistrationRequest(
+        username="asekars", email="dhanasekars@gmail.com", password="12A345678"
+    )
 except ValidationError as e:
     print(e)

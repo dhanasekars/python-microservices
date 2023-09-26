@@ -18,18 +18,16 @@
   - [x] Integration test for registration
   - [x] Update all functions to use db connection
   - [x] Set up a Docker container for db server
-- [ ] Restructure : v2 
-    - [ ] Configure environments to run integrationtest locally with local db and in Git actions with docker db
-    - [ ] Means moving secrets folder outside the app folder and creating more than one environment file
-    - [ ] Move main.py inside /app folder
+- [x] Restructure : v2 
+    - [x] Means moving secrets folder outside the app folder and creating more than one environment file
+    - [x] Move main.py inside /app folder
 - [x] - Run unit tests in parallel, measure current execution time before moving to parallel execution. 
         used pytest-xdist plugin - 57 tests took 3.73s and with 3 workers it took 2.88s. 
 - [x] Authentication
-- [x] Update the test fixture @generateUDID 
-- [ ] Create admin API - to activate, de-active, delete users. 
+- [x] Update the test fixture @generateUDID
+- [ ] Configure environments to run in Git actions
+- [ ] Endpoint to renew access token
 - [ ] Database backup using pg_dump and pg_restore
-- [ ] Tracking and limiting usage 
-- [ ] Have an error message json
 - [ ] Host it in cloud
 - [ ] Add release notes
 - [ ] Maintain release version numbers
@@ -37,6 +35,9 @@
 ## Later
 
 - [ ] Connect to more than one type of DB and test ( Postgres, MySQL, SQLite)
+- [ ] Create admin API - to activate, de-active, delete users. 
+- [ ] Tracking and limiting usage 
+- [ ] Have an error message json file
 - [ ] Head, Options, Patch and Trace
 - [ ] Generate total time spent for this project from README.md
 - [x] Fix all lint issues
@@ -49,8 +50,6 @@
 
 
 ## Progress
-
-# Progress
 
 <details>
     <summary>Day 1 : Aug 18  </summary>
@@ -492,6 +491,16 @@ https://github.com/tiangolo/fastapi/issues/296
 - Docker for nginx
   - Acts as reverse proxy and load balancer
 - Docker compose for both
+
+</details>
+
+<details> 
+    <summary> Day 35: Sep 26</summary>
+
+`Time Spent : 180 minutes`
+
+- Restructured project to separate python from other files.
+- Resulting in restructuring of docker files
 
 </details>
 

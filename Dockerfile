@@ -10,15 +10,13 @@ ENV PATH="/root/.local/bin:$PATH"
 RUN poetry --version
 
 WORKDIR /app
-COPY poetry.lock pyproject.toml Makefile /app/
+COPY poetry.lock pyproject.toml /app/
 
 # Install dependencies
 RUN poetry install
 
 # Creating folders, and files for a project:
-COPY /app/ /app/app
-COPY main.py /app
-
+COPY ./app /app/
 
 # Run unittest
 CMD ["make", "alltests"]

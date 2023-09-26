@@ -39,7 +39,7 @@ services:
   nginx:
     build:
       context: ./nginx
-    container_name: microservices-nginx
+    container_name: todo-nginx
     ports:
       - "80:80"
     depends_on:
