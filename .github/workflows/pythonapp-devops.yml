@@ -13,11 +13,15 @@
           env:
             POSTGRES_USER: ${{ secrets.DB_USER }}
             POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-            POSTGRES_DB: ${{ secrets.DB_NAME }}
+            TODOLIST_DB: ${{ secrets.DB_NAME }}
             POSTGRES_PORT: ${{ secrets.DB_PORT }}
+            POSTGRES_HOST: postgres
+
+
           ports:
             - 5432:5432
           options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+          command: [ "./setup-env.sh" ]
 
       steps:
         - name: Set up Python 3.10
@@ -65,11 +69,14 @@
           #----------------------------------------------
         - name: Run unit tests
           env:
-            DB_USER: ${{ secrets.DB_USER }}
-            DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-            DB_NAME: ${{ secrets.DB_NAME }}
-            DB_PORT: ${{ secrets.DB_PORT }}
+            TODOLIST_ADMIN: ${{ secrets.DB_USER }}
+            POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+            TODO_ADMIN_PASSWORD: ${{ secrets.TODO_ADMIN_PASSWORD }}
+            TODOLIST_DB: ${{ secrets.DB_NAME }}
+            POSTGRES_PORT: ${{ secrets.DB_PORT }}
+            POSTGRES_HOST: postgres
             JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
+            TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
           run: |
             python -m pytest --cov=app/apis --cov=app/utils --cov=app/data  app/tests/01_unit_tests
 

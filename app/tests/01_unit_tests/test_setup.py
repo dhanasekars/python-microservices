@@ -6,21 +6,21 @@ import unittest
 from unittest.mock import patch, MagicMock
 
 from fastapi import HTTPException
-from app.data.setup import (
+from data.setup import (
     connect_to_database,
     create_tables,
     get_db,
     db_name,
 )
-from app.data.models import User
+from data.models import User
 
 
 class TestDBConnection(unittest.TestCase):
     """class to test database connection connect_to_database()"""
 
-    @patch("app.data.setup.database_exists")
-    @patch("app.data.setup.create_database")
-    @patch("app.data.setup.logging.info")
+    @patch("data.setup.database_exists")
+    @patch("data.setup.create_database")
+    @patch("data.setup.logging.info")
     def test_connect_to_database_creates_database_if_it_doesnt_exist(
         self, mock_logging_info, mock_create_database, mock_database_exists
     ):
@@ -41,9 +41,9 @@ class TestDBConnection(unittest.TestCase):
             f"Database '{db_name}' created successfully."
         )
 
-    @patch("app.data.setup.database_exists")
-    @patch("app.data.setup.create_database")
-    @patch("app.data.setup.logging.info")
+    @patch("data.setup.database_exists")
+    @patch("data.setup.create_database")
+    @patch("data.setup.logging.info")
     def test_connect_to_database_does_not_create_database_if_it_already_exists(
         self, mock_logging_info, mock_create_database, mock_database_exists
     ):
@@ -64,9 +64,9 @@ class TestDBConnection(unittest.TestCase):
             f"Database '{db_name}' already exists."
         )
 
-    @patch("app.data.setup.database_exists")
-    @patch("app.data.setup.create_database")
-    @patch("app.data.setup.logging.error")
+    @patch("data.setup.database_exists")
+    @patch("data.setup.create_database")
+    @patch("data.setup.logging.error")
     def test_connect_to_database_handles_exception(
         self, mock_logging_error, mock_create_database, mock_database_exists
     ):
@@ -169,13 +169,13 @@ class TestUserPasswordVerification(unittest.TestCase):
 class TestCreateTable(unittest.TestCase):
     """Class to test create_tables"""
 
-    @patch("app.data.setup.Base.metadata.create_all")
+    @patch("data.setup.Base.metadata.create_all")
     def test_create_tables(self, mock_create_all):
         """Test that create_tables() calls Base.metadata.create_all()"""
         create_tables(db_engine=MagicMock())
         mock_create_all.assert_called_once()
 
-    @patch("app.data.setup.Base.metadata.create_all")
+    @patch("data.setup.Base.metadata.create_all")
     def test_create_tables_handles_exception(self, mock_create_all):
         """Test that create_tables() handles an exception."""
         mock_create_all.side_effect = Exception("Failed to create tables")
@@ -187,7 +187,7 @@ class TestCreateTable(unittest.TestCase):
 class TestGetDB(unittest.TestCase):
     """Class to test get_db"""
 
-    @patch("app.data.setup.SessionLocal")
+    @patch("data.setup.SessionLocal")
     def test_get_db(self, mock_session_local):
         """Test that get_db() returns the expected session."""
         mock_session = MagicMock()

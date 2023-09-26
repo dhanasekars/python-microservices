@@ -11,9 +11,9 @@ from jose import jwt, JWTError
 from fastapi.testclient import TestClient
 from main import app
 
-from app.utils.access_token import JWT_SECRET_KEY, ALGORITHM
-from app.utils.helper import generate_id
-from app.utils.config_manager import config_manager
+from utils.access_token import JWT_SECRET_KEY, ALGORITHM
+from utils.helper import generate_id
+from utils.config_manager import config_manager
 
 client = TestClient(app)
 config_manager.get_secrets()

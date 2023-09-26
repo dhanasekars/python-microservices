@@ -4,16 +4,15 @@ Created on : 21/09/23 4:10 pm
 """
 import os
 from multiprocessing import Process
-from unittest.mock import Mock, MagicMock
+from unittest.mock import Mock
 
 import pytest
-from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from main import app
-from app.data.setup import get_db
-from app.utils.helper import generate_id
-from app.utils.config_manager import config_manager
+from data.setup import get_db
+from utils.helper import generate_id
+from utils.config_manager import config_manager
 
 client = TestClient(app)
 config_manager.get_secrets()
@@ -127,7 +126,6 @@ def delete_todo_success(create_todo, create_user):
     """Test that a user can add a todo item."""
     unique_username, unique_email, generated_access_token = create_user
     single_todo = create_todo["single"]
-    print(single_todo["id"])
     headers = {"Authorization": f"Bearer {generated_access_token}"}
     response = client.delete(f"/todos/{single_todo['id']}", headers=headers)
 
@@ -267,7 +265,7 @@ class TestTodos:
         assert response.status_code == 404
         response_data = response.json()
         assert isinstance(response_data, dict)
-        assert response_data["detail"] == f"Todo not found"
+        assert response_data["detail"] == "Todo not found"
 
     def test_delete_todo_success(self, delete_todo_success):
         """Test that a user can add a todo item."""
@@ -280,7 +278,7 @@ class TestTodos:
 
         assert response.status_code == 404
         response_data = response.json()
-        assert response_data["detail"] == f"Todo not found"
+        assert response_data["detail"] == "Todo not found"
 
     def test_update_todo_success(self, create_todo):
         """Test that a user can add a todo item."""
@@ -307,4 +305,4 @@ class TestTodos:
         assert response.status_code == 404
         response_data = response.json()
         assert isinstance(response_data, dict)
-        assert response_data["detail"] == f"Todo not found"
+        assert response_data["detail"] == "Todo not found"

@@ -10,34 +10,38 @@
 - [x] Restructure project
 - [x] Containerization  
 - [x] Establish CI/CD in - Git Actions
-- [ ] Move data store from json to db
+- [x] Move data store from json to db
   - [x] Create a db connection
   - [x] Create a db tables
   - [x] Create a db connection pool
   - [x] test_todo.py tests fail if the db server is not running, fix it
   - [x] Integration test for registration
   - [x] Update all functions to use db connection
-  - [ ] Set up a Docker container for db server
-  - [ ] Make integration tests to run in Git actions by creating a db server in Git actions
+  - [x] Set up a Docker container for db server
+- [x] Restructure : v2 
+    - [x] Means moving secrets folder outside the app folder and creating more than one environment file
+    - [x] Move main.py inside /app folder
 - [x] - Run unit tests in parallel, measure current execution time before moving to parallel execution. 
         used pytest-xdist plugin - 57 tests took 3.73s and with 3 workers it took 2.88s. 
 - [x] Authentication
-- [x] Update the test fixture @generateUDID 
-- [ ] Tracking and limiting usage 
-- [ ] Have an error message json
+- [x] Update the test fixture @generateUDID
+- [ ] Configure environments to run in Git actions
+- [ ] Endpoint to renew access token
+- [ ] Database backup using pg_dump and pg_restore
 - [ ] Host it in cloud
 - [ ] Add release notes
 - [ ] Maintain release version numbers
-- 
+
 ## Later
 
 - [ ] Connect to more than one type of DB and test ( Postgres, MySQL, SQLite)
+- [ ] Create admin API - to activate, de-active, delete users. 
+- [ ] Tracking and limiting usage 
+- [ ] Have an error message json file
 - [ ] Head, Options, Patch and Trace
 - [ ] Generate total time spent for this project from README.md
 - [x] Fix all lint issues
 - [ ] Explore Fire
-- [ ] Confirm schema for db by passing the schema name in secrets.env
-- [ ] Create admin API - to activate, de-active, delete users. 
 - [ ] Reqover coverage
 - [ ] Explore query builder 
 
@@ -46,8 +50,6 @@
 
 
 ## Progress
-
-# Progress
 
 <details>
     <summary>Day 1 : Aug 18  </summary>
@@ -444,7 +446,7 @@ Have to focus on unit tests tomorrow.
 
 - Get and post route completed
 - Unit tests added for access_token modules
-- :thumsdown: Not able to mock get / post FastAPI Depends
+- :thumsdown: Not able to mock get / post FastAPI "Depends"
 https://github.com/tiangolo/fastapi/issues/296
 
 </details>
@@ -476,6 +478,29 @@ https://github.com/tiangolo/fastapi/issues/296
 
 - Delete and get todo by id integration and unit test complete
 - PUT route, integration and unit test complete
+
+</details>
+
+
+<details> 
+    <summary> Day 34: Sep 25</summary>
+
+`Time Spent : 180 minutes`
+
+- Created docker for Posgres db
+- Docker for nginx
+  - Acts as reverse proxy and load balancer
+- Docker compose for both
+
+</details>
+
+<details> 
+    <summary> Day 35: Sep 26</summary>
+
+`Time Spent : 180 minutes`
+
+- Restructured project to separate python from other files.
+- Resulting in restructuring of docker files
 
 </details>
 

@@ -8,32 +8,17 @@ install:
 
 format:
 	#format code
-	black *.py app/../*.py
+	black app/../
 
 lint:
 	#flake8 or #pylint
 	pylint -j 4 --rcfile=pylint.rc app/
-
-unittests:
-	# Run all unittests
-	poetry run python -m pytest --cov=app  --cov-report=term-missing app/tests/01_unit_tests
-
-integrationtests:
-	# Run all integration tests
-	poetry run python -m pytest --cov=app --cov-report=term-missing app/tests/02_integration_tests
-
-
-alltests: unittests integrationtests
-
 
 git:
 	#git push
 	git add .
 	git commit -m "$(MSG)"
 	git push origin working-tree
-
-start:
-	uvicorn main:app --reload
 
 clean_cache:
 	#clearing all pytest cache
@@ -50,8 +35,6 @@ deletelog:
 source:
 	source ~/.zshrc
 
-routine: deletelog clean_cache restartpg alltests clean_cache git
-
 check: format lint
 
 listvenv:
@@ -61,9 +44,6 @@ docker_build:
 	docker pull dhanasekars/my-todos:latest
 	docker run -p 80:8000 my-todos
 
-hardstart:
-	poetry run python main.py
-
 startpg:
 	brew services start postgresql@15
 
@@ -72,3 +52,10 @@ stoppg:
 
 restartpg:
 	brew services restart postgresql@15
+
+dcup:
+	docker-compose --env-file app/secrets/.env.docker up
+
+dcdown:
+	docker-compose down
+

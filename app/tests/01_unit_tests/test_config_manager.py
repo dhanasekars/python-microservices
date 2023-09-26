@@ -5,7 +5,7 @@ Created on : 18/09/23 10:34 am
 import json
 import unittest
 from unittest.mock import patch, mock_open
-from app.utils.config_manager import ConfigurationManager
+from utils.config_manager import ConfigurationManager
 
 
 class TestConfigLoader(unittest.TestCase):

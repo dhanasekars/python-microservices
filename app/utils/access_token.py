@@ -2,6 +2,7 @@
 Created on : 18/09/23 4:53 pm
 @author : ds  
 """
+import logging
 import os
 from datetime import datetime, timedelta
 
@@ -12,11 +13,12 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from starlette.status import HTTP_401_UNAUTHORIZED
 
-from app.data.models import User
-from app.data.setup import get_db
-from app.utils.config_manager import config_manager
+from data.models import User
+from data.setup import get_db
+from utils.config_manager import config_manager
 
 config_manager.get_secrets()
+config_manager.configure_logging()
 # Configure JWT settings
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = "HS256"
@@ -70,10 +72,13 @@ def verify_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
+            logging.debug("Username is none")
             raise credentials_exception
         user = db.query(User).filter(User.username == username).first()
         if user is None:
+            logging.debug("Username not found in DB")
             raise credentials_exception
     except JWTError:
+        logging.debug("JWT Error")
         raise credentials_exception
     return user

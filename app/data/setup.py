@@ -4,33 +4,26 @@ Created on : 09/09/23 6:02 pm
 """
 import os
 import logging
-from dotenv import load_dotenv
 
 from fastapi import HTTPException
 from sqlalchemy_utils import create_database, database_exists
-from sqlalchemy import (
-    create_engine,
-)
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.data.models import Base
-from app.utils.config_manager import config_manager
+from data.models import Base
+from utils.config_manager import config_manager
 
 
 config_manager.configure_logging()
 # Get the directory containing your script (data folder)
-script_directory = os.path.dirname(__file__)
+config_manager.get_secrets()
 
-# Construct the path to the secrets.env file relative to your script's location
-dotenv_path = os.path.join(script_directory, "..", "secrets", "secrets.env")
-load_dotenv(dotenv_path)
-
-db_user = os.getenv("DB_USER")
-db_password = os.getenv("DB_PASSWORD")
-db_host = os.getenv("DB_HOST")
-db_port = os.getenv("DB_PORT")
-db_name = os.getenv("DB_NAME")
-db_schema = os.getenv("DB_SCHEMA", "public")
+db_user = os.getenv("TODOLIST_ADMIN")
+db_password = os.getenv("TODO_ADMIN_PASSWORD")
+db_host = os.getenv("POSTGRES_HOST")
+db_port = os.getenv("POSTGRES_PORT")
+db_name = os.getenv("TODOLIST_DB")
+db_schema = os.getenv("POSTGRES_SCHEMA", "public")
 
 
 # Create the database engine

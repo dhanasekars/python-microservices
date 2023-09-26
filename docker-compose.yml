@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    container_name: todo-postgres
+    user: postgres
+    environment:
+      - MY_ENVIRONMENT=docker
+
+    volumes:
+      - ./app/secrets/.env.docker:/run/secrets/.env.docker
+      - ./setup-env.sh:/docker-entrypoint-initdb.d/setup-env.sh
+    env_file:
+      - app/secrets/.env.docker
+
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi-app
+    env_file:
+      - ./app/secrets/.env.docker
+    environment:
+      - MY_ENVIRONMENT=docker
+
+    depends_on:
+      - postgres
+
+  nginx:
+    build:
+      context: ./nginx
+    container_name: todo-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - app

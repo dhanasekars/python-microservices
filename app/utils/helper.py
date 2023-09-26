@@ -8,9 +8,9 @@ from fastapi import HTTPException
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from app.data import models
-from app.data.models import User, Todo, RegistrationRequest
-from app.utils.config_manager import config_manager
+from data import models
+from data.models import User, Todo, RegistrationRequest
+from utils.config_manager import config_manager
 
 config_manager.configure_logging()
 

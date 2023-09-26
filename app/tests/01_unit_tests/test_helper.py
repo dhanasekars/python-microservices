@@ -6,11 +6,11 @@ import unittest
 from unittest.mock import patch, Mock, ANY
 from fastapi import HTTPException
 
-from app.utils.helper import load_user_todos, register_new_user, generate_id
-from app.data.models import User
+from utils.helper import load_user_todos, register_new_user, generate_id
+from data.models import User
 
 
-@patch("app.utils.helper.Session")
+@patch("utils.helper.Session")
 class TestLoadUserTodos(unittest.TestCase):
     """Class to test Loader user function"""
 

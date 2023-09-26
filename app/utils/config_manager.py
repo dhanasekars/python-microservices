@@ -71,10 +71,20 @@ class ConfigurationManager:
         logging.getLogger()
 
     def get_secrets(self):
-        """Load the secrets from the secrets.env file"""
+        """Load the secrets from the environment-specific .env file"""
+        environment = os.environ.get("MY_ENVIRONMENT")
+        if environment == "local":
+            dotenv_file = ".env.local"
+        elif environment == "docker":
+            dotenv_file = ".env.docker"
+        else:
+            raise ValueError(
+                "Invalid or unspecified environment. Set MY_ENVIRONMENT to 'local' or 'docker'."
+            )
+
         script_directory = os.path.dirname(__file__)
-        # Construct the path to the secrets.env file relative to your script's location
-        dotenv_path = os.path.join(script_directory, "..", "secrets", "secrets.env")
+        # Construct the path to the environment-specific .env file
+        dotenv_path = os.path.join(script_directory, "..", "secrets", dotenv_file)
         load_dotenv(dotenv_path)
 
 
