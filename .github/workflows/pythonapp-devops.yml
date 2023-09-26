@@ -11,6 +11,7 @@
         postgres:
           image: postgres:latest
           env:
+            MY_ENVIRONMENT: docker 
             POSTGRES_USER: ${{ secrets.DB_USER }}
             POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
             TODOLIST_DB: ${{ secrets.DB_NAME }}
