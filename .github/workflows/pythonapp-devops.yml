@@ -16,12 +16,12 @@
             TODOLIST_DB: ${{ secrets.DB_NAME }}
             POSTGRES_PORT: ${{ secrets.DB_PORT }}
             POSTGRES_HOST: postgres
-
-
           ports:
             - POSTGRES_PORT:POSTGRES_PORT
           options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-          command: [ "./setup-env.sh" ]
+          run: |
+            chmod +x setup-env.sh
+            ./setup-env.sh
 
       steps:
         - name: Set up Python 3.10
@@ -79,6 +79,19 @@
             TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
           run: |
             python -m pytest --cov=app/apis --cov=app/utils --cov=app/data  app/tests/01_unit_tests
+
+        #----------------------------------------------
+        # ----- Run SQL script to create database -----
+        #----------------------------------------------
+        - name: Create PostgreSQL database
+          env:
+            POSTGRES_USER: ${{ secrets.DB_USER }}
+            POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          run: |
+            chmod +x setup-env.sh
+            docker exec -i todo-postgres psql -U postgres < setup-env.sh  
+        
+        
 
 #        - name: Set up and run  Integration tests
 #          env:
