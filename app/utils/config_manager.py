@@ -83,7 +83,7 @@ class ConfigurationManager:
             )
 
         script_directory = os.path.dirname(__file__)
-        # Construct the path to the environment-specific .env file relative to your script's location
+        # Construct the path to the environment-specific .env file
         dotenv_path = os.path.join(script_directory, "..", "secrets", dotenv_file)
         load_dotenv(dotenv_path)
 

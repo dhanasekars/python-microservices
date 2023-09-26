@@ -5,8 +5,8 @@ Created on : 18/08/23 8:37 am
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
 
-from app.apis import todos
-from app.data.setup import connect_to_database, create_tables
+from apis import todos
+from data.setup import connect_to_database, create_tables
 
 app = FastAPI()
 

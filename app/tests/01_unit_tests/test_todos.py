@@ -10,10 +10,10 @@ from fastapi.testclient import TestClient
 from fastapi import FastAPI
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from app.data.models import RegistrationRequest, User, ReturnTodo
-from app.apis import todos
-from app.data.setup import get_db
-from app.utils.access_token import verify_token
+from data.models import RegistrationRequest, User, ReturnTodo
+from data.setup import get_db
+from apis import todos
+from utils.access_token import verify_token
 
 app_test = FastAPI()
 test_client = TestClient(app_test)
@@ -61,7 +61,7 @@ class TestRootRoute:
         assert response.json() == {"message": "Welcome to API Challenge"}
 
 
-@patch("app.apis.todos.register_new_user")  # Mock the function
+@patch("apis.todos.register_new_user")  # Mock the function
 class TestRegistration:
     """Tests for the registration route"""
 
@@ -115,11 +115,11 @@ class TestRegistration:
         mock_register_new_user.assert_called_once()
 
 
-@patch("app.apis.todos.logging")
+@patch("apis.todos.logging")
 class TestAddTodo(unittest.TestCase):
     """Tests for the add_todo route"""
 
-    @patch("app.apis.todos.ReturnTodo")
+    @patch("apis.todos.ReturnTodo")
     def test_add_todo(self, mock_return_todo, _):
         """Test that a user can add a todo item."""
         # Mock the FastAPI request dependencies
@@ -158,11 +158,11 @@ class TestAddTodo(unittest.TestCase):
         assert response.status_code == 500
 
 
-@patch("app.apis.todos.logging")
+@patch("apis.todos.logging")
 class TestGetTodos(unittest.TestCase):
     """Tests for the get_todos route"""
 
-    @patch("app.apis.todos.load_user_todos")
+    @patch("apis.todos.load_user_todos")
     def test_get_2_todo(self, mock_load_user_todos, _):
         """Test that a user can get a list of todo items."""
         expected_return_todos = [
@@ -189,7 +189,7 @@ class TestGetTodos(unittest.TestCase):
     def test_get_todo_exception(self, _):
         """Test that a user cannot get a list of todo items with invalid data."""
         mock_load_user_todos = Mock(side_effect=Exception("Simulated error"))
-        with patch("app.apis.todos.load_user_todos", mock_load_user_todos):
+        with patch("apis.todos.load_user_todos", mock_load_user_todos):
             response = test_client.get("/todos")
         self.assertEqual(
             response.status_code, 500
@@ -201,11 +201,11 @@ class TestGetTodos(unittest.TestCase):
         assert mock_load_user_todos.calledonce()
 
 
-@patch("app.apis.todos.logging")
+@patch("apis.todos.logging")
 class TestGetTodoById:
     """Tests for the get_todo_by_id route"""
 
-    @patch("app.apis.todos.ReturnTodo")
+    @patch("apis.todos.ReturnTodo")
     def test_get_todo_success(self, mock_return_todo, _):
         """Test that a user can get a todo item."""
         expected_return_todo = ReturnTodo(
@@ -226,7 +226,7 @@ class TestGetTodoById:
         mock_return_todo.assert_called_once()
 
 
-@patch("app.apis.todos.logging")
+@patch("apis.todos.logging")
 class TestDeleteTodoByID:
     """Tests for the delete_todo route"""
 
@@ -244,11 +244,11 @@ class TestDeleteTodoByID:
         assert actual_message == expected_message
 
 
-@patch("app.apis.todos.logging")
+@patch("apis.todos.logging")
 class TestUpdateTodoByID:
     """Tests for the update_todo route"""
 
-    @patch("app.apis.todos.ReturnTodo")
+    @patch("apis.todos.ReturnTodo")
     def test_update_todo_success(self, mock_return_todo, _):
         """update an existing todo"""
         update_todo_data = {
@@ -276,7 +276,7 @@ class TestUpdateTodoByID:
 # ------------------ Test  modifying override dependencies---------------------#
 
 
-@patch("app.apis.todos.logging")
+@patch("apis.todos.logging")
 class TestExceptions:
     """Tests for the get_todo_by_id route"""
 

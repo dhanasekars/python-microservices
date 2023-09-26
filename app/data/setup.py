@@ -5,15 +5,13 @@ Created on : 09/09/23 6:02 pm
 import os
 import logging
 
-from dotenv import load_dotenv
-
 from fastapi import HTTPException
 from sqlalchemy_utils import create_database, database_exists
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.data.models import Base
-from app.utils.config_manager import config_manager
+from data.models import Base
+from utils.config_manager import config_manager
 
 
 config_manager.configure_logging()

@@ -10,13 +10,14 @@ from fastapi import Query, HTTPException, Depends
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from app.utils.access_token import create_access_token, verify_token
-from app.utils.helper import (
+from utils.access_token import create_access_token, verify_token
+from utils.helper import (
     register_new_user,
     load_user_todos,
 )
-from app.utils.config_manager import config_manager
-from app.data.models import (
+from utils.config_manager import config_manager
+from utils.custom_exceptions import InvalidQueryParameter
+from data.models import (
     ReturnTodo,
     TodoItem,
     RegistrationRequest,
@@ -24,8 +25,7 @@ from app.data.models import (
     Todo,
     UpdateTodo,
 )
-from app.data.setup import get_db
-from app.utils.custom_exceptions import InvalidQueryParameter
+from data.setup import get_db
 
 router = fastapi.APIRouter()
 
@@ -165,8 +165,8 @@ async def delete_todo(
 
         if not todo:
             # If the todo item is not found, raise a 404 Not Found exception
+            logging.debug("Todo not found")
             raise HTTPException(status_code=404, detail="Todo not found")
-
         # Delete the todo item from the database
         db.delete(todo)
         db.commit()
