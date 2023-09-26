@@ -75,7 +75,7 @@
             JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
             TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
           run: |
-            poetry run python -m pytest --cov --cov-report=term-missing tests/01_unit_tests
+            poetry run python -m pytest --cov --cov-report=term-missing app/tests/01_unit_tests
 
         #----------------------------------------------
         # ----- Run SQL script to create database -----
