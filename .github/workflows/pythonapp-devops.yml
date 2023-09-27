@@ -2,7 +2,7 @@ name: FastAPI CI/CD
 
 on:
   push:
-    branches: ['working-tree'git s]
+    branches: ['working-tree']
 
 jobs:
   build:
