@@ -50,6 +50,8 @@ stoppg:
 restartpg:
 	brew services restart postgresql@15
 
+dcbuild:
+	docker-compose build
 dcup:
 	docker-compose --env-file app/secrets/.env.docker up
 
@@ -66,4 +68,4 @@ test: unittests integrationtests
 
 routine: clean_cache deletelog test git clean_cache
 
-all: routine dcup
+all: routine dcbuild dcup
