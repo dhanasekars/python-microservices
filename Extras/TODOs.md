@@ -26,7 +26,8 @@
 - [x] Authentication
 - [x] Update the test fixture @generateUDID
 - [ ] Configure environments to run in Git actions
-- [ ] Endpoint to renew access token
+- [x] Endpoint to renew access token
+- [ ] Improve integration coverage
 - [ ] Database backup using pg_dump and pg_restore
 - [ ] Host it in cloud
 - [ ] Add release notes

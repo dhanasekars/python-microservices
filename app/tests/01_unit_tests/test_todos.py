@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch, Mock, MagicMock
 
 from fastapi.testclient import TestClient
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
 from data.models import RegistrationRequest, User, ReturnTodo
@@ -113,6 +113,43 @@ class TestRegistration:
 
         # Ensure that the register_new_user function was called
         mock_register_new_user.assert_called_once()
+
+
+@patch("apis.todos.logging")
+@patch("apis.todos.renew_access_token")
+class TestTokenRenew(unittest.TestCase):
+    """Tests for the token renew route"""
+
+    def test_token_renew_success(self, mock_renew_access_token, _):
+        """Test for the token renew route"""
+        # Mock the renew_access_token function to return a mock token
+        mock_renew_access_token.return_value = {
+            "access_token": "mocked_access_token",
+            "token_type": "bearer",
+        }
+
+        # Send a POST request to the token renew endpoint
+        response = test_client.post("/token-renew/")
+
+        # Assert that the response is successful and contains the access token
+        assert response.status_code == 200
+        assert "access_token" in response.json()
+        assert response.json()["token_type"] == "bearer"
+
+        # Assert that the renew_access_token function was called
+        mock_renew_access_token.assert_called_once()
+
+    def test_token_renew_exception(self, mock_renew_access_token, _):
+        """Test for the token renew route"""
+        # Mock the renew_access_token function to return a mock token
+        mock_renew_access_token.side_effect = HTTPException(
+            status_code=500, detail="Failed to renew access token"
+        )
+
+        # with patch("apis.todos.renew_access_token", mock_renew_access_token):
+        response = test_client.post("/token-renew/")
+        assert response.status_code == 500
+        assert response.json()["detail"] == "Failed to renew access token"
 
 
 @patch("apis.todos.logging")

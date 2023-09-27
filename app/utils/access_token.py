@@ -45,12 +45,6 @@ def create_access_token(data: dict, expires_delta: timedelta):
 #     """Verify the password against the hashed password."""
 #     return pwd_context.verify(plain_password, hashed_password)
 
-
-# def get_user(db_fixture, username: str):
-#     """Get a user from the database."""
-#     return db_fixture, username
-#
-#
 # def authenticate_user(db_fixture, username: str, password: str):
 #     """Authenticate a user and return user details."""
 #     user = get_user(db_fixture, username)
@@ -82,3 +76,15 @@ def verify_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_
         logging.debug("JWT Error")
         raise credentials_exception
     return user
+
+
+def renew_access_token(current_user: User, access_token_expires: timedelta):
+    try:
+        # Create a new token with an updated expiration time
+        new_token = create_access_token(
+            data={"sub": current_user.username}, expires_delta=access_token_expires
+        )
+        return {"access_token": new_token, "token_type": "bearer"}
+    except Exception as e:
+        logging.error(f"Error renewing access token: {e}")
+        raise HTTPException(status_code=500, detail="Failed to renew access token")
