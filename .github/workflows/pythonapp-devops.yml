@@ -12,9 +12,9 @@ jobs:
     steps:
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v1
       with:
-        python-version: '3.10.0'
+        python-version: '3.10'
 
     - name: Install Poetry
       uses: snok/install-poetry@v1
