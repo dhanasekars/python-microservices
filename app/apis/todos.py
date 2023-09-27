@@ -10,7 +10,7 @@ from fastapi import Query, HTTPException, Depends
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from utils.access_token import create_access_token, verify_token
+from utils.access_token import create_access_token, verify_token, renew_access_token
 from utils.helper import (
     register_new_user,
     load_user_todos,
@@ -60,6 +60,17 @@ def register_user(user: RegistrationRequest, db: Session = Depends(get_db)):
         db.rollback()
         logging.error(f"Error: {err}")
         raise HTTPException(status_code=400, detail="Username or email already exists")
+
+
+@router.post("/token-renew/")
+def token_renew(current_user: User = Depends(verify_token)):
+    """Renew an access token using the access token provided in the header"""
+    try:
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        new_token_data = renew_access_token(current_user, access_token_expires)
+        return new_token_data
+    except HTTPException as err:
+        raise HTTPException(status_code=err.status_code, detail=err.detail)
 
 
 @router.post("/todos")

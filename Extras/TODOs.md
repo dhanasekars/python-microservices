@@ -26,7 +26,8 @@
 - [x] Authentication
 - [x] Update the test fixture @generateUDID
 - [ ] Configure environments to run in Git actions
-- [ ] Endpoint to renew access token
+- [x] Endpoint to renew access token
+- [ ] Improve integration coverage
 - [ ] Database backup using pg_dump and pg_restore
 - [ ] Host it in cloud
 - [ ] Add release notes
@@ -37,6 +38,7 @@
 - [ ] Connect to more than one type of DB and test ( Postgres, MySQL, SQLite)
 - [ ] Create admin API - to activate, de-active, delete users. 
 - [ ] Tracking and limiting usage 
+- [ ] /graphql endpoint
 - [ ] Have an error message json file
 - [ ] Head, Options, Patch and Trace
 - [ ] Generate total time spent for this project from README.md
@@ -504,6 +506,16 @@ https://github.com/tiangolo/fastapi/issues/296
 
 </details>
 
+
+<details> 
+    <summary> Day 35: Sep 27</summary>
+
+`Time Spent : 180 minutes`
+
+- Renew token route
+- Makefile updates
+
+</details>
 
 -------------------------------
 

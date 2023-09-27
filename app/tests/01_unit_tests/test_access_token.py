@@ -12,7 +12,7 @@ from jose import JWTError
 from sqlalchemy.orm import Session
 
 from data.models import User
-from utils.access_token import create_access_token, verify_token
+from utils.access_token import create_access_token, verify_token, renew_access_token
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -137,3 +137,42 @@ class TestVerifyToken:
             verify_token("invalid_token", db=mock_db_session)
         assert context.value.status_code == 401
         assert context.value.detail == "Could not validate credentials"
+
+
+class TestRenewAccessToken(unittest.TestCase):
+    """Class to test renew_access_token"""
+
+    def setUp(self):
+        self.current_user = Mock(username="testuser")
+        self.access_token_expires = timedelta(minutes=15)
+
+    @patch("utils.access_token.create_access_token", return_value="mocked_access_token")
+    def test_renew_access_token_success(self, mock_create_access_token):
+        """Test that renew_access_token() returns the expected result."""
+        result = renew_access_token(self.current_user, self.access_token_expires)
+
+        # Assert that the create_access_token function was called with the correct parameters
+        mock_create_access_token.assert_called_once_with(
+            data={"sub": "testuser"}, expires_delta=self.access_token_expires
+        )
+
+        # Assert the expected result
+
+        assert result == {"access_token": "mocked_access_token", "token_type": "bearer"}
+
+    @patch(
+        "utils.access_token.create_access_token", side_effect=Exception("Mocked error")
+    )
+    def test_renew_access_token_failure(self, mock_create_access_token):
+        """Test that renew_access_token() raises an exception if the token cannot be renewed."""
+        with self.assertRaises(HTTPException) as exc_context:
+            renew_access_token(self.current_user, self.access_token_expires)
+
+        # Assert that the create_access_token function was called with the correct parameters
+        mock_create_access_token.assert_called_once_with(
+            data={"sub": "testuser"}, expires_delta=self.access_token_expires
+        )
+
+        # Assert the expected result
+        assert exc_context.exception.status_code == 500
+        assert exc_context.exception.detail == "Failed to renew access token"

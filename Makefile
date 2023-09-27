@@ -40,9 +40,6 @@ check: format lint
 listvenv:
 	find / -type d -name 'bin' -exec sh -c 'if [ -f "{}/activate" ]; then dirname "{}"; fi' \;
 
-docker_build:
-	docker pull dhanasekars/my-todos:latest
-	docker run -p 80:8000 my-todos
 
 startpg:
 	brew services start postgresql@15
@@ -59,3 +56,14 @@ dcup:
 dcdown:
 	docker-compose down
 
+unittests:
+	cd app && poetry run python -m pytest --cov  --cov-report=term-missing tests/01_unit_tests
+
+integrationtests:
+	cd app && poetry run python -m pytest --cov --cov-report=term-missing tests/02_integration_tests
+
+test: unittests integrationtests
+
+routine: clean_cache deletelog test git clean_cache
+
+all: routine dcup

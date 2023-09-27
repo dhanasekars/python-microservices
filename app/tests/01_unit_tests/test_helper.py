@@ -29,9 +29,11 @@ class TestLoadUserTodos(unittest.TestCase):
         ]
 
         # Configure the mock database session to return the mock to-do data
+        # pylint: disable=C0301
         (
             mock_db_session.query.return_value.filter.return_value.offset.return_value.limit.return_value.all
         ).return_value = mock_todo_data
+        # pylint: enable=C0301
 
         # Call the function under test
         todos = load_user_todos(mock_user, page=1, per_page=5, db=mock_db_session)
