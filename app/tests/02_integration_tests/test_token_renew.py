@@ -6,11 +6,9 @@ import os
 from multiprocessing import Process
 import pytest
 
-from jose import jwt, JWTError
 from fastapi.testclient import TestClient
-from main import app
 
-from utils.access_token import JWT_SECRET_KEY, ALGORITHM
+from main import app
 from utils.helper import generate_id
 from utils.config_manager import config_manager
 
@@ -85,7 +83,7 @@ class TestRenewToken:
         """Test renew token route"""
         response = client.post(
             "/token-renew/",
-            headers={"Authorization": f"Bearer fake_token"},
+            headers={"Authorization": "Bearer fake_token"},
         )
         print(response.json())
         print(response.status_code)

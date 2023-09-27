@@ -59,3 +59,14 @@ dcup:
 dcdown:
 	docker-compose down
 
+unittests:
+	cd app && poetry run python -m pytest --cov  --cov-report=term-missing tests/01_unit_tests
+
+integrationtests:
+	cd app && poetry run python -m pytest --cov --cov-report=term-missing tests/02_integration_tests
+
+test: unittests integrationtests
+
+routine: clean_cache test git clean_cache
+
+all: routine dcup

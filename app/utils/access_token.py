@@ -79,12 +79,13 @@ def verify_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_
 
 
 def renew_access_token(current_user: User, access_token_expires: timedelta):
+    """Renew an access token with a new expiration time."""
     try:
         # Create a new token with an updated expiration time
         new_token = create_access_token(
             data={"sub": current_user.username}, expires_delta=access_token_expires
         )
         return {"access_token": new_token, "token_type": "bearer"}
-    except Exception as e:
-        logging.error(f"Error renewing access token: {e}")
+    except Exception as err:
+        logging.error(f"Error renewing access token: {err}")
         raise HTTPException(status_code=500, detail="Failed to renew access token")

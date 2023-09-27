@@ -13,7 +13,6 @@ from sqlalchemy.orm import Session
 
 from data.models import User
 from utils.access_token import create_access_token, verify_token, renew_access_token
-from utils.config_manager import config_manager
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -143,11 +142,13 @@ class TestVerifyToken:
 class TestRenewAccessToken(unittest.TestCase):
     """Class to test renew_access_token"""
 
-    @patch("utils.access_token.create_access_token", return_value="mocked_access_token")
-    def test_renew_access_token_success(self, mock_create_access_token):
-        # Call the function
+    def setUp(self):
         self.current_user = Mock(username="testuser")
         self.access_token_expires = timedelta(minutes=15)
+
+    @patch("utils.access_token.create_access_token", return_value="mocked_access_token")
+    def test_renew_access_token_success(self, mock_create_access_token):
+        """Test that renew_access_token() returns the expected result."""
         result = renew_access_token(self.current_user, self.access_token_expires)
 
         # Assert that the create_access_token function was called with the correct parameters
@@ -163,9 +164,7 @@ class TestRenewAccessToken(unittest.TestCase):
         "utils.access_token.create_access_token", side_effect=Exception("Mocked error")
     )
     def test_renew_access_token_failure(self, mock_create_access_token):
-        # Call the function and expect an HTTPException
-        self.current_user = Mock(username="testuser")
-        self.access_token_expires = timedelta(minutes=15)
+        """Test that renew_access_token() raises an exception if the token cannot be renewed."""
         with self.assertRaises(HTTPException) as exc_context:
             renew_access_token(self.current_user, self.access_token_expires)
 
