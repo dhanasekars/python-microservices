@@ -1,124 +1,35 @@
-  name: Python application test with Github actions
-  on: 
-    push:
-      branches: ['main']
+name: CI
 
-  jobs:
-    build:
-      runs-on:  ubuntu-latest
+on:
+  push:
+    branches:
+      - working-tree
 
-      services:
-        postgres:
-          image: postgres:latest
-          env:
-            MY_ENVIRONMENT: docker 
-            POSTGRES_USER: ${{ secrets.DB_USER }}
-            POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-            TODOLIST_DB: ${{ secrets.DB_NAME }}
-            POSTGRES_PORT: ${{ secrets.DB_PORT }}
-            POSTGRES_HOST: postgres
-          ports:
-            - 5432:5432
-          options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+jobs:
+  build:
 
+    runs-on: ubuntu-latest
 
-    # Add other environment variables here
+    steps:
+    - name: Set up Docker Compose
+      uses: docker/compose-action@v1.5.1
+      with:
+        compose-file: docker-compose.yml
 
-      steps:
-        - name: Debug Environment Variables
-          run: |
-            echo "MY_ENVIRONMENT: $MY_ENVIRONMENT"
-            echo "DB_USER: $DB_USER"
-        - name: Set up Python 3.10
-          uses: actions/setup-python@v1
-          with:
-            python-version: '3.10'
+    - name: Run unit tests
+      run: |
+        docker-compose run app python -m unittest discover -s ./app/tests/01_unit_tests -p "*_test.py"
 
-        #----------------------------------------------
-        #  -----  install & configure poetry  -----
-        #----------------------------------------------
-        - name: Install Poetry
-          uses: snok/install-poetry@v1
-          with:
-            virtualenvs-create: false
-            virtualenvs-in-project: true
-            installer-parallel: true
+    - name: Run integration tests
+      run: |
+        docker-compose run app python -m unittest discover -s ./app/tests/02_Integration_tests -p "*_test.py"
 
-        #----------------------------------------------
-        #       load cached venv if cache exists
-        #----------------------------------------------
-        - name: Load cached venv
-          id: cached-poetry-dependencies
-          uses: actions/cache@v3
-          with:
-            path: .venv
-            key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
-        #----------------------------------------------
-        # install dependencies if cache does not exist
-        #----------------------------------------------
-        - uses: actions/checkout@v2
-          with:
-            submodules: 'recursive'
-
-        - name: Install dependencies
-          if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-          run: poetry install --no-interaction --no-root
-
-        - name: Check Venv and Poetry Version
-          run: |
-              poetry --version
-
-          #----------------------------------------------
-          #  -----  run unit tests  -----
-          #----------------------------------------------
-        - name: Run unit tests
-          run: |
-            cd app
-            poetry run python -m pytest --cov --cov-report=term-missing tests/01_unit_tests
-
-        #----------------------------------------------
-        # ----- Run SQL script to create database -----
-        #----------------------------------------------
-        - name: Create PostgreSQL database
-          env:
-            POSTGRES_USER: ${{ secrets.DB_USER }}
-            POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          run: |
-            chmod +x setup-env.sh
-            docker exec -i todo-postgres psql -U postgres < setup-env.sh  
-        
-        
-
-#        - name: Set up and run  Integration tests
-#          env:
-#              DB_USER: ${{ secrets.DB_USER }}
-#              DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-#              DB_NAME: ${{ secrets.DB_NAME }}
-#              DB_PORT: ${{ secrets.DB_PORT }}
-#              JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
-#
-#          run: |
-#            python -m pytest app/tests/02_integration_tests
-
-        #----------------------------------------------
-        #              Set up Docker Buildx
-        #----------------------------------------------
-#
-#        - name: Set up Docker Buildx
-#          uses: docker/setup-buildx-action@v1
-#
-#        - name: Build and Push Docker Image
-#          env:
-#            DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-#            DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_TOKEN }}
-#          run: |
-#            echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
-#        #----------------------------------------------
-#        #              Build and Push Docker image
-#        #----------------------------------------------
-#        - name: Build and Push Docker image
-#          run: |
-#            docker buildx create --use
-#            docker buildx build --push -t dhanasekars/my-todos:latest -f Dockerfile .
-#            docker logout
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository }}/postgres:${{ github.sha }}
+          ghcr.io/${{ github.repository }}/app:${{ github.sha }}
+          ghcr.io/${{ github.repository }}/nginx:${{ github.sha }}
