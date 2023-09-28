@@ -15,16 +15,17 @@
 
 # HOW TO SETUP THE PROJECT
 
-## DOCKER WAY
+## THE DOCKER WAY
 
 The easiest way to run the project is to use docker-compose. 
 To do so, you need to have docker and docker-compose installed on your machine.
 
-### SETUP 1 : SETUP ENVIRONMENT
+### SETUP DOCKER
+### STEP 1 : SETUP ENVIRONMENT
 
-1. Clone the project main branch
-2. Create a .env.docker file in the app/secrets directory of the project and add the variables looking at the `.env.example` file.
-3. Ensure to set `POSTGRES_HOST=postgres`
+1. Clone the project main branch.
+2. Create a `.env.docker` file in the app/secrets directory of the project and add the variables looking at the `.env.example` file.
+3. Ensure to set `POSTGRES_HOST=postgres`.
 4. Run the following to make execute permissions on the setup-env.sh file:
     ```bash
     chmod +x setup-env.sh
@@ -50,8 +51,8 @@ The docker-compose.yml file contains the following services:
 2. postgres: This is the database service
 3. nginx: This is the web server service
 
-Note: nginx acts as a reverse proxy to the FastAPI application. 
-This is done to allow the application to be served on port 80, also to create a graphql endpoint on the same port.(coming soon...)
+Nginx acts as a reverse proxy to the FastAPI application. 
+This is done to allow the application to be served on port 80, also to create a JS based graphql endpoint on the same port.(coming soon...)
 
 
 
