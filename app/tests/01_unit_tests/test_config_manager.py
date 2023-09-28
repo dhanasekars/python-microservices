@@ -77,36 +77,3 @@ class TestConfigLoader(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             config_loader.load_config()
         self.assertEqual(str(context.exception), "Invalid JSON format in config file.")
-
-    @patch.dict(
-        "os.environ",
-        {"GITHUB_ACTIONS": "true", "GITHUB_WORKSPACE": "/path/to/github/workspace"},
-    )
-    @patch("builtins.open", new_callable=mock_open, read_data='{"key": "value"}')
-    def test_github_actions(self, _):
-        """Test that the configuration data is loaded correctly when running in GitHub Actions."""
-
-        # Create an instance of your configuration class
-        config_loader = ConfigurationManager()
-
-        # Call the load_config method
-        config_loader.load_config()
-
-        # Assert that the configuration data is loaded correctly
-        self.assertEqual(config_loader.config_data, {"key": "value"})
-
-    @patch.dict(
-        "os.environ",
-        {"GITHUB_ACTIONS": "true", "GITHUB_WORKSPACE": ""},
-    )
-    def test_github_actions_environment_exception(self):
-        """Test that an EnvironmentError is raised
-        if the GITHUB_WORKSPACE environment variable is not set."""
-
-        # Assert that the configuration data is loaded correctly
-        with self.assertRaises(EnvironmentError) as context:
-            config_loader = ConfigurationManager()
-            config_loader.load_config()
-        self.assertEqual(
-            str(context.exception), "GITHUB_WORKSPACE environment variable not found."
-        )

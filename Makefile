@@ -20,9 +20,12 @@ git:
 	git commit -m "$(MSG)"
 	git push origin working-tree
 
-clean_cache:
+cc:
 	#clearing all pytest cache
+	find . -type f -name ".coverage.DSs-MacBook-Pro.local*" -exec rm -f {} \;
 	find . -type d -name ".pytest_cache" -exec rm -r {} +
+	find . -type f -name ".coverage" -exec rm -r {} +
+
 
 coverage_for_function:
 	# This is to check coverage for a given function using pytest
@@ -50,6 +53,8 @@ stoppg:
 restartpg:
 	brew services restart postgresql@15
 
+dcbuild:
+	docker-compose build
 dcup:
 	docker-compose --env-file app/secrets/.env.docker up
 
@@ -62,8 +67,8 @@ unittests:
 integrationtests:
 	cd app && poetry run python -m pytest --cov --cov-report=term-missing tests/02_integration_tests
 
-test: unittests integrationtests
+test: unittests integrationtests cc
 
-routine: clean_cache deletelog test git clean_cache
+routine: cc deletelog test git cc
 
-all: routine dcup
+all: routine dcbuild dcup

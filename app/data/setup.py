@@ -20,9 +20,9 @@ config_manager.get_secrets()
 
 db_user = os.getenv("TODOLIST_ADMIN")
 db_password = os.getenv("TODO_ADMIN_PASSWORD")
-db_host = os.getenv("POSTGRES_HOST")
-db_port = os.getenv("POSTGRES_PORT")
-db_name = os.getenv("TODOLIST_DB")
+db_host = os.getenv("POSTGRES_HOST", "localhost")
+db_port = os.getenv("POSTGRES_PORT", "5432")
+db_name = os.getenv("TODOLIST_DB", "todolist")
 db_schema = os.getenv("POSTGRES_SCHEMA", "public")
 
 
