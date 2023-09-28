@@ -1,3 +1,27 @@
+# Building microservices using FastAPI
+
+Create an API tutorial ( mimic ) https://www.eviltester.com/page/tools/apichallenges/
+using Python and FastAPI
+
+⚠️ main branch will be updated every Saturday. For the latest code, check working-tree
+
+## Other Learning Objectives
+
+1. Pytest
+2. Unit Test coverage
+3. Poetry
+4. Fire
+
+## Additional learnings
+
+1. Pytantic
+2. Make File
+3. Singelton Design Pattern
+4. SQLAlchemy
+
+### Spend two hours daily on this project
+
+
 ## September
 
 - [x] Patch entire class check unittest for get_todo_list()
@@ -25,7 +49,6 @@
         used pytest-xdist plugin - 57 tests took 3.73s and with 3 workers it took 2.88s. 
 - [x] Authentication
 - [x] Update the test fixture @generateUDID
-- [ ] Configure environments to run in Git actions
 - [x] Endpoint to renew access token
 - [ ] Improve integration coverage
 - [ ] Database backup using pg_dump and pg_restore
@@ -208,7 +231,7 @@ Have to focus on unit tests tomorrow.
 - Productive time creating unit tests and coverage report
 - Config file added using `Singleton` design pattern
 
-![unit_test_coverage.png](Extras/images/unit_test_coverage.png)
+![unit_test_coverage.png](images%2Funit_test_coverage.png)
 
 </details>
 
@@ -258,7 +281,7 @@ Have to focus on unit tests tomorrow.
 - Some refactoring while adding debug log
 - Learnt about --show-missing in coverage to show missing lines
 
-![unit_coverage_Sep_03.png](Extras/images/unit_coverage_Sep_03.png)
+![unit_coverage_Sep_03.png](images%2Funit_coverage_Sep_03.png)
 
 </details>
 

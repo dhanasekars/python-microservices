@@ -25,25 +25,11 @@ class ConfigurationManager:
     def load_config(self):
         """Get the directory of the current script"""
 
-        if "GITHUB_ACTIONS" in os.environ:
-            # Running in GitHub Actions
-            github_workspace = os.environ.get("GITHUB_WORKSPACE")
-            if not github_workspace:
-                raise EnvironmentError(
-                    "GITHUB_WORKSPACE environment variable not found."
-                )
-
-            config_file_relative_path = (
-                "app/config/config.json"  # Relative to the root of your repository
-            )
-            config_file_path = os.path.join(github_workspace, config_file_relative_path)
-        else:
-            # Running locally
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            config_file_relative_path = "../config/config.json"
-            config_file_path = os.path.abspath(
-                os.path.join(script_dir, config_file_relative_path)
-            )
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        config_file_relative_path = "../config/config.json"
+        config_file_path = os.path.abspath(
+            os.path.join(script_dir, config_file_relative_path)
+        )
         try:
             with open(config_file_path, "r", encoding="UTF8") as config_file:
                 self.config_data = json.load(config_file)
@@ -75,7 +61,7 @@ class ConfigurationManager:
         environment = os.environ.get("MY_ENVIRONMENT")
         if environment == "local":
             dotenv_file = ".env.local"
-        elif environment == "docker" or "GITHUB_ACTIONS" in os.environ:
+        elif environment == "docker":
             dotenv_file = ".env.docker"
         else:
             raise ValueError(
