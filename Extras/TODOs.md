@@ -52,16 +52,19 @@ using Python and FastAPI
 - [x] Endpoint to renew access token
 - [ ] Improve integration coverage
 - [ ] Reqover coverage
-- [ ] Database backup using pg_dump and pg_restore
-- [ ] Add release notes
-- [ ] Maintain release version numbers
 
-## Later
+
+## October
 
 - [ ] Create admin API - to activate, de-active, delete users. 
 - [ ] Generate total time spent for this project from README.md
 - [ ] Head, Options, Patch and Trace
 - [ ] /graphql endpoint
+- [ ] Database backup using pg_dump and pg_restore
+- [ ] Add release notes
+- [ ] Maintain release version numbers
+
+## Later
 - [ ] Host it in cloud
     - [ ] Tracking and limiting usage 
     - [ ] Monitoring
