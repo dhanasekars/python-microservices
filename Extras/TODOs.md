@@ -51,23 +51,24 @@ using Python and FastAPI
 - [x] Update the test fixture @generateUDID
 - [x] Endpoint to renew access token
 - [ ] Improve integration coverage
+- [ ] Reqover coverage
 - [ ] Database backup using pg_dump and pg_restore
-- [ ] Host it in cloud
 - [ ] Add release notes
 - [ ] Maintain release version numbers
 
 ## Later
 
-- [ ] Connect to more than one type of DB and test ( Postgres, MySQL, SQLite)
 - [ ] Create admin API - to activate, de-active, delete users. 
-- [ ] Tracking and limiting usage 
-- [ ] /graphql endpoint
-- [ ] Have an error message json file
-- [ ] Head, Options, Patch and Trace
 - [ ] Generate total time spent for this project from README.md
+- [ ] Head, Options, Patch and Trace
+- [ ] /graphql endpoint
+- [ ] Host it in cloud
+    - [ ] Tracking and limiting usage 
+    - [ ] Monitoring
+    - [ ] Clean up data regularly
+- [ ] Connect to more than one type of DB and test ( Postgres, MySQL, SQLite)
 - [x] Fix all lint issues
 - [ ] Explore Fire
-- [ ] Reqover coverage
 - [ ] Explore query builder 
 
 ### Action items
@@ -537,6 +538,20 @@ https://github.com/tiangolo/fastapi/issues/296
 
 - Renew token route
 - Makefile updates
+
+</details>
+
+
+<details> 
+    <summary> Day 36: Sep 28</summary>
+
+`Time Spent : 120 minutes`
+
+- Tested installing the project in a new machine
+- Plan for upcoming weeks
+  - Lowered hosting on cloud priority
+  - Focus on improving integration test coverage and admin route.
+  - Then move to graphql
 
 </details>
 
