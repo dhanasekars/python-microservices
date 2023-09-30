@@ -4,10 +4,14 @@ Created on : 27/09/23 9:13 am
 """
 import os
 from multiprocessing import Process
+from unittest.mock import patch
+
 import pytest
+from fastapi import HTTPException
 
 from fastapi.testclient import TestClient
 
+from apis.todos import token_renew
 from main import app
 from utils.helper import generate_id
 from utils.config_manager import config_manager
@@ -90,3 +94,20 @@ class TestRenewToken:
         assert isinstance(response.json(), dict)
         assert response.status_code == 401
         assert "detail" in response.json()
+
+
+class TestTokenExceptions:
+    @patch("apis.todos.renew_access_token")
+    def test_token_renew_with_http_exception(self, mock_renew_access_token):
+        """Test HTTPException is raised."""
+        mock_renew_access_token.side_effect = HTTPException(
+            status_code=403, detail="Access denied"
+        )
+
+        # Call the token_renew function, which should raise an HTTPException
+        with pytest.raises(HTTPException) as cm:
+            token_renew()
+
+        # Assert that the HTTPException status code and detail match the expected values
+        assert cm.value.status_code == 403
+        assert cm.value.detail == "Access denied"

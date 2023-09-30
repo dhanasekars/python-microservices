@@ -50,19 +50,19 @@ using Python and FastAPI
 - [x] Authentication
 - [x] Update the test fixture @generateUDID
 - [x] Endpoint to renew access token
-- [ ] Improve integration coverage
+- [x] Improve integration coverage (current is 85% - mostly HTTPExceptions are not covered)
 - [ ] Reqover coverage
 
-
 ## October
-
+- [ ] Publish about this project in LinkedIn and in my blog.
 - [ ] Create admin API - to activate, de-active, delete users. 
 - [ ] Generate total time spent for this project from README.md
 - [ ] Head, Options, Patch and Trace
 - [ ] /graphql endpoint
 - [ ] Database backup using pg_dump and pg_restore
-- [ ] Add release notes
-- [ ] Maintain release version numbers
+- [ ] Jenkins pipeline
+  - [ ] Add release notes
+  - [ ] Maintain release version numbers
 
 ## Later
 - [ ] Host it in cloud
@@ -555,6 +555,16 @@ https://github.com/tiangolo/fastapi/issues/296
   - Lowered hosting on cloud priority
   - Focus on improving integration test coverage and admin route.
   - Then move to graphql
+
+</details>
+
+
+<details> 
+    <summary> Day 37: Sep 29</summary>
+
+`Time Spent : 90 minutes`
+
+- Improve integration test coverage 
 
 </details>
 

@@ -145,6 +145,7 @@ async def get_todo_by_id(
             .filter(Todo.id == todo_id, Todo.owner_id == current_user.id)
             .first()
         )
+
         if todo is None:
             raise HTTPException(status_code=404, detail="Todo not found")
 
