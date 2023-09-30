@@ -2,12 +2,16 @@
 Created on : 21/09/23 4:10 pm
 @author : ds  
 """
+import json
 import os
 from multiprocessing import Process
-from unittest.mock import Mock
+from unittest.mock import MagicMock, patch, Mock
 
 import pytest
+from fastapi import HTTPException, Depends
 from fastapi.testclient import TestClient
+from sqlalchemy.exc import NoResultFound, SQLAlchemyError
+from sqlalchemy.testing import db
 
 from main import app
 from data.setup import get_db
@@ -40,6 +44,12 @@ double_todo_data = [
 ]
 
 
+another_todo_data = {
+    "title": "Integration Test another",
+    "description": "Created during Integration Tests.",
+}
+
+
 def start_app():
     """Start the FastAPI app using Uvicorn."""
     import uvicorn
@@ -68,7 +78,7 @@ def setup_teardown_app(request):  # pylint: disable=unused-argument
 
 def override_get_db():
     """Override the get_db function to return a mock session"""
-    mock_db_session = Mock()
+    mock_db_session = MagicMock()
     return mock_db_session
 
 
@@ -202,7 +212,6 @@ class TestTodos:
     def test_get_more_than_one(self, create_todo, create_user):
         """Test get todos success."""
         unique_username, unique_email, generated_access_token = create_user
-        double_todos = create_todo["double"]
         headers = {"Authorization": f"Bearer {generated_access_token}"}
         response = client.get("/todos?page=1&per_page=2", headers=headers)
 
@@ -230,17 +239,6 @@ class TestTodos:
         response = client.get("/todos?page=1&per_page=abc", headers=headers)
         assert response.status_code == 422
         assert "Input should be a valid integer" in response.json()["detail"][0]["msg"]
-
-    def test_get_todo_exception(self, create_user):
-        """Test the 500 internal server error."""
-        app.dependency_overrides[get_db] = override_get_db
-        override_get_db.return_value = Exception("Simulated database error")
-        unique_username, unique_email, generated_access_token = create_user
-        headers = {"Authorization": f"Bearer {generated_access_token}"}
-        # Send a POST request with valid data
-        response = client.get("/todos", headers=headers)
-        assert response.status_code == 500
-        app.dependency_overrides = {}
 
     def test_get_todo_by_id_success(self, create_todo):
         """Test get todos by id success."""
@@ -295,7 +293,6 @@ class TestTodos:
         assert response_data[0]["doneStatus"] == update_todo_data["doneStatus"]
 
     def test_update_todo_by_id_404(self, create_todo):
-        """Test get todos by id success."""
         single_todo = create_todo["single"]
         response = client.put(
             f"/todos/{single_todo['id']}",
@@ -306,3 +303,86 @@ class TestTodos:
         response_data = response.json()
         assert isinstance(response_data, dict)
         assert response_data["detail"] == "Todo not found"
+
+
+class TestExceptions:
+    @patch("apis.todos.load_user_todos")
+    def test_get_todos_with_exception(self, mock_load_user_todos, create_user):
+        """test exception is raised while getting todos"""
+        mock_load_user_todos.side_effect = Exception("Simulated database error")
+        unique_username, unique_email, generated_access_token = create_user
+        headers = {"Authorization": f"Bearer {generated_access_token}"}
+        response = client.get("/todos?page=1&per_page=1", headers=headers)
+        assert response.status_code == 500
+        assert (
+            "Internal Server Error: Simulated database error"
+            in response.json()["detail"]
+        )
+
+    def test_add_todo_with_exception(self, create_user):
+        """test exception is raised while adding todos"""
+        unique_username, unique_email, generated_access_token = create_user
+        headers = {"Authorization": f"Bearer {generated_access_token}"}
+        mock_db_session = MagicMock()
+        mock_db_session.commit.side_effect = Exception("Simulated database error")
+
+        # Override the get_db dependency with the mock session
+        app.dependency_overrides[get_db] = lambda: mock_db_session
+
+        valid_todo_data = {
+            "title": "Test Todo",
+            "description": "Test description",
+            "doneStatus": False,
+        }
+
+        response = client.post("/todos", json=valid_todo_data, headers=headers)
+        print(response.json())
+        assert response.status_code == 500
+
+        # Assert that the response contains an appropriate error message
+        expected_error_message = "Internal Server Error: Simulated database error"
+        assert expected_error_message in response.json()["detail"]
+
+        # Clean up the dependency override
+        app.dependency_overrides = {}
+
+    def test_delete_todo_by_id_with_exception(self, create_todo):
+        """test exception is raised while deleting a todo"""
+        single_todo = create_todo["double"][0]
+        mock_db_session = MagicMock()
+        mock_db_session.commit.side_effect = Exception("Simulated database error")
+
+        # Override the get_db dependency with the mock session
+        app.dependency_overrides[get_db] = lambda: mock_db_session
+        response = client.delete(
+            f"/todos/{single_todo['id']}", headers=create_todo["headers"]
+        )
+        assert response.status_code == 500
+
+        # Assert that the response contains an appropriate error message
+        expected_error_message = "Internal Server Error: Simulated database error"
+        assert expected_error_message in response.json()["detail"]
+
+        # Clean up the dependency override
+        app.dependency_overrides = {}
+
+    def test_update_todo_by_id_with_exception(self, create_todo):
+        """test exception is raised while updating a todo"""
+        single_todo = create_todo["double"][0]
+        mock_db_session = MagicMock()
+        mock_db_session.commit.side_effect = Exception("Simulated database error")
+
+        # Override the get_db dependency with the mock session
+        app.dependency_overrides[get_db] = lambda: mock_db_session
+        response = client.put(
+            f"/todos/{single_todo['id']}",
+            headers=create_todo["headers"],
+            json=update_todo_data,
+        )
+        assert response.status_code == 500
+        # Assert that the response contains an appropriate error message
+        expected_error_message = "Internal Server Error: Simulated database error"
+        assert expected_error_message in response.json()["detail"]
+
+        # Clean up the dependency override
+        app.dependency_overrides = {}
