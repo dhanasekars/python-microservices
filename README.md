@@ -99,9 +99,9 @@ Unlike Docker, local setup requires more work to get the project running.
       cd app &&
       poetry run python main.py
     ```
-```warning
-Unlike the Docker setup, the local setup steps were not tested. You may need to do some debugging to get the project running.
-```
+
+`Unlike the Docker setup, the local setup steps were not tested. You may need to do some debugging to get the project running.`
+
 
 ### A lite version
 
