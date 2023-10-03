@@ -77,7 +77,7 @@ Unlike Docker, local setup requires more work to get the project running.
     ```bash
         poetry install
     ```
-4. Create a `.local.docker` file in the `/app/secrets` directory of the project and add the variables looking at the `.env.example` file. Ensure to set `POSTGRES_HOST=localhost`.
+4. Create a `.env.local` file in the `/app/secrets` directory of the project and add the variables looking at the `.env.example` file. Ensure to set `POSTGRES_HOST=localhost`.
 5. Set `MY_ENVIRONMENT=local`
     ```bash
         export MY_ENVIRONMENT=local
