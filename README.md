@@ -2,8 +2,8 @@
 
 - The project can be used as an example to learn how to build a web API using FastAPI and PostgreSQL.
 - To learn how to write unit and integration tests for a web API.
-- This project has 100% unit and 90% integration test coverage. (does that mean it is bug free ?)
-- What is covered in automated checks and build exploratory tests to find bugs.
+- This project has 100% unit and 90% integration test coverage. (does that mean it is bug-free?)
+- What is covered in automated checks and exploratory tests to find bugs.
 
 ## Technology stack
 - Python 3.8
@@ -20,7 +20,7 @@
 
 ## WHAT'S IN THE APP
 
-The app contains the following end points: 
+The app contains the following endpoints: 
 
 ![endpoints.png](Extras%2Fimages%2Fendpoints.png)
 
@@ -29,20 +29,20 @@ The app contains the following end points:
 ## THE DOCKER WAY
 
 The easiest way to run the project is to use docker-compose. 
-To do so, you need to have docker and docker-compose installed on your machine.
+To do so, you will need to have docker and docker-compose installed on your machine.
 
 ### SETUP DOCKER
-### STEP 1 : SETUP ENVIRONMENT
+### STEP 1: SETUP ENVIRONMENT
 
-1. Clone the project main branch.
+1. Clone the project's main branch.
 2. Create a `.env.docker` file in the `/app/secrets` directory of the project and add the variables looking at the `.env.example` file.
 3. Ensure to set `POSTGRES_HOST=postgres`.
-4. Run the following to make execute permissions on the setup-env.sh file:
+4. Run the following to execute permissions on the setup-env.sh file:
     ```bash
         chmod +x setup-env.sh
     ```
 
-### STEP 2 : BUILD AND RUN THE PROJECT
+### STEP 2: BUILD AND RUN THE PROJECT
 
 1. Run the following command to build the project:
     ```bash
@@ -52,7 +52,7 @@ To do so, you need to have docker and docker-compose installed on your machine.
     ```bash
        docker-compose --env-file app/secrets/.env.docker up
     ```
-3. Visit http://localhost/docs to view the (FastAPI auto generated) OpenAPI documentation
+3. Visit http://localhost/docs to view the (FastAPI auto-generated) OpenAPI documentation
 
 ### DOCKER STRUCTURE
 
@@ -63,15 +63,15 @@ The docker-compose.yml file contains the following services:
 3. Nginx: This is the web server service
 
 Nginx acts as a reverse proxy to the FastAPI application. 
-This is done to allow the application to be served on port 80, also to create a JS based graphql endpoint on the same port.(coming soon...)
+This allows the application to be served on port 80 and create a JS-based graphql endpoint on the same port. (coming soon...)
 
 
 ## THE NON-DOCKER LOCAL SETUP WAY
 
-Unlike Docker, local setup requires a bit more work to get the project running.
+Unlike Docker, local setup requires more work to get the project running.
 
-### STEP 1 : SETUP APP
-1. Clone the project main branch.
+### STEP 1: SETUP APP
+1. Clone the project's main branch.
 2. Install Poetry on your machine. Project dependencies are managed using Poetry.( https://python-poetry.org/docs/#installation )
 3. Run the following command to install the project dependencies:
     ```bash
@@ -83,16 +83,16 @@ Unlike Docker, local setup requires a bit more work to get the project running.
         export MY_ENVIRONMENT=local
     ```
 
-### STEP 2 : SETUP DATABASE
+### STEP 2: SETUP DATABASE
 
-1. The CRUD app needs a PostgreSQL database to run. You can either install PostgreSQL on your machine or use docker to run a PostgreSQL container.
-2. The app just needs a username and password to connect to the database. 
+1. The CRUD app needs a PostgreSQL database to run. You can install PostgreSQL on your machine or use docker to run a PostgreSQL container.
+2. The app needs a username and password to connect to the database. 
 3. The app creates the database on startup. Ensure to set the database name in the `.local.docker` file.
 4. Create a user with the name specified in the `.local.docker` file.
-5. The app looks for username and password in the `.local.docker` file. Ensure to set the password for the user you created in step 2.
+5. The app looks for username and password in the `.local.docker` file. Please set the password for the user you created in step 2.
 6. Look at Makefile to see the commands to run to tests and run the project.
 
-### STEP 3 : RUN THE PROJECT
+### STEP 3: RUN THE PROJECT
 
 1. Run the following command to run the project:
     ```bash
@@ -100,19 +100,18 @@ Unlike Docker, local setup requires a bit more work to get the project running.
       poetry run python main.py
     ```
 ```warning
-Unlike Docker setup, the local setup steps were not tested. You may need to do some debugging to get the project running.
+Unlike the Docker setup, the local setup steps were not tested. You may need to do some debugging to get the project running.
 ```
 
-### Liteweight version
+### A lite version
 
-A lightweight no database version of the project is available at [simple-crud](https://github.com/dhanasekars/simple-crud-microservices) repo.
+The project's lightweight no database version is available at [simple-crud](https://github.com/dhanasekars/simple-crud-microservices) repo.
 This app uses a JSON to store data.
 
-
-## WHAT NEXT ?
+## WHAT NEXT?
 
 ### 2023 Q4
-- Admin endpoints to manage users and roles and data
+- Admin endpoints to manage users, roles and data
 - Head, Options, Patch and Trace endpoints
 - JS GraphQL endpoint
 - JS GraphQL endpoint tests
