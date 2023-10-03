@@ -1,4 +1,4 @@
-# A web API project
+# A CRUD Web microservices app using FastAPI
 
 - The project can be used as an example to learn how to build a web API using FastAPI and PostgreSQL.
 - To learn how to write unit and integration tests for a web API.
