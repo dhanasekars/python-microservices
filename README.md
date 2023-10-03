@@ -87,9 +87,9 @@ Unlike Docker, local setup requires more work to get the project running.
 
 1. The CRUD app needs a PostgreSQL database to run. You can install PostgreSQL on your machine or use docker to run a PostgreSQL container.
 2. The app needs a username and password to connect to the database. 
-3. The app creates the database on startup. Ensure to set the database name in the `.local.docker` file.
-4. Create a user with the name specified in the `.local.docker` file.
-5. The app looks for username and password in the `.local.docker` file. Please set the password for the user you created in step 2.
+3. The app creates the database on startup. Ensure to set the database name in the `.env.local` file.
+4. Create a user with the name specified in the `.env.local` file.
+5. The app looks for a username and password in the `.env.local` file. Please set the password for the user you created in step 2.
 6. Look at Makefile to see the commands to run to tests and run the project.
 
 ### STEP 3: RUN THE PROJECT
