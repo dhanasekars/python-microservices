@@ -568,6 +568,16 @@ https://github.com/tiangolo/fastapi/issues/296
 
 </details>
 
+
+<details> 
+    <summary> Day 38: Oct 05</summary>
+
+`Time Spent : 120 minutes`
+
+- Installed and setup nodejs
+- setup graphql-yoga and created a graphql server 
+
+</details>
 -------------------------------
 
 <details> 

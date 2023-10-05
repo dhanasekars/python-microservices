@@ -1,0 +1,21 @@
+{
+  "name": "graphql",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^3.12.1",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "fsevents": "^2.3.3",
+    "graphql-yoga": "^4.0.5",
+    "json5": "^2.2.3"
+  }
+}

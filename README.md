@@ -16,6 +16,10 @@
 - Docker
   - Docker Compose
 - Nginx
+- JS
+  - nodejs
+  - Babel
+  - graphql-yoga
 
 
 ## WHAT'S IN THE APP
