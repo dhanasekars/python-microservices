@@ -36,6 +36,18 @@ services:
     depends_on:
       - postgres
 
+  graphql:
+    build:
+      context: ./graphql/  
+    container_name: graphql-app
+    env_file:
+      - ./app/secrets/.env.docker
+    environment:
+      - MY_ENVIRONMENT=docker
+
+    depends_on:
+      - postgres
+
   nginx:
     build:
       context: ./nginx

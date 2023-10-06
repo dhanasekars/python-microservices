@@ -14,7 +14,6 @@
     "apollo-server-express": "^3.12.1",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "fsevents": "^2.3.3",
     "graphql-yoga": "^4.0.5",
     "json5": "^2.2.3"
   }

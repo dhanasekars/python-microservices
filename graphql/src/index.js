@@ -2,27 +2,27 @@ import { createServer } from 'http'
 import { createSchema, createYoga } from 'graphql-yoga'
 
 
-console.log("Hello World!")
-// Type definitions (schema)
-const typeDefs = `
-    type Query {
-        hello: String!
+const schema = createSchema({
+    typeDefs: /* GraphQL */ `
+      type Query {
+        id: Int!
+        name: String!
+        description: String!
+        doneStatus: Boolean!
+      }
+    `,
+    resolvers: {
+      Query: {
+        id: () => '1234',
+        name: () => 'Get things done.',
+        description: () => 'A GraphQL API for a todo list.',
+        doneStatus: () => true
+      }
     }
-`
-
-// Resolvers
-
-const resolvers = {
-    Query: {
-        hello() {
-            return "This is my first query!"
-        }
-    }  
-}
+  })
 
 const yoga = createYoga({
-    typeDefs,
-    resolvers
+    schema
   })
    
 

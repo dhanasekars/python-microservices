@@ -2,3 +2,4 @@ app/log/*.log
 app/data/todo.json
 graphql/node_modules
 graphql/npm-debug.log
+Dockerfile
