@@ -69,23 +69,21 @@ The docker-compose.yml file contains the following services:
 Nginx acts as a reverse proxy to the FastAPI application. 
 This is done to allow the application to be served on port 80, also to create a JS based graphql endpoint on the same port.(coming soon...)
 
-
 ## THE NON-DOCKER LOCAL SETUP WAY
 
 Unlike Docker, local setup requires a bit more work to get the project running.
 
 ### STEP 1 : SETUP APP
+
 1. Clone the project main branch.
 2. Install Poetry on your machine. Project dependencies are managed using Poetry.( https://python-poetry.org/docs/#installation )
 3. Run the following command to install the project dependencies:
-    ```bash
-        poetry install
-    ```
+        ```bash
+            poetry install```
 4. Create a `.local.docker` file in the `/app/secrets` directory of the project and add the variables looking at the `.env.example` file. Ensure to set `POSTGRES_HOST=localhost`.
 5. Set `MY_ENVIRONMENT=local`
-    ```bash
-        export MY_ENVIRONMENT=local
-    ```
+        ```bash
+        export MY_ENVIRONMENT=local ```
 
 ### STEP 2 : SETUP DATABASE
 

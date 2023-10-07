@@ -590,6 +590,18 @@ https://github.com/tiangolo/fastapi/issues/296
 - Ngnix configured to operate at /graphql and direct traffic to graphql-yoga server :thumpsup
 
 </details>
+
+<details> 
+    <summary> Day 40: Oct 07</summary>
+
+`Time Spent : 45 minutes`
+
+- Basic Query for Todo set using hardcoded data
+
+
+</details>
+
+
 -------------------------------
 
 
