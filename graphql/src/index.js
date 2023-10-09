@@ -1,45 +1,59 @@
 import { createServer } from 'http'
 import { createSchema, createYoga } from 'graphql-yoga'
-
+import { v4 as uuidv4 } from 'uuid';
+import { loadJson, saveJson } from './helper.js';
 // Demo sample data
-
-const Todo = [{
-  id: '1',
-  title: 'Learn GraphQL',
-  description: 'The main concepts of GraphQL',
-  doneStatus: true
-},
-{
-  id: '2',
-  title: 'Learn Yoga',
-  description: 'The main concepts of Yoga',
-  doneStatus: false
-},
-{
-  id: '3',
-  title: 'Learn Prisma',
-  description: 'The main concepts of Prisma',
-  doneStatus: false
-}]
-
+const filepath = 'src/data.json';
+const todos = loadJson(filepath);
 
 
 const schema = createSchema({
     typeDefs: /* GraphQL */ `
       type Query {
-       todo: [Todo!]!
+       todo(search: String): [Todo!]!
+      }
+      type Mutation {
+        createTodo(
+          title: String!
+          description: String
+          doneStatus: Boolean
+        ): Todo!
       }
 
       type Todo {
         id: ID!
         title: String!
         description: String
-        doneStatus: Boolean!
+        doneStatus: Boolean
       }
     `,
     resolvers: {
       Query: {
-        todo: () => Todo
+        todo(parent, args, ctx, info) {
+          if (!args.search){
+            return todos
+          }
+
+          return todos.filter((todo) => {
+            return todo.title.toLowerCase().includes(args.search.toLowerCase())
+          })
+        }
+      },
+      Mutation: {
+        createTodo: (parent, args, ctx, info) => {
+       
+          // Determine doneStatus, if not provided, default to false
+          const doneStatus = args.doneStatus !== undefined ? args.doneStatus : false;
+          const todo = {
+            id: uuidv4(),
+            title: args.title,
+            description: args.description,
+            doneStatus: doneStatus
+          }
+          todos.push(todo)
+          saveJson(filepath, todos);
+          return todo
+        }
       }
     }
   })
@@ -48,6 +62,7 @@ const yoga = createYoga({
     schema
   })
    
+  
 
 const server = new createServer(yoga)
 

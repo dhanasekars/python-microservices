@@ -1,0 +1,61 @@
+[
+  {
+    "id": "1",
+    "title": "Learn GraphQL",
+    "description": "The main concepts of GraphQL",
+    "doneStatus": true
+  },
+  {
+    "id": "2",
+    "title": "Learn Yoga",
+    "description": "The main concepts of Yoga",
+    "doneStatus": false
+  },
+  {
+    "id": "3",
+    "title": "Learn Prisma",
+    "description": "The main concepts of Prisma",
+    "doneStatus": false
+  },
+  {
+    "id": "4",
+    "title": "Learn Python",
+    "description": "The main concepts of Python",
+    "doneStatus": false
+  },
+  {
+    "id": "e6c6fa78-f8e6-47bd-8b80-b227d6dc6e04",
+    "title": "This is first mutation with true",
+    "doneStatus": true
+  },
+  {
+    "id": "cd02fe2d-c44b-4ad2-a324-24adda82cd19",
+    "title": "This is second mutation with true",
+    "description": "Updating and storing to json file",
+    "doneStatus": true
+  },
+  {
+    "id": "4327839b-1952-42c8-8936-5f56402a2976",
+    "title": "This is third mutation with true",
+    "description": "Updating and storing to json file",
+    "doneStatus": true
+  },
+  {
+    "id": "30821fb2-b873-44a1-bd60-50b0719d055c",
+    "title": "Nodemon to  ignore data.json",
+    "description": "Updating and storing to json file",
+    "doneStatus": true
+  },
+  {
+    "id": "008cb1a1-d80e-43cc-af85-359186366901",
+    "title": "Nodemon is ignoring :D",
+    "description": "Updating and storing to json file",
+    "doneStatus": true
+  },
+  {
+    "id": "7bd6006d-d164-4aea-b5ad-d6b28f532017",
+    "title": "Nodemon is ignoring 😀",
+    "description": "Updating and storing to json file",
+    "doneStatus": true
+  }
+]

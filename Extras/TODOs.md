@@ -601,6 +601,16 @@ https://github.com/tiangolo/fastapi/issues/296
 
 </details>
 
+<details> 
+    <summary> Day 41: Oct 09</summary>
+
+`Time Spent : 120 minutes`
+
+- Create Mutation done
+- Data is stored in local json file `data.json`
+
+
+</details>
 
 -------------------------------
 
