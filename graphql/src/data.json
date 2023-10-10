@@ -1,23 +1,5 @@
 [
   {
-    "id": "1",
-    "title": "Learn GraphQL",
-    "description": "The main concepts of GraphQL",
-    "doneStatus": true
-  },
-  {
-    "id": "2",
-    "title": "Learn Yoga",
-    "description": "The main concepts of Yoga",
-    "doneStatus": false
-  },
-  {
-    "id": "3",
-    "title": "Learn Prisma",
-    "description": "The main concepts of Prisma",
-    "doneStatus": false
-  },
-  {
     "id": "4",
     "title": "Learn Python",
     "description": "The main concepts of Python",
@@ -57,5 +39,46 @@
     "title": "Nodemon is ignoring 😀",
     "description": "Updating and storing to json file",
     "doneStatus": true
+  },
+  {
+    "id": "9fcaee63-ff9a-445c-849c-e794618247fd",
+    "title": "Babel Spread operator 😀",
+    "description": "Updating and storing to json file",
+    "doneStatus": true
+  },
+  {
+    "id": "e6181fac-94a1-4a56-8c6e-2a69be932d78",
+    "title": "This is testing input type"
+  },
+  {
+    "id": "58998e41-84e4-4ae1-a48b-c37096fdabd9",
+    "title": "This is testing input type",
+    "doneStatus": false
+  },
+  {
+    "id": "42c3b85e-ddee-49d5-9753-112fcc39efa4",
+    "title": "This is testing input type",
+    "doneStatus": true
+  },
+  {
+    "id": "b1b4d4cb-392c-4540-b39c-dcc3bf871964",
+    "title": "This is testing input type",
+    "description": "This is to test description",
+    "doneStatus": true
+  },
+  {
+    "id": "bccf2887-831e-4f90-8244-136964a378c9",
+    "title": "This is to create a todo",
+    "doneStatus": false
+  },
+  {
+    "id": "d50b2667-2aac-4367-b1af-c21d18fd071a",
+    "title": "This is to create a todo",
+    "doneStatus": false
+  },
+  {
+    "id": "93029d76-6df4-40f8-8dd6-f329a95f980c",
+    "title": "This is to create a todo",
+    "doneStatus": false
   }
 ]

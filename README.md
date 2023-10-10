@@ -20,6 +20,7 @@
   - nodejs
   - Babel
   - graphql-yoga
+  - babel-plugin-transform-object-rest-spread
 
 
 ## WHAT'S IN THE APP
