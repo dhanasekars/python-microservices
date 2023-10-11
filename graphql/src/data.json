@@ -6,11 +6,6 @@
     "doneStatus": false
   },
   {
-    "id": "e6c6fa78-f8e6-47bd-8b80-b227d6dc6e04",
-    "title": "This is first mutation with true",
-    "doneStatus": true
-  },
-  {
     "id": "cd02fe2d-c44b-4ad2-a324-24adda82cd19",
     "title": "This is second mutation with true",
     "description": "Updating and storing to json file",
@@ -78,6 +73,11 @@
   },
   {
     "id": "93029d76-6df4-40f8-8dd6-f329a95f980c",
+    "title": "This is to create a todo",
+    "doneStatus": false
+  },
+  {
+    "id": "d03f7da0-a618-4989-a938-4737429d3e23",
     "title": "This is to create a todo",
     "doneStatus": false
   }

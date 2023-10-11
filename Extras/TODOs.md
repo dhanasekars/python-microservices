@@ -612,6 +612,28 @@ https://github.com/tiangolo/fastapi/issues/296
 
 </details>
 
+
+<details> 
+    <summary> Day 42: Oct 10</summary>
+
+`Time Spent : 120 minutes`
+
+- Delete mutation
+- Project restrucutring - in progress
+
+
+</details>
+
+<details> 
+    <summary> Day 43: Oct 11</summary>
+
+`Time Spent : 90 minutes`
+
+- Project restrucutring - complete
+
+</details>
+
+
 -------------------------------
 
 
