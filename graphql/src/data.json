@@ -6,12 +6,6 @@
     "doneStatus": false
   },
   {
-    "id": "cd02fe2d-c44b-4ad2-a324-24adda82cd19",
-    "title": "This is second mutation with true",
-    "description": "Updating and storing to json file",
-    "doneStatus": true
-  },
-  {
     "id": "4327839b-1952-42c8-8936-5f56402a2976",
     "title": "This is third mutation with true",
     "description": "Updating and storing to json file",
@@ -37,23 +31,9 @@
   },
   {
     "id": "9fcaee63-ff9a-445c-849c-e794618247fd",
-    "title": "Babel Spread operator 😀",
+    "title": "This is updated again",
     "description": "Updating and storing to json file",
-    "doneStatus": true
-  },
-  {
-    "id": "e6181fac-94a1-4a56-8c6e-2a69be932d78",
-    "title": "This is testing input type"
-  },
-  {
-    "id": "58998e41-84e4-4ae1-a48b-c37096fdabd9",
-    "title": "This is testing input type",
     "doneStatus": false
-  },
-  {
-    "id": "42c3b85e-ddee-49d5-9753-112fcc39efa4",
-    "title": "This is testing input type",
-    "doneStatus": true
   },
   {
     "id": "b1b4d4cb-392c-4540-b39c-dcc3bf871964",
@@ -62,23 +42,32 @@
     "doneStatus": true
   },
   {
-    "id": "bccf2887-831e-4f90-8244-136964a378c9",
-    "title": "This is to create a todo",
+    "id": "4accbdf6-de00-4f96-add7-d07ffdb2f1e4",
+    "title": "This is to create a todo expecting null description",
     "doneStatus": false
   },
   {
-    "id": "d50b2667-2aac-4367-b1af-c21d18fd071a",
-    "title": "This is to create a todo",
-    "doneStatus": false
+    "id": "fd5db22f-aefb-42ff-8219-e1159eeedcac",
+    "title": "This is to create a todo expecting null description",
+    "doneStatus": false,
+    "description": ""
   },
   {
-    "id": "93029d76-6df4-40f8-8dd6-f329a95f980c",
-    "title": "This is to create a todo",
-    "doneStatus": false
+    "id": "940bd3a0-aa32-4730-aaed-d33043b229f8",
+    "title": "This is updated again",
+    "doneStatus": true,
+    "description": "This description is updated using muatation"
   },
   {
-    "id": "d03f7da0-a618-4989-a938-4737429d3e23",
-    "title": "This is to create a todo",
-    "doneStatus": false
+    "id": "2b647661-99e2-47a2-9e1c-e4c311505e37",
+    "title": "This is checking",
+    "doneStatus": true,
+    "description": "Updating description."
+  },
+  {
+    "id": "2c363e4d-8519-4680-b55b-6969d09258bb",
+    "title": "This is updated again",
+    "doneStatus": true,
+    "description": "This description is updated using muatation"
   }
 ]

@@ -9,12 +9,34 @@ const Mutation = {
       const todo = {
         id: uuidv4(),
         ...args.data, // babel spread operator to copy all properties from args
-        doneStatus
+        doneStatus,
+        // description
       }
      db.todos.push(todo)
       saveJson(filepath, db.todos);
       return todo
     },
+
+    updateTodo: (parent, args, { db }, info) => {
+      const { id, data } = args
+      const todo = db.todos.find((todo) => todo.id === id)
+      if (!todo) {
+        throw new Error('Todo not found')
+      }
+      if (typeof data.title === 'string') {
+        todo.title = data.title
+      }
+      if (typeof data.description !== 'undefined') {
+        todo.description = data.description
+      }
+      if (typeof data.doneStatus !== 'undefined') {
+        todo.doneStatus = data.doneStatus
+      }
+      saveJson(filepath, db.todos);
+      return todo
+    },
+
+
     deleteTodo: (parent, args, { db }, info) => {
       const todoIndex = db.todos.findIndex((todo) => todo.id === args.id)
       if (todoIndex === -1) {

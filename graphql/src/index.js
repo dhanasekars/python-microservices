@@ -9,7 +9,6 @@ import db from './db.js';
 
 const schemaFile = 'src/schema.graphql';
 const typeDefs = fs.readFileSync(schemaFile, 'utf8');
-console.log(db.todos)
 
 const yoga = createYoga({
     schema: createSchema({

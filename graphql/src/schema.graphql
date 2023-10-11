@@ -3,6 +3,7 @@ type Query {
 }
 type Mutation {
     createTodo(data: CreateTodoInput): Todo!
+    updateTodo(id: ID!, data: UpdateTodoInput): Todo!
     deleteTodo(id: ID!): Todo!
 }
 input CreateTodoInput {
@@ -10,6 +11,13 @@ input CreateTodoInput {
     description: String
     doneStatus: Boolean
 }
+
+input UpdateTodoInput {
+    title: String
+    description: String
+    doneStatus: Boolean
+}
+
 type Todo {
     id: ID!
     title: String!
