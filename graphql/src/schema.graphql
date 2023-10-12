@@ -6,6 +6,11 @@ type Mutation {
     updateTodo(id: ID!, data: UpdateTodoInput): Todo!
     deleteTodo(id: ID!): Todo!
 }
+
+type Subscription {
+    todoitem(todoID: ID!): [Todo!]!
+}
+
 input CreateTodoInput {
     title: String!
     description: String

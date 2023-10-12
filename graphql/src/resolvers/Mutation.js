@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { saveJson } from '../helper.js';
 const filepath = 'src/data.json';
+
 const Mutation = {
     createTodo: (parent, args, { db }, info) => {
    
@@ -17,7 +18,7 @@ const Mutation = {
       return todo
     },
 
-    updateTodo: (parent, args, { db }, info) => {
+    updateTodo: (parent, args, { db, pubsub }, info) => {
       const { id, data } = args
       const todo = db.todos.find((todo) => todo.id === id)
       if (!todo) {
@@ -33,6 +34,7 @@ const Mutation = {
         todo.doneStatus = data.doneStatus
       }
       saveJson(filepath, db.todos);
+      pubsub.publish(`todo ${id}`, { todo })
       return todo
     },
 

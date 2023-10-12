@@ -21,6 +21,7 @@
   - Babel
   - graphql-yoga
   - babel-plugin-transform-object-rest-spread
+  - graphql-subscriptions
 
 
 ## WHAT'S IN THE APP

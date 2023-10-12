@@ -630,10 +630,18 @@ https://github.com/tiangolo/fastapi/issues/296
 `Time Spent : 90 minutes`
 
 - Project restrucutring - complete
+- Update Todo
 
 </details>
 
+<details> 
+    <summary> Day 44: Oct 12</summary>
 
+`Time Spent : 90 minutes`
+
+- Subscription - in progress
+
+</details>
 -------------------------------
 
 
