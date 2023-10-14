@@ -1,0 +1,78 @@
+[
+  {
+    "id": "4",
+    "title": "Learn Python",
+    "description": "Updating description.",
+    "doneStatus": false
+  },
+  {
+    "id": "4327839b-1952-42c8-8936-5f56402a2976",
+    "title": "This is third mutation with true",
+    "description": "Updating and storing to json file",
+    "doneStatus": true
+  },
+  {
+    "id": "30821fb2-b873-44a1-bd60-50b0719d055c",
+    "title": "Nodemon to  ignore data.json",
+    "description": "Updating and storing to json file",
+    "doneStatus": true
+  },
+  {
+    "id": "008cb1a1-d80e-43cc-af85-359186366901",
+    "title": "Nodemon is ignoring :D",
+    "description": "Updating and storing to json file",
+    "doneStatus": true
+  },
+  {
+    "id": "7bd6006d-d164-4aea-b5ad-d6b28f532017",
+    "title": "Nodemon is ignoring 😀",
+    "description": "Updating and storing to json file",
+    "doneStatus": true
+  },
+  {
+    "id": "9fcaee63-ff9a-445c-849c-e794618247fd",
+    "title": "This is updated again",
+    "description": "Updating and storing to json file",
+    "doneStatus": false
+  },
+  {
+    "id": "b1b4d4cb-392c-4540-b39c-dcc3bf871964",
+    "title": "This is testing input type",
+    "description": "This is to test description",
+    "doneStatus": true
+  },
+  {
+    "id": "4accbdf6-de00-4f96-add7-d07ffdb2f1e4",
+    "title": "This is to create a todo expecting null description",
+    "doneStatus": false
+  },
+  {
+    "id": "fd5db22f-aefb-42ff-8219-e1159eeedcac",
+    "title": "This is to create a todo expecting null description",
+    "doneStatus": false,
+    "description": ""
+  },
+  {
+    "id": "940bd3a0-aa32-4730-aaed-d33043b229f8",
+    "title": "This is updated again",
+    "doneStatus": true,
+    "description": "This description is updated using muatation"
+  },
+  {
+    "id": "2b647661-99e2-47a2-9e1c-e4c311505e37",
+    "title": "This is checking",
+    "doneStatus": false,
+    "description": "Updating description."
+  },
+  {
+    "id": "2c363e4d-8519-4680-b55b-6969d09258bb",
+    "title": "This is updated again",
+    "doneStatus": true,
+    "description": "This description is updated using muatation"
+  },
+  {
+    "id": "48aecea2-c3aa-4a77-ba78-1f858705c8e3",
+    "title": "This is adding new",
+    "doneStatus": true
+  }
+]

@@ -54,15 +54,15 @@ using Python and FastAPI
 - [ ] Reqover coverage
 
 ## October
-- [ ] Publish about this project in LinkedIn and in my blog.
-- [ ] Create admin API - to activate, de-active, delete users. 
+- [x] Publish about this project in LinkedIn and in my blog.
 - [ ] Generate total time spent for this project from README.md
-- [ ] Head, Options, Patch and Trace
 - [ ] /graphql endpoint
 - [ ] Database backup using pg_dump and pg_restore
 - [ ] Jenkins pipeline
   - [ ] Add release notes
   - [ ] Maintain release version numbers
+ - [ ] Head, Options, Patch and Trace
+
 
 ## Later
 - [ ] Host it in cloud
@@ -72,7 +72,9 @@ using Python and FastAPI
 - [ ] Connect to more than one type of DB and test ( Postgres, MySQL, SQLite)
 - [x] Fix all lint issues
 - [ ] Explore Fire
-- [ ] Explore query builder 
+- [ ] Explore query builder
+- [ ] Create admin API - to activate, de-active, delete users. 
+
 
 ### Action items
  - [ ] is it necessary to install libpq separately using brew?
@@ -568,7 +570,91 @@ https://github.com/tiangolo/fastapi/issues/296
 
 </details>
 
+
+<details> 
+    <summary> Day 38: Oct 05</summary>
+
+`Time Spent : 120 minutes`
+
+- Installed and setup nodejs
+- setup graphql-yoga and created a graphql server 
+
+</details>
+
+<details> 
+    <summary> Day 39: Oct 06</summary>
+
+`Time Spent : 120 minutes`
+
+- Docker for graphql 
+- Ngnix configured to operate at /graphql and direct traffic to graphql-yoga server :thumpsup
+
+</details>
+
+<details> 
+    <summary> Day 40: Oct 07</summary>
+
+`Time Spent : 45 minutes`
+
+- Basic Query for Todo set using hardcoded data
+
+
+</details>
+
+<details> 
+    <summary> Day 41: Oct 09</summary>
+
+`Time Spent : 120 minutes`
+
+- Create Mutation done
+- Data is stored in local json file `data.json`
+
+
+</details>
+
+
+<details> 
+    <summary> Day 42: Oct 10</summary>
+
+`Time Spent : 120 minutes`
+
+- Delete mutation
+- Project restrucutring - in progress
+
+
+</details>
+
+<details> 
+    <summary> Day 43: Oct 11</summary>
+
+`Time Spent : 90 minutes`
+
+- Project restrucutring - complete
+- Update Todo
+
+</details>
+
+<details> 
+    <summary> Day 44: Oct 12</summary>
+
+`Time Spent : 90 minutes`
+
+- Subscription - in progress
+
+</details>
+
+<details> 
+    <summary> Day 45: Oct 13</summary>
+
+`Time Spent : 90 minutes`
+
+- Subscription - in progress.
+- Able to create a simple countdown timer subscription
+
+</details>
+
 -------------------------------
+
 
 <details> 
     <summary> Day 0: Template</summary>

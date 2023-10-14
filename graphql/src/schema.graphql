@@ -1,0 +1,32 @@
+type Query {
+    todo(search: String): [Todo!]!
+}
+type Mutation {
+    createTodo(data: CreateTodoInput): Todo!
+    updateTodo(id: ID!, data: UpdateTodoInput): Todo!
+    deleteTodo(id: ID!): Todo!
+}
+
+type Subscription {
+    todoUpdates(todoID: ID!): [Todo!]!
+    countdown(from: Int!): Int!
+}
+
+input CreateTodoInput {
+    title: String!
+    description: String
+    doneStatus: Boolean
+}
+
+input UpdateTodoInput {
+    title: String
+    description: String
+    doneStatus: Boolean
+}
+
+type Todo {
+    id: ID!
+    title: String!
+    description: String
+    doneStatus: Boolean
+}
