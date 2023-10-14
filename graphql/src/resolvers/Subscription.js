@@ -1,18 +1,24 @@
 const Subscription = {
-    // Channel for individual todo items 
-
-    todoitem:{
-    subscribe(parent, { todoID }, { db, pubsub }, info) {
-        const todo = db.todos.find((todo) => todo.id === todoID);
-        if (!todo) {
-            throw new Error('Todo not found');
-        }
-        // pubsub.subscribe(`todo ${todoID}`);
-        return pubsub.subscribe(`todo ${todoID}`);
-        }
+// todoUpdates:{
+//     subscribe: (parent, { todoID }, { pubsub }, info) =>
+//      pubsub.subscribe(`todoUpdates_${todoID}`)
+//     },
+countdown:{
+    subscribe: async function* (_, { from }) {
+        for (let i = from; i >= 0; i--) {
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          yield { countdown: i }
 }
-};
+}
+}
 
+// countdown:{
+//     subscribe: (parent, args, { pubsub }, info) => {
+//         // console.log(args.from);
+//         let count = 0;
+//         setInterval(() => pubsub.publish('countdown', { count: count++ }), 1000);
+//         return pubsub.subscribe('countdown');
+//     }
+// }
+}
 export { Subscription as default };
-
-

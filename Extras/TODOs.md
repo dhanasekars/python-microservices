@@ -642,6 +642,17 @@ https://github.com/tiangolo/fastapi/issues/296
 - Subscription - in progress
 
 </details>
+
+<details> 
+    <summary> Day 45: Oct 13</summary>
+
+`Time Spent : 90 minutes`
+
+- Subscription - in progress.
+- Able to create a simple countdown timer subscription
+
+</details>
+
 -------------------------------
 
 

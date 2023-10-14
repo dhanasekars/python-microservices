@@ -7,7 +7,7 @@ import Mutation from './resolvers/Mutation.js';
 import Subscription from './resolvers/Subscription.js';
 import db from './db.js';
 
-const pubsub =  createPubSub()
+const pubsub = createPubSub();
 
 const schemaFile = 'src/schema.graphql';
 const typeDefs = fs.readFileSync(schemaFile, 'utf8');

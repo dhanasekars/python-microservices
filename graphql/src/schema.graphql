@@ -8,7 +8,8 @@ type Mutation {
 }
 
 type Subscription {
-    todoitem(todoID: ID!): [Todo!]!
+    todoUpdates(todoID: ID!): [Todo!]!
+    countdown(from: Int!): Int!
 }
 
 input CreateTodoInput {
