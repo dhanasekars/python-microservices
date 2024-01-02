@@ -51,20 +51,21 @@ using Python and FastAPI
 - [x] Update the test fixture @generateUDID
 - [x] Endpoint to renew access token
 - [x] Improve integration coverage (current is 85% - mostly HTTPExceptions are not covered)
-- [ ] Reqover coverage
-
-## October
 - [x] Publish about this project in LinkedIn and in my blog.
-- [ ] Generate total time spent for this project from README.md
+
+
+## Jan 2024
+- [ ] Reqover coverage
 - [ ] /graphql endpoint
 - [ ] Database backup using pg_dump and pg_restore
 - [ ] Jenkins pipeline
   - [ ] Add release notes
   - [ ] Maintain release version numbers
  - [ ] Head, Options, Patch and Trace
+ - [ ] Explore ruff package****
 
 
-## Later
+## Q1 2024
 - [ ] Host it in cloud
     - [ ] Tracking and limiting usage 
     - [ ] Monitoring
@@ -74,6 +75,8 @@ using Python and FastAPI
 - [ ] Explore Fire
 - [ ] Explore query builder
 - [ ] Create admin API - to activate, de-active, delete users. 
+- [ ] Generate total time spent for this project from README.md
+
 
 
 ### Action items
