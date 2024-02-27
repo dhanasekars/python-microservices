@@ -3,7 +3,8 @@
 - The project can be used as an example to learn how to build a web API using FastAPI and PostgreSQL.
 - To learn how to write unit and integration tests for a web API.
 - This project has 100% unit and 90% integration test coverage. (does that mean it is bug-free?)
-- What is covered in automated checks and exploratory tests to find bugs.
+- As an Exploratory tester, understand what is covered in automated checks and do exploratory tests.
+
 
 ## Technology stack
 - Python 3.8
