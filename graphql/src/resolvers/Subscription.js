@@ -1,10 +1,15 @@
 const Subscription = {
-// todoUpdates:{
-//     subscribe: (parent, { todoID }, { pubsub }, info) =>
-//      pubsub.subscribe(`todoUpdates_${todoID}`)
-//     },
+todoUpdates:{
+    subscribe: (parent, { todoID }, { db, pubsub }, info) => {
+      console.log(pubsub)
+      const todo = db.todos.find(todo => todo.id === todoID)
+      if (!todo) {
+        throw new Error(`No todo with id ${todoID}`)
+      }
+        return pubsub.asyncIterator(`todoUpdates ${todoID}`) 
+    },
 countdown:{
-    subscribe: async function* (_, { from }) {
+    subscribe: async function* (parent, { from }, { pubsub }, info) {
         for (let i = from; i >= 0; i--) {
           await new Promise(resolve => setTimeout(resolve, 1000))
           yield { countdown: i }
@@ -12,13 +17,7 @@ countdown:{
 }
 }
 
-// countdown:{
-//     subscribe: (parent, args, { pubsub }, info) => {
-//         // console.log(args.from);
-//         let count = 0;
-//         setInterval(() => pubsub.publish('countdown', { count: count++ }), 1000);
-//         return pubsub.subscribe('countdown');
-//     }
-// }
 }
+}
+
 export { Subscription as default };
