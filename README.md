@@ -84,6 +84,8 @@ Unlike Docker, local setup requires more work to get the project running.
     ```bash
         poetry install
     ```
+   (If there is a failure try installing PostgreSQL before installing python libraries.)
+
 4. Create a `.env.local` file in the `/app/secrets` directory of the project and add the variables looking at the `.env.example` file. Ensure to set `POSTGRES_HOST=localhost`.
 5. Set `MY_ENVIRONMENT=local`
         ```bash
