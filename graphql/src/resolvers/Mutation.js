@@ -34,7 +34,7 @@ const Mutation = {
         todo.doneStatus = data.doneStatus
       }
       saveJson(filepath, db.todos);
-      pubsub.publish(`todo ${id}`, { todo })
+      pubsub.publish(`todoUpdates ${id}`, { todoupdates: todo })
       return todo
     },
 
